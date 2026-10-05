@@ -75,7 +75,7 @@ go install golang.org/x/vuln/cmd/govulncheck@v1.8.0
 
 ## Releasing
 
-Push a tag `vX.Y.Z`. `.github/workflows/release.yml` runs two jobs: GoReleaser (`.goreleaser.yaml`) attaches six archives (linux, darwin, windows × amd64, arm64) and `checksums.txt` to the GitHub release, and Docker buildx pushes a `linux/amd64,linux/arm64` image to `ghcr.io/jhisse/spoor` tagged `X.Y.Z`, `X.Y` and `latest`. The version reaches `spoor --version` through `-ldflags "-X main.version=…"`; a plain `go build` reports `dev`. The `Dockerfile` cross-compiles on the builder's architecture, so the image needs no emulation.
+Push a tag `vX.Y.Z`. `.github/workflows/release.yml` runs two jobs: GoReleaser (`.goreleaser.yaml`) attaches six archives (linux, darwin, windows × amd64, arm64) and `checksums.txt` to the GitHub release, and Docker buildx pushes a `linux/amd64,linux/arm64` image to `ghcr.io/jhisse/spoor` tagged `X.Y.Z`, `X.Y` and `latest`. The version reaches `spoor --version` through `-ldflags "-X main.version=…"`; without them it falls back to the module version in the build info (`go install …@v0.1.0`, or a `go build` from a tagged checkout), then to `dev`. The `Dockerfile` cross-compiles on the builder's architecture, so the image needs no emulation.
 
 Try the whole thing without publishing: `go run github.com/goreleaser/goreleaser/v2@v2.18.2 release --snapshot --clean --skip=publish`, and `docker buildx build --platform linux/amd64,linux/arm64 .`.
 

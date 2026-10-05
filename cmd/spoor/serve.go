@@ -92,7 +92,7 @@ func serve(cfg *config.Config) error {
 	defer func() { _ = ro.Close() }()
 
 	ingest := &otlp.Handler{Store: st}
-	webHandlers := &web.Handlers{Store: st, Ingest: ingest, IngestAddr: cfg.IngestAddr, RetentionDays: cfg.RetentionDays, Version: version}
+	webHandlers := &web.Handlers{Store: st, Ingest: ingest, IngestAddr: cfg.IngestAddr, RetentionDays: cfg.RetentionDays, Version: versionString()}
 
 	ingestServer := &http.Server{Addr: cfg.IngestAddr, Handler: ingestMux(st, ingest), ReadHeaderTimeout: readHeaderTimeout, ReadTimeout: ioTimeout, WriteTimeout: ioTimeout, IdleTimeout: 2 * ioTimeout}
 	httpServer := &http.Server{Addr: cfg.HTTPAddr, Handler: web.SameOrigin(cfg.AllowedHosts, httpMux(st, ro, webHandlers)), ReadHeaderTimeout: readHeaderTimeout, ReadTimeout: ioTimeout, WriteTimeout: ioTimeout, IdleTimeout: 2 * ioTimeout}

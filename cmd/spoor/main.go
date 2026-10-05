@@ -7,10 +7,20 @@ import (
 	"flag"
 	"fmt"
 	"os"
+	"runtime/debug"
+	"strings"
 )
 
-// version is set at release time: -ldflags "-X main.version=1.2.3".
+// version is set at release time: -ldflags "-X main.version=1.2.3". A
+// `go install …@vX.Y.Z` build has no ldflags; its module version is in the build info.
 var version = "dev"
+
+func versionString() string {
+	if info, ok := debug.ReadBuildInfo(); version == "dev" && ok && info.Main.Version != "" && info.Main.Version != "(devel)" {
+		return strings.TrimPrefix(info.Main.Version, "v")
+	}
+	return version
+}
 
 var commands = map[string]func(args []string) error{
 	"serve": runServe, "migrate": runMigrate,
@@ -28,7 +38,7 @@ func main() {
 		usage()
 		return
 	case "-v", "--version", "version":
-		fmt.Println("spoor", version)
+		fmt.Println("spoor", versionString())
 		return
 	}
 	if !ok {

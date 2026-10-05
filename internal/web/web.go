@@ -21,7 +21,7 @@ type Handlers struct {
 	// 0 = keep forever.
 	RetentionDays int
 
-	// Version is the release the binary was built as; "dev" for a plain go build.
+	// Version is the release the binary was built as; "dev" when the build info has none.
 	Version string
 
 	// Ingest is the process's OTLP receiver, for its counters of what never
