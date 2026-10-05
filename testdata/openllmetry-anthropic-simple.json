@@ -1,0 +1,124 @@
+{
+  "resourceSpans": [
+    {
+      "resource": {
+        "attributes": [
+          {
+            "key": "service.name",
+            "value": {
+              "stringValue": "spoor-testdata-capture"
+            }
+          }
+        ]
+      },
+      "scopeSpans": [
+        {
+          "scope": {
+            "name": "opentelemetry.instrumentation.anthropic",
+            "version": "0.36.1"
+          },
+          "spans": [
+            {
+              "traceId": "6a3a6ad8c726ce1be8fc1a7faba8aab6",
+              "spanId": "6c444559dcce1d9d",
+              "name": "anthropic.chat",
+              "kind": "SPAN_KIND_CLIENT",
+              "startTimeUnixNano": "1786371966067693000",
+              "endTimeUnixNano": "1786371967069685000",
+              "attributes": [
+                {
+                  "key": "gen_ai.system",
+                  "value": {
+                    "stringValue": "Anthropic"
+                  }
+                },
+                {
+                  "key": "llm.request.type",
+                  "value": {
+                    "stringValue": "completion"
+                  }
+                },
+                {
+                  "key": "gen_ai.request.model",
+                  "value": {
+                    "stringValue": "claude-haiku-4-5"
+                  }
+                },
+                {
+                  "key": "gen_ai.prompt.0.content",
+                  "value": {
+                    "stringValue": "What is the capital of France? Answer in one sentence."
+                  }
+                },
+                {
+                  "key": "gen_ai.prompt.0.role",
+                  "value": {
+                    "stringValue": "user"
+                  }
+                },
+                {
+                  "key": "gen_ai.response.model",
+                  "value": {
+                    "stringValue": "claude-haiku-4-5-20251001"
+                  }
+                },
+                {
+                  "key": "gen_ai.completion.0.finish_reason",
+                  "value": {
+                    "stringValue": "end_turn"
+                  }
+                },
+                {
+                  "key": "gen_ai.completion.0.role",
+                  "value": {
+                    "stringValue": "assistant"
+                  }
+                },
+                {
+                  "key": "gen_ai.completion.0.content",
+                  "value": {
+                    "stringValue": "The capital of France is Paris."
+                  }
+                },
+                {
+                  "key": "gen_ai.usage.prompt_tokens",
+                  "value": {
+                    "intValue": "19"
+                  }
+                },
+                {
+                  "key": "gen_ai.usage.completion_tokens",
+                  "value": {
+                    "intValue": "10"
+                  }
+                },
+                {
+                  "key": "llm.usage.total_tokens",
+                  "value": {
+                    "intValue": "29"
+                  }
+                },
+                {
+                  "key": "gen_ai.usage.cache_read_input_tokens",
+                  "value": {
+                    "intValue": "0"
+                  }
+                },
+                {
+                  "key": "gen_ai.usage.cache_creation_input_tokens",
+                  "value": {
+                    "intValue": "0"
+                  }
+                }
+              ],
+              "status": {
+                "code": "STATUS_CODE_OK"
+              },
+              "flags": 256
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

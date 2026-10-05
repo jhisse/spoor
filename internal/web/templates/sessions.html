@@ -1,0 +1,66 @@
+{{define "title"}}spoor — Sessions{{end}}
+
+{{/* status_shape is a store.Status as its shape from the sprite; the word goes beside it. */}}
+{{define "status_shape"}}<svg class="st {{if eq . "error"}}err{{else}}{{.}}{{end}}" aria-hidden="true"><use href="#i-{{if eq . "error"}}err{{else}}{{.}}{{end}}"/></svg>{{end}}
+
+{{define "content"}}
+<div id="sessions">
+{{with .Replay}}
+<nav class="crumbs" aria-label="Breadcrumb"><a href="/sessions">Sessions</a><span class="mono">{{.Summary.ID}}</span></nav>
+<div class="head"><h1>{{template "status_shape" .Summary.Status}}<span class="sr">{{.Summary.Status}}</span> Session <span class="mono">{{.Summary.ID}}</span></h1><a class="btn sm" href="/sessions">All sessions</a></div>
+<div class="stack">
+<div class="panel">
+<div class="band"><dl class="stats grow">
+<div><dt>Turns</dt><dd>{{.Summary.TraceCount}}</dd></div><div><dt>Work (sum of turns)</dt><dd>{{.Work}}</dd></div><div><dt>Wall clock</dt><dd>{{.Wall}}</dd></div>
+<div><dt>Tokens</dt><dd>{{tokenSum .Summary.TotalInputTokens .Summary.TotalOutputTokens}}</dd></div><div><dt>Cost</dt><dd>{{template "cache_unknown" .Summary.CacheUnknown}}{{costVal .Summary.TotalCostUSD}}</dd></div>
+</dl></div>
+{{if .Strip}}<figure class="sec">
+<div class="chart-h"><h3>Turns <span class="muted">· one column per turn · height = {{.StripScale}} · the split is its token mix · ⋯ = idle time</span></h3>
+<div class="legend">{{.Legend}}<span>{{template "status_shape" "ok"}} ok</span><span>{{template "status_shape" "unset"}} unset</span><span>{{template "status_shape" "error"}} error</span></div></div>
+<div class="chart">{{.Strip}}</div>
+</figure>{{end}}
+{{template "session_chart" .Chart}}
+</div>
+<ol class="stack turns">{{range .Turns}}
+{{if .Idle}}<li class="idle cap">⋯ idle {{.Idle}} ⋯</li>{{end}}
+<li class="panel" id="turn-{{.N}}">
+<div class="panel-h"><span class="turn-n">{{.N}}</span><span class="badge{{if eq .Trace.Status "error"}} err{{end}}">{{template "status_shape" .Trace.Status}}{{.Trace.Status}}</span><a class="link name" href="/traces/{{.Trace.ID}}">{{or .Trace.Name .Trace.ID}}</a><span class="cap end" title="{{.Trace.StartedAt.UTC.Format "2006-01-02 15:04:05 UTC"}}">{{relTime .Trace.StartedAt}} · {{fmtDuration (.Trace.EndedAt.Sub .Trace.StartedAt)}}</span></div>
+<div class="panel-b">
+{{if .Input}}<div class="msg user"><div class="msg-h">input</div><div class="prose">{{.Input}}</div></div>{{end}}
+{{if .Output}}<div class="msg assistant"><div class="msg-h">output</div><div class="prose">{{.Output}}</div></div>{{end}}
+<div class="row{{if or .Input .Output}} mt{{end}}">{{tokenBar .Mix $.Replay.MaxTokens 160 8}}<span class="cap">{{tokenSum .Trace.TotalInputTokens .Trace.TotalOutputTokens}} · {{costVal .Trace.TotalCostUSD}}{{if .Cumulative}} · cumulative {{costVal .Cumulative}}{{end}}</span></div>
+</div></li>{{end}}
+</ol>
+<p class="cap">Token bars share one scale, the largest turn. <a class="link" href="/blind-spots">? = not reported by the SDK · – = no price for the model</a></p>
+</div>
+{{else}}
+<div class="head"><h1>Sessions</h1><span class="cap">A session is the traces that share one <code>session.id</code></span></div>
+{{if .Sessions}}
+<div class="panel"><table class="data cards">
+<thead><tr><th>Session</th><th>Last turn</th><th class="num">Wall clock</th><th class="num">Turns</th><th class="num">Tokens{{if .MaxTokens}} <small>· bar 0–{{fmtCount .MaxTokens}}</small>{{end}}</th><th class="num">Cost</th></tr></thead>
+<tbody>{{range .Sessions}}<tr>
+<td class="main"><span class="cellmain">{{template "status_shape" .Status}}<span class="sr">{{.Status}}</span>{{if .Subject}}<a class="rowlink name ellip" href="{{sessionURL .ID}}" title="{{.Subject}}">{{.Subject}}</a><span class="mono muted" title="{{.ID}}">{{printf "%.8s" .ID}}</span>{{else}}<a class="rowlink name mono ellip" href="{{sessionURL .ID}}" title="{{.ID}}">{{.ID}}</a>{{end}}</span></td>
+<td class="dim" data-l="last turn" title="{{.EndedAt.UTC.Format "2006-01-02 15:04:05 UTC"}}">{{relTime .EndedAt}}</td><td class="num dim" data-l="over">{{.Wall}}</td><td class="num" data-l="turns">{{.TraceCount}}</td>
+<td class="num wide" data-l="tokens"><span class="cellbar">{{tokenSum .TotalInputTokens .TotalOutputTokens}}{{tokenBar .Mix $.MaxTokens 64 6}}</span></td><td class="num end" data-l="cost">{{template "cache_unknown" .CacheUnknown}}{{costVal .TotalCostUSD}}</td>
+</tr>{{end}}</tbody></table></div>
+<div class="foot"><div class="legend">{{.Legend}}<a class="link muted" href="/blind-spots" title="how many, on the Blind spots page">? = not reported by the SDK</a><a class="link muted" href="/blind-spots" title="which models, on the Blind spots page">– = no price for the model</a><a class="link muted" href="/blind-spots" title="how many, on the Blind spots page">~ = priced without cache counts from the sender</a></div>{{if .NextURL}}<a class="btn sm" href="{{.NextURL}}">Next page →</a>{{end}}</div>
+{{else}}
+<div class="panel"><div class="empty"><h2>No sessions {{if .Service}}from this service{{else}}yet{{end}}</h2>
+<p>A session groups the traces of one conversation, so it can be read turn by turn, with its running cost and how the context grew.</p>
+<p class="mt">spoor builds one from the traces whose spans carry the same <code>session.id</code> attribute (<code>gen_ai.conversation.id</code>, <code>thread_id</code> and <code>conversation_id</code> are read too). Set it in your SDK and the conversation shows up here; traces without it stay in the trace list.</p></div></div>
+{{end}}
+{{end}}
+</div>
+{{end}}
+
+{{define "session_chart"}}{{with .}}{{/* given a *contextChart; nil renders nothing */}}
+<details class="sec disc" open><summary><h3>Inside the turns · context per model call</h3><span class="cap">{{.Steps}} generations</span></summary>
+<div class="chart mt">{{.Tokens}}</div>
+<div class="legend mt">{{.Legend}}</div>
+{{if .Dollars}}<p class="cap mt measure">{{.DollarsNote}}</p>
+<div class="chart">{{.Dollars}}</div>{{end}}
+{{range .Breaks}}<p class="callout warn mt measure">{{.}}</p>{{end}}
+<details class="disc mt"><summary class="cap">How spoor tells the contexts apart, and what C, B and E mean</summary>
+<p class="cap mt measure">The spans do not say which context a call belongs to, so spoor reads it from the tokens: a call continues the earlier call whose prompt it read from cache; when it read none, spoor assumes the largest earlier prompt of the same model not larger than its own, and says so. <b>C</b> smaller context: a prompt smaller than every context so far — a compaction or a sub-agent's first call; the spans do not say which. <b>B</b> cache break: the call read at most half the cache share its context had and wrote at least as much as it read. <b>E</b> cache expiry: a break after 5 minutes or more without a call in that context. A pause is labelled from 5 minutes, a common prompt-cache lifetime.</p></details>
+{{range .Notes}}<p class="cap measure">{{.}}</p>{{end}}
+</details>{{end}}{{end}}

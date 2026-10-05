@@ -1,0 +1,12 @@
+/spoor
+/bin/
+*.db
+*.db-wal
+*.db-shm
+.env
+.DS_Store
+.claude/
+
+# private working notes: research, reports, specs, mockups
+/notes/
+/dist/

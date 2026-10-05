@@ -1,0 +1,869 @@
+{
+  "resourceSpans": [
+    {
+      "resource": {
+        "attributes": [
+          {
+            "key": "telemetry.sdk.language",
+            "value": {
+              "stringValue": "python"
+            }
+          },
+          {
+            "key": "telemetry.sdk.name",
+            "value": {
+              "stringValue": "opentelemetry"
+            }
+          },
+          {
+            "key": "telemetry.sdk.version",
+            "value": {
+              "stringValue": "1.45.0"
+            }
+          },
+          {
+            "key": "service.instance.id",
+            "value": {
+              "stringValue": "31e26363-b8e1-48a4-bab0-212c85273c50"
+            }
+          },
+          {
+            "key": "service.name",
+            "value": {
+              "stringValue": "capture"
+            }
+          }
+        ]
+      },
+      "scopeSpans": [
+        {
+          "scope": {
+            "name": "openinference.instrumentation.openai_agents",
+            "version": "2.5.2"
+          },
+          "spans": [
+            {
+              "traceId": "72bcea4b52f835fd80afcf69ac12c20d",
+              "spanId": "1ee6f5120a510192",
+              "parentSpanId": "2676f181deffb5e5",
+              "name": "generation",
+              "kind": "SPAN_KIND_INTERNAL",
+              "startTimeUnixNano": "1791060022840019968",
+              "endTimeUnixNano": "1791060022895921920",
+              "attributes": [
+                {
+                  "key": "llm.system",
+                  "value": {
+                    "stringValue": "openai"
+                  }
+                },
+                {
+                  "key": "session.id",
+                  "value": {
+                    "stringValue": "capture-session"
+                  }
+                },
+                {
+                  "key": "llm.model_name",
+                  "value": {
+                    "stringValue": "gpt-4o-mini"
+                  }
+                },
+                {
+                  "key": "llm.invocation_parameters",
+                  "value": {
+                    "stringValue": "{\"base_url\": \"http://127.0.0.1:14331/v1/\"}"
+                  }
+                },
+                {
+                  "key": "input.value",
+                  "value": {
+                    "stringValue": "[{\"content\": \"Answer in one word.\", \"role\": \"system\"}, {\"role\": \"user\", \"content\": \"Weather in Paris?\"}]"
+                  }
+                },
+                {
+                  "key": "input.mime_type",
+                  "value": {
+                    "stringValue": "application/json"
+                  }
+                },
+                {
+                  "key": "llm.input_messages.0.message.role",
+                  "value": {
+                    "stringValue": "system"
+                  }
+                },
+                {
+                  "key": "llm.input_messages.0.message.content",
+                  "value": {
+                    "stringValue": "Answer in one word."
+                  }
+                },
+                {
+                  "key": "llm.input_messages.1.message.role",
+                  "value": {
+                    "stringValue": "user"
+                  }
+                },
+                {
+                  "key": "llm.input_messages.1.message.content",
+                  "value": {
+                    "stringValue": "Weather in Paris?"
+                  }
+                },
+                {
+                  "key": "output.value",
+                  "value": {
+                    "stringValue": "[{\"content\": null, \"refusal\": null, \"role\": \"assistant\", \"annotations\": null, \"audio\": null, \"function_call\": null, \"tool_calls\": [{\"id\": \"call_1\", \"function\": {\"arguments\": \"{\\\"city\\\": \\\"Paris\\\"}\", \"name\": \"get_weather\"}, \"type\": \"function\"}]}]"
+                  }
+                },
+                {
+                  "key": "output.mime_type",
+                  "value": {
+                    "stringValue": "application/json"
+                  }
+                },
+                {
+                  "key": "llm.output_messages.0.message.role",
+                  "value": {
+                    "stringValue": "assistant"
+                  }
+                },
+                {
+                  "key": "llm.output_messages.0.message.tool_calls.0.tool_call.id",
+                  "value": {
+                    "stringValue": "call_1"
+                  }
+                },
+                {
+                  "key": "llm.output_messages.0.message.tool_calls.0.tool_call.function.name",
+                  "value": {
+                    "stringValue": "get_weather"
+                  }
+                },
+                {
+                  "key": "llm.output_messages.0.message.tool_calls.0.tool_call.function.arguments",
+                  "value": {
+                    "stringValue": "{\"city\": \"Paris\"}"
+                  }
+                },
+                {
+                  "key": "llm.token_count.prompt",
+                  "value": {
+                    "intValue": "1200"
+                  }
+                },
+                {
+                  "key": "llm.token_count.completion",
+                  "value": {
+                    "intValue": "40"
+                  }
+                },
+                {
+                  "key": "openinference.span.kind",
+                  "value": {
+                    "stringValue": "LLM"
+                  }
+                }
+              ],
+              "status": {
+                "code": "STATUS_CODE_OK"
+              },
+              "flags": 256
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "resource": {
+        "attributes": [
+          {
+            "key": "telemetry.sdk.language",
+            "value": {
+              "stringValue": "python"
+            }
+          },
+          {
+            "key": "telemetry.sdk.name",
+            "value": {
+              "stringValue": "opentelemetry"
+            }
+          },
+          {
+            "key": "telemetry.sdk.version",
+            "value": {
+              "stringValue": "1.45.0"
+            }
+          },
+          {
+            "key": "service.instance.id",
+            "value": {
+              "stringValue": "31e26363-b8e1-48a4-bab0-212c85273c50"
+            }
+          },
+          {
+            "key": "service.name",
+            "value": {
+              "stringValue": "capture"
+            }
+          }
+        ]
+      },
+      "scopeSpans": [
+        {
+          "scope": {
+            "name": "openinference.instrumentation.openai_agents",
+            "version": "2.5.2"
+          },
+          "spans": [
+            {
+              "traceId": "72bcea4b52f835fd80afcf69ac12c20d",
+              "spanId": "df91face9e85a12a",
+              "parentSpanId": "2676f181deffb5e5",
+              "name": "get_weather",
+              "kind": "SPAN_KIND_INTERNAL",
+              "startTimeUnixNano": "1791060022898798080",
+              "endTimeUnixNano": "1791060022899456000",
+              "attributes": [
+                {
+                  "key": "session.id",
+                  "value": {
+                    "stringValue": "capture-session"
+                  }
+                },
+                {
+                  "key": "tool.name",
+                  "value": {
+                    "stringValue": "get_weather"
+                  }
+                },
+                {
+                  "key": "input.value",
+                  "value": {
+                    "stringValue": "{\"city\": \"Paris\"}"
+                  }
+                },
+                {
+                  "key": "input.mime_type",
+                  "value": {
+                    "stringValue": "application/json"
+                  }
+                },
+                {
+                  "key": "output.value",
+                  "value": {
+                    "stringValue": "18 C, clear"
+                  }
+                },
+                {
+                  "key": "tool.description",
+                  "value": {
+                    "stringValue": "Weather in a city"
+                  }
+                },
+                {
+                  "key": "tool.parameters",
+                  "value": {
+                    "stringValue": "{\"properties\": {\"city\": {\"title\": \"City\", \"type\": \"string\"}}, \"required\": [\"city\"], \"title\": \"get_weather_args\", \"type\": \"object\", \"additionalProperties\": false}"
+                  }
+                },
+                {
+                  "key": "openinference.span.kind",
+                  "value": {
+                    "stringValue": "TOOL"
+                  }
+                }
+              ],
+              "status": {
+                "code": "STATUS_CODE_OK"
+              },
+              "flags": 256
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "resource": {
+        "attributes": [
+          {
+            "key": "telemetry.sdk.language",
+            "value": {
+              "stringValue": "python"
+            }
+          },
+          {
+            "key": "telemetry.sdk.name",
+            "value": {
+              "stringValue": "opentelemetry"
+            }
+          },
+          {
+            "key": "telemetry.sdk.version",
+            "value": {
+              "stringValue": "1.45.0"
+            }
+          },
+          {
+            "key": "service.instance.id",
+            "value": {
+              "stringValue": "31e26363-b8e1-48a4-bab0-212c85273c50"
+            }
+          },
+          {
+            "key": "service.name",
+            "value": {
+              "stringValue": "capture"
+            }
+          }
+        ]
+      },
+      "scopeSpans": [
+        {
+          "scope": {
+            "name": "openinference.instrumentation.openai_agents",
+            "version": "2.5.2"
+          },
+          "spans": [
+            {
+              "traceId": "72bcea4b52f835fd80afcf69ac12c20d",
+              "spanId": "2676f181deffb5e5",
+              "parentSpanId": "170d510e9ffbb5f9",
+              "name": "turn",
+              "kind": "SPAN_KIND_INTERNAL",
+              "startTimeUnixNano": "1791060022839024896",
+              "endTimeUnixNano": "1791060022901017856",
+              "attributes": [
+                {
+                  "key": "session.id",
+                  "value": {
+                    "stringValue": "capture-session"
+                  }
+                },
+                {
+                  "key": "openinference.span.kind",
+                  "value": {
+                    "stringValue": "CHAIN"
+                  }
+                }
+              ],
+              "status": {
+                "code": "STATUS_CODE_OK"
+              },
+              "flags": 256
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "resource": {
+        "attributes": [
+          {
+            "key": "telemetry.sdk.language",
+            "value": {
+              "stringValue": "python"
+            }
+          },
+          {
+            "key": "telemetry.sdk.name",
+            "value": {
+              "stringValue": "opentelemetry"
+            }
+          },
+          {
+            "key": "telemetry.sdk.version",
+            "value": {
+              "stringValue": "1.45.0"
+            }
+          },
+          {
+            "key": "service.instance.id",
+            "value": {
+              "stringValue": "31e26363-b8e1-48a4-bab0-212c85273c50"
+            }
+          },
+          {
+            "key": "service.name",
+            "value": {
+              "stringValue": "capture"
+            }
+          }
+        ]
+      },
+      "scopeSpans": [
+        {
+          "scope": {
+            "name": "openinference.instrumentation.openai_agents",
+            "version": "2.5.2"
+          },
+          "spans": [
+            {
+              "traceId": "72bcea4b52f835fd80afcf69ac12c20d",
+              "spanId": "28c2e13ed9f06ed2",
+              "parentSpanId": "f6342587f7c8388e",
+              "name": "generation",
+              "kind": "SPAN_KIND_INTERNAL",
+              "startTimeUnixNano": "1791060022902893056",
+              "endTimeUnixNano": "1791060022905252096",
+              "attributes": [
+                {
+                  "key": "llm.system",
+                  "value": {
+                    "stringValue": "openai"
+                  }
+                },
+                {
+                  "key": "session.id",
+                  "value": {
+                    "stringValue": "capture-session"
+                  }
+                },
+                {
+                  "key": "llm.model_name",
+                  "value": {
+                    "stringValue": "gpt-4o-mini"
+                  }
+                },
+                {
+                  "key": "llm.invocation_parameters",
+                  "value": {
+                    "stringValue": "{\"base_url\": \"http://127.0.0.1:14331/v1/\"}"
+                  }
+                },
+                {
+                  "key": "input.value",
+                  "value": {
+                    "stringValue": "[{\"content\": \"Answer in one word.\", \"role\": \"system\"}, {\"role\": \"user\", \"content\": \"Weather in Paris?\"}, {\"role\": \"assistant\", \"content\": null, \"tool_calls\": [{\"id\": \"call_1\", \"type\": \"function\", \"function\": {\"name\": \"get_weather\", \"arguments\": \"{\\\"city\\\": \\\"Paris\\\"}\"}}]}, {\"role\": \"tool\", \"tool_call_id\": \"call_1\", \"content\": \"18 C, clear\"}]"
+                  }
+                },
+                {
+                  "key": "input.mime_type",
+                  "value": {
+                    "stringValue": "application/json"
+                  }
+                },
+                {
+                  "key": "llm.input_messages.0.message.role",
+                  "value": {
+                    "stringValue": "system"
+                  }
+                },
+                {
+                  "key": "llm.input_messages.0.message.content",
+                  "value": {
+                    "stringValue": "Answer in one word."
+                  }
+                },
+                {
+                  "key": "llm.input_messages.1.message.role",
+                  "value": {
+                    "stringValue": "user"
+                  }
+                },
+                {
+                  "key": "llm.input_messages.1.message.content",
+                  "value": {
+                    "stringValue": "Weather in Paris?"
+                  }
+                },
+                {
+                  "key": "llm.input_messages.2.message.role",
+                  "value": {
+                    "stringValue": "assistant"
+                  }
+                },
+                {
+                  "key": "llm.input_messages.2.message.tool_calls.0.tool_call.id",
+                  "value": {
+                    "stringValue": "call_1"
+                  }
+                },
+                {
+                  "key": "llm.input_messages.2.message.tool_calls.0.tool_call.function.name",
+                  "value": {
+                    "stringValue": "get_weather"
+                  }
+                },
+                {
+                  "key": "llm.input_messages.2.message.tool_calls.0.tool_call.function.arguments",
+                  "value": {
+                    "stringValue": "{\"city\": \"Paris\"}"
+                  }
+                },
+                {
+                  "key": "llm.input_messages.3.message.role",
+                  "value": {
+                    "stringValue": "tool"
+                  }
+                },
+                {
+                  "key": "llm.input_messages.3.message.content",
+                  "value": {
+                    "stringValue": "18 C, clear"
+                  }
+                },
+                {
+                  "key": "llm.input_messages.3.message.tool_call_id",
+                  "value": {
+                    "stringValue": "call_1"
+                  }
+                },
+                {
+                  "key": "output.value",
+                  "value": {
+                    "stringValue": "[{\"content\": \"Paris.\", \"refusal\": null, \"role\": \"assistant\", \"annotations\": null, \"audio\": null, \"function_call\": null, \"tool_calls\": null}]"
+                  }
+                },
+                {
+                  "key": "output.mime_type",
+                  "value": {
+                    "stringValue": "application/json"
+                  }
+                },
+                {
+                  "key": "llm.output_messages.0.message.role",
+                  "value": {
+                    "stringValue": "assistant"
+                  }
+                },
+                {
+                  "key": "llm.output_messages.0.message.content",
+                  "value": {
+                    "stringValue": "Paris."
+                  }
+                },
+                {
+                  "key": "llm.token_count.prompt",
+                  "value": {
+                    "intValue": "1200"
+                  }
+                },
+                {
+                  "key": "llm.token_count.completion",
+                  "value": {
+                    "intValue": "40"
+                  }
+                },
+                {
+                  "key": "openinference.span.kind",
+                  "value": {
+                    "stringValue": "LLM"
+                  }
+                }
+              ],
+              "status": {
+                "code": "STATUS_CODE_OK"
+              },
+              "flags": 256
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "resource": {
+        "attributes": [
+          {
+            "key": "telemetry.sdk.language",
+            "value": {
+              "stringValue": "python"
+            }
+          },
+          {
+            "key": "telemetry.sdk.name",
+            "value": {
+              "stringValue": "opentelemetry"
+            }
+          },
+          {
+            "key": "telemetry.sdk.version",
+            "value": {
+              "stringValue": "1.45.0"
+            }
+          },
+          {
+            "key": "service.instance.id",
+            "value": {
+              "stringValue": "31e26363-b8e1-48a4-bab0-212c85273c50"
+            }
+          },
+          {
+            "key": "service.name",
+            "value": {
+              "stringValue": "capture"
+            }
+          }
+        ]
+      },
+      "scopeSpans": [
+        {
+          "scope": {
+            "name": "openinference.instrumentation.openai_agents",
+            "version": "2.5.2"
+          },
+          "spans": [
+            {
+              "traceId": "72bcea4b52f835fd80afcf69ac12c20d",
+              "spanId": "f6342587f7c8388e",
+              "parentSpanId": "170d510e9ffbb5f9",
+              "name": "turn",
+              "kind": "SPAN_KIND_INTERNAL",
+              "startTimeUnixNano": "1791060022902324992",
+              "endTimeUnixNano": "1791060022907527936",
+              "attributes": [
+                {
+                  "key": "session.id",
+                  "value": {
+                    "stringValue": "capture-session"
+                  }
+                },
+                {
+                  "key": "openinference.span.kind",
+                  "value": {
+                    "stringValue": "CHAIN"
+                  }
+                }
+              ],
+              "status": {
+                "code": "STATUS_CODE_OK"
+              },
+              "flags": 256
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "resource": {
+        "attributes": [
+          {
+            "key": "telemetry.sdk.language",
+            "value": {
+              "stringValue": "python"
+            }
+          },
+          {
+            "key": "telemetry.sdk.name",
+            "value": {
+              "stringValue": "opentelemetry"
+            }
+          },
+          {
+            "key": "telemetry.sdk.version",
+            "value": {
+              "stringValue": "1.45.0"
+            }
+          },
+          {
+            "key": "service.instance.id",
+            "value": {
+              "stringValue": "31e26363-b8e1-48a4-bab0-212c85273c50"
+            }
+          },
+          {
+            "key": "service.name",
+            "value": {
+              "stringValue": "capture"
+            }
+          }
+        ]
+      },
+      "scopeSpans": [
+        {
+          "scope": {
+            "name": "openinference.instrumentation.openai_agents",
+            "version": "2.5.2"
+          },
+          "spans": [
+            {
+              "traceId": "72bcea4b52f835fd80afcf69ac12c20d",
+              "spanId": "170d510e9ffbb5f9",
+              "parentSpanId": "e3d6b6545cb820bc",
+              "name": "assistant",
+              "kind": "SPAN_KIND_INTERNAL",
+              "startTimeUnixNano": "1791060022838963968",
+              "endTimeUnixNano": "1791060022909347072",
+              "attributes": [
+                {
+                  "key": "session.id",
+                  "value": {
+                    "stringValue": "capture-session"
+                  }
+                },
+                {
+                  "key": "graph.node.id",
+                  "value": {
+                    "stringValue": "assistant"
+                  }
+                },
+                {
+                  "key": "agent.name",
+                  "value": {
+                    "stringValue": "assistant"
+                  }
+                },
+                {
+                  "key": "openinference.span.kind",
+                  "value": {
+                    "stringValue": "AGENT"
+                  }
+                }
+              ],
+              "status": {
+                "code": "STATUS_CODE_OK"
+              },
+              "flags": 256
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "resource": {
+        "attributes": [
+          {
+            "key": "telemetry.sdk.language",
+            "value": {
+              "stringValue": "python"
+            }
+          },
+          {
+            "key": "telemetry.sdk.name",
+            "value": {
+              "stringValue": "opentelemetry"
+            }
+          },
+          {
+            "key": "telemetry.sdk.version",
+            "value": {
+              "stringValue": "1.45.0"
+            }
+          },
+          {
+            "key": "service.instance.id",
+            "value": {
+              "stringValue": "31e26363-b8e1-48a4-bab0-212c85273c50"
+            }
+          },
+          {
+            "key": "service.name",
+            "value": {
+              "stringValue": "capture"
+            }
+          }
+        ]
+      },
+      "scopeSpans": [
+        {
+          "scope": {
+            "name": "openinference.instrumentation.openai_agents",
+            "version": "2.5.2"
+          },
+          "spans": [
+            {
+              "traceId": "72bcea4b52f835fd80afcf69ac12c20d",
+              "spanId": "e3d6b6545cb820bc",
+              "parentSpanId": "1c2ac246dd60da70",
+              "name": "Agent workflow",
+              "kind": "SPAN_KIND_INTERNAL",
+              "startTimeUnixNano": "1791060022838563072",
+              "endTimeUnixNano": "1791060022910987008",
+              "attributes": [
+                {
+                  "key": "session.id",
+                  "value": {
+                    "stringValue": "capture-session"
+                  }
+                },
+                {
+                  "key": "openinference.span.kind",
+                  "value": {
+                    "stringValue": "CHAIN"
+                  }
+                }
+              ],
+              "status": {
+                "code": "STATUS_CODE_OK"
+              },
+              "flags": 256
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "resource": {
+        "attributes": [
+          {
+            "key": "telemetry.sdk.language",
+            "value": {
+              "stringValue": "python"
+            }
+          },
+          {
+            "key": "telemetry.sdk.name",
+            "value": {
+              "stringValue": "opentelemetry"
+            }
+          },
+          {
+            "key": "telemetry.sdk.version",
+            "value": {
+              "stringValue": "1.45.0"
+            }
+          },
+          {
+            "key": "service.instance.id",
+            "value": {
+              "stringValue": "31e26363-b8e1-48a4-bab0-212c85273c50"
+            }
+          },
+          {
+            "key": "service.name",
+            "value": {
+              "stringValue": "capture"
+            }
+          }
+        ]
+      },
+      "scopeSpans": [
+        {
+          "scope": {
+            "name": "openinference.instrumentation.openai_agents",
+            "version": "2.5.2"
+          },
+          "spans": [
+            {
+              "traceId": "72bcea4b52f835fd80afcf69ac12c20d",
+              "spanId": "1c2ac246dd60da70",
+              "name": "Agent workflow",
+              "kind": "SPAN_KIND_INTERNAL",
+              "startTimeUnixNano": "1791060022838338000",
+              "endTimeUnixNano": "1791060022912660000",
+              "attributes": [
+                {
+                  "key": "session.id",
+                  "value": {
+                    "stringValue": "capture-session"
+                  }
+                },
+                {
+                  "key": "openinference.span.kind",
+                  "value": {
+                    "stringValue": "AGENT"
+                  }
+                }
+              ],
+              "status": {
+                "code": "STATUS_CODE_OK"
+              },
+              "flags": 256
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

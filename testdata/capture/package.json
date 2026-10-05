@@ -1,0 +1,12 @@
+{
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "@ai-sdk/openai": "4.0.83",
+    "@ai-sdk/otel": "1.0.127",
+    "@opentelemetry/exporter-trace-otlp-proto": "0.222.0",
+    "@opentelemetry/sdk-trace-node": "2.11.0",
+    "ai": "7.0.127",
+    "zod": "4.6.5"
+  }
+}

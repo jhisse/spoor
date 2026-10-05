@@ -1,0 +1,564 @@
+{
+  "resourceSpans": [
+    {
+      "resource": {
+        "attributes": [
+          {
+            "key": "telemetry.sdk.language",
+            "value": {
+              "stringValue": "python"
+            }
+          },
+          {
+            "key": "telemetry.sdk.name",
+            "value": {
+              "stringValue": "opentelemetry"
+            }
+          },
+          {
+            "key": "telemetry.sdk.version",
+            "value": {
+              "stringValue": "1.45.0"
+            }
+          },
+          {
+            "key": "service.instance.id",
+            "value": {
+              "stringValue": "21dc4587-f881-480f-ae83-5fbf4fb44ba5"
+            }
+          },
+          {
+            "key": "service.name",
+            "value": {
+              "stringValue": "capture"
+            }
+          },
+          {
+            "key": "deployment.environment",
+            "value": {
+              "stringValue": "production"
+            }
+          },
+          {
+            "key": "model_id",
+            "value": {
+              "stringValue": "capture"
+            }
+          }
+        ]
+      },
+      "scopeSpans": [
+        {
+          "scope": {
+            "name": "litellm"
+          },
+          "spans": [
+            {
+              "traceId": "449e0f3c85e66267d567d6501e30faa2",
+              "spanId": "db5e138a03138a03",
+              "name": "litellm_request",
+              "kind": "SPAN_KIND_INTERNAL",
+              "startTimeUnixNano": "1791060035629085952",
+              "endTimeUnixNano": "1791060036011401984",
+              "attributes": [
+                {
+                  "key": "metadata.user_api_key_hash",
+                  "value": {
+                    "stringValue": ""
+                  }
+                },
+                {
+                  "key": "metadata.user_api_key_alias",
+                  "value": {
+                    "stringValue": ""
+                  }
+                },
+                {
+                  "key": "metadata.user_api_key_spend",
+                  "value": {
+                    "stringValue": ""
+                  }
+                },
+                {
+                  "key": "metadata.user_api_key_max_budget",
+                  "value": {
+                    "stringValue": ""
+                  }
+                },
+                {
+                  "key": "metadata.user_api_key_budget_reset_at",
+                  "value": {
+                    "stringValue": ""
+                  }
+                },
+                {
+                  "key": "metadata.user_api_key_user_spend",
+                  "value": {
+                    "stringValue": ""
+                  }
+                },
+                {
+                  "key": "metadata.user_api_key_user_max_budget",
+                  "value": {
+                    "stringValue": ""
+                  }
+                },
+                {
+                  "key": "metadata.user_api_key_team_spend",
+                  "value": {
+                    "stringValue": ""
+                  }
+                },
+                {
+                  "key": "metadata.user_api_key_team_max_budget",
+                  "value": {
+                    "stringValue": ""
+                  }
+                },
+                {
+                  "key": "metadata.user_api_key_team_id",
+                  "value": {
+                    "stringValue": ""
+                  }
+                },
+                {
+                  "key": "metadata.user_api_key_org_id",
+                  "value": {
+                    "stringValue": ""
+                  }
+                },
+                {
+                  "key": "metadata.user_api_key_org_alias",
+                  "value": {
+                    "stringValue": ""
+                  }
+                },
+                {
+                  "key": "metadata.user_api_key_project_id",
+                  "value": {
+                    "stringValue": ""
+                  }
+                },
+                {
+                  "key": "metadata.user_api_key_project_alias",
+                  "value": {
+                    "stringValue": ""
+                  }
+                },
+                {
+                  "key": "metadata.user_api_key_user_id",
+                  "value": {
+                    "stringValue": ""
+                  }
+                },
+                {
+                  "key": "metadata.user_api_key_team_alias",
+                  "value": {
+                    "stringValue": ""
+                  }
+                },
+                {
+                  "key": "metadata.user_api_key_user_email",
+                  "value": {
+                    "stringValue": ""
+                  }
+                },
+                {
+                  "key": "metadata.user_api_key_end_user_id",
+                  "value": {
+                    "stringValue": ""
+                  }
+                },
+                {
+                  "key": "metadata.user_api_key_request_route",
+                  "value": {
+                    "stringValue": ""
+                  }
+                },
+                {
+                  "key": "metadata.spend_logs_metadata",
+                  "value": {
+                    "stringValue": ""
+                  }
+                },
+                {
+                  "key": "metadata.requester_ip_address",
+                  "value": {
+                    "stringValue": ""
+                  }
+                },
+                {
+                  "key": "metadata.user_agent",
+                  "value": {
+                    "stringValue": ""
+                  }
+                },
+                {
+                  "key": "metadata.requester_metadata",
+                  "value": {
+                    "stringValue": ""
+                  }
+                },
+                {
+                  "key": "metadata.prompt_management_metadata",
+                  "value": {
+                    "stringValue": ""
+                  }
+                },
+                {
+                  "key": "metadata.applied_guardrails",
+                  "value": {
+                    "stringValue": "[]"
+                  }
+                },
+                {
+                  "key": "metadata.mcp_tool_call_metadata",
+                  "value": {
+                    "stringValue": ""
+                  }
+                },
+                {
+                  "key": "metadata.vector_store_request_metadata",
+                  "value": {
+                    "stringValue": ""
+                  }
+                },
+                {
+                  "key": "metadata.routing_decision",
+                  "value": {
+                    "stringValue": ""
+                  }
+                },
+                {
+                  "key": "metadata.usage_object",
+                  "value": {
+                    "stringValue": "{'completion_tokens': 40, 'prompt_tokens': 1200, 'total_tokens': 1240, 'completion_tokens_details': {'accepted_prediction_tokens': None, 'audio_tokens': None, 'reasoning_tokens': 32, 'rejected_prediction_tokens': None}, 'prompt_tokens_details': {'audio_tokens': None, 'cached_tokens': 1024}}"
+                  }
+                },
+                {
+                  "key": "metadata.requester_custom_headers",
+                  "value": {
+                    "stringValue": ""
+                  }
+                },
+                {
+                  "key": "metadata.cold_storage_object_key",
+                  "value": {
+                    "stringValue": ""
+                  }
+                },
+                {
+                  "key": "metadata.user_api_key_auth_metadata",
+                  "value": {
+                    "stringValue": ""
+                  }
+                },
+                {
+                  "key": "metadata.team_alias",
+                  "value": {
+                    "stringValue": ""
+                  }
+                },
+                {
+                  "key": "metadata.team_id",
+                  "value": {
+                    "stringValue": ""
+                  }
+                },
+                {
+                  "key": "hidden_params",
+                  "value": {
+                    "stringValue": "{\"model_id\": null, \"cache_key\": null, \"api_base\": \"http://127.0.0.1:14331/v1\", \"response_cost\": 0.0001272, \"additional_headers\": {\"llm_provider-server\": \"BaseHTTP/0.6 Python/3.13.5\", \"llm_provider-date\": \"Sat, 03 Oct 2026 20:40:35 GMT\", \"llm_provider-content-type\": \"application/json\", \"llm_provider-content-length\": \"514\"}, \"litellm_overhead_time_ms\": 118.4779, \"batch_models\": null, \"batch_successful_requests\": null, \"batch_failed_requests\": null, \"litellm_model_name\": \"openai/gpt-4o-mini\", \"usage_object\": null}"
+                  }
+                },
+                {
+                  "key": "litellm.provider.model",
+                  "value": {
+                    "stringValue": "openai/gpt-4o-mini"
+                  }
+                },
+                {
+                  "key": "gen_ai.cost.input_cost",
+                  "value": {
+                    "doubleValue": 0.00010319999999999999
+                  }
+                },
+                {
+                  "key": "gen_ai.cost.output_cost",
+                  "value": {
+                    "doubleValue": 2.4e-05
+                  }
+                },
+                {
+                  "key": "gen_ai.cost.total_cost",
+                  "value": {
+                    "doubleValue": 0.0001272
+                  }
+                },
+                {
+                  "key": "gen_ai.cost.tool_usage_cost",
+                  "value": {
+                    "doubleValue": 0.0
+                  }
+                },
+                {
+                  "key": "gen_ai.cost.cache_read_cost",
+                  "value": {
+                    "doubleValue": 7.68e-05
+                  }
+                },
+                {
+                  "key": "gen_ai.cost.reasoning_cost",
+                  "value": {
+                    "doubleValue": 1.92e-05
+                  }
+                },
+                {
+                  "key": "gen_ai.cost.original_cost",
+                  "value": {
+                    "doubleValue": 0.0001272
+                  }
+                },
+                {
+                  "key": "gen_ai.cost.discount_percent",
+                  "value": {
+                    "doubleValue": 0.0
+                  }
+                },
+                {
+                  "key": "gen_ai.cost.discount_amount",
+                  "value": {
+                    "doubleValue": 0.0
+                  }
+                },
+                {
+                  "key": "gen_ai.cost.margin_percent",
+                  "value": {
+                    "doubleValue": 0.0
+                  }
+                },
+                {
+                  "key": "gen_ai.cost.margin_fixed_amount",
+                  "value": {
+                    "doubleValue": 0.0
+                  }
+                },
+                {
+                  "key": "gen_ai.cost.margin_total_amount",
+                  "value": {
+                    "doubleValue": 0.0
+                  }
+                },
+                {
+                  "key": "gen_ai.request.model",
+                  "value": {
+                    "stringValue": "gpt-4o-mini"
+                  }
+                },
+                {
+                  "key": "llm.request.type",
+                  "value": {
+                    "stringValue": "completion"
+                  }
+                },
+                {
+                  "key": "gen_ai.system",
+                  "value": {
+                    "stringValue": "openai"
+                  }
+                },
+                {
+                  "key": "llm.is_streaming",
+                  "value": {
+                    "stringValue": "False"
+                  }
+                },
+                {
+                  "key": "gen_ai.response.id",
+                  "value": {
+                    "stringValue": "chatcmpl-fake"
+                  }
+                },
+                {
+                  "key": "litellm.call_id",
+                  "value": {
+                    "stringValue": "0fddcc4e-4631-42f5-9c60-049e349e7087"
+                  }
+                },
+                {
+                  "key": "gen_ai.response.model",
+                  "value": {
+                    "stringValue": "gpt-4o-mini"
+                  }
+                },
+                {
+                  "key": "gen_ai.usage.total_tokens",
+                  "value": {
+                    "intValue": "1240"
+                  }
+                },
+                {
+                  "key": "gen_ai.usage.output_tokens",
+                  "value": {
+                    "intValue": "40"
+                  }
+                },
+                {
+                  "key": "gen_ai.usage.input_tokens",
+                  "value": {
+                    "intValue": "1200"
+                  }
+                },
+                {
+                  "key": "llm.request.functions.0.name",
+                  "value": {
+                    "stringValue": "get_weather"
+                  }
+                },
+                {
+                  "key": "llm.request.functions.0.description",
+                  "value": {
+                    "stringValue": "Weather in a city"
+                  }
+                },
+                {
+                  "key": "llm.request.functions.0.parameters",
+                  "value": {
+                    "stringValue": "{\"type\": \"object\", \"properties\": {\"city\": {\"type\": \"string\"}}, \"required\": [\"city\"]}"
+                  }
+                },
+                {
+                  "key": "gen_ai.input.messages",
+                  "value": {
+                    "stringValue": "[{\"role\": \"system\", \"parts\": [{\"type\": \"text\", \"content\": \"Answer in one word.\"}]}, {\"role\": \"user\", \"parts\": [{\"type\": \"text\", \"content\": \"Weather in Paris?\"}]}]"
+                  }
+                },
+                {
+                  "key": "gen_ai.operation.name",
+                  "value": {
+                    "stringValue": "chat"
+                  }
+                },
+                {
+                  "key": "gen_ai.output.messages",
+                  "value": {
+                    "stringValue": "[{\"role\": \"assistant\", \"parts\": [], \"finish_reason\": \"tool_calls\"}]"
+                  }
+                },
+                {
+                  "key": "gen_ai.response.finish_reasons",
+                  "value": {
+                    "stringValue": "[\"tool_calls\"]"
+                  }
+                },
+                {
+                  "key": "gen_ai.completion.0.function_call.arguments",
+                  "value": {
+                    "stringValue": "{\"city\": \"Paris\"}"
+                  }
+                },
+                {
+                  "key": "gen_ai.completion.0.function_call.name",
+                  "value": {
+                    "stringValue": "get_weather"
+                  }
+                }
+              ],
+              "status": {
+                "code": "STATUS_CODE_OK"
+              },
+              "flags": 256
+            },
+            {
+              "traceId": "449e0f3c85e66267d567d6501e30faa2",
+              "spanId": "2e9b0b6d4983c43b",
+              "parentSpanId": "db5e138a03138a03",
+              "name": "raw_gen_ai_request",
+              "kind": "SPAN_KIND_INTERNAL",
+              "startTimeUnixNano": "1791060035629085952",
+              "endTimeUnixNano": "1791060036011401984",
+              "attributes": [
+                {
+                  "key": "llm.openai.messages",
+                  "value": {
+                    "stringValue": "[{'role': 'system', 'content': 'Answer in one word.'}, {'role': 'user', 'content': 'Weather in Paris?'}]"
+                  }
+                },
+                {
+                  "key": "llm.openai.tools",
+                  "value": {
+                    "stringValue": "[{'type': 'function', 'function': {'name': 'get_weather', 'description': 'Weather in a city', 'parameters': {'type': 'object', 'properties': {'city': {'type': 'string'}}, 'required': ['city']}}}]"
+                  }
+                },
+                {
+                  "key": "llm.openai.extra_body",
+                  "value": {
+                    "stringValue": "{}"
+                  }
+                },
+                {
+                  "key": "llm.openai.id",
+                  "value": {
+                    "stringValue": "chatcmpl-fake"
+                  }
+                },
+                {
+                  "key": "llm.openai.choices",
+                  "value": {
+                    "stringValue": "[{'finish_reason': 'tool_calls', 'index': 0, 'logprobs': None, 'message': {'content': None, 'refusal': None, 'role': 'assistant', 'annotations': None, 'audio': None, 'function_call': None, 'tool_calls': [{'id': 'call_1', 'function': {'arguments': '{\"city\": \"Paris\"}', 'name': 'get_weather'}, 'type': 'function'}]}}]"
+                  }
+                },
+                {
+                  "key": "llm.openai.created",
+                  "value": {
+                    "intValue": "1"
+                  }
+                },
+                {
+                  "key": "llm.openai.model",
+                  "value": {
+                    "stringValue": "gpt-4o-mini"
+                  }
+                },
+                {
+                  "key": "llm.openai.object",
+                  "value": {
+                    "stringValue": "chat.completion"
+                  }
+                },
+                {
+                  "key": "llm.openai.moderation",
+                  "value": {
+                    "stringValue": ""
+                  }
+                },
+                {
+                  "key": "llm.openai.service_tier",
+                  "value": {
+                    "stringValue": ""
+                  }
+                },
+                {
+                  "key": "llm.openai.system_fingerprint",
+                  "value": {
+                    "stringValue": ""
+                  }
+                },
+                {
+                  "key": "llm.openai.usage",
+                  "value": {
+                    "stringValue": "{'completion_tokens': 40, 'prompt_tokens': 1200, 'total_tokens': 1240, 'completion_tokens_details': {'accepted_prediction_tokens': None, 'audio_tokens': None, 'reasoning_tokens': 32, 'rejected_prediction_tokens': None}, 'prompt_tokens_details': {'audio_tokens': None, 'cache_write_tokens': None, 'cached_tokens': 1024}}"
+                  }
+                }
+              ],
+              "status": {
+                "code": "STATUS_CODE_OK"
+              },
+              "flags": 256
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

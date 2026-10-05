@@ -1,0 +1,124 @@
+{
+  "resourceSpans": [
+    {
+      "resource": {
+        "attributes": [
+          {
+            "key": "service.name",
+            "value": {
+              "stringValue": "spoor-testdata-capture"
+            }
+          }
+        ]
+      },
+      "scopeSpans": [
+        {
+          "scope": {
+            "name": "opentelemetry.instrumentation.anthropic",
+            "version": "0.36.1"
+          },
+          "spans": [
+            {
+              "traceId": "766a86f4771a973fbf0ddc43cab7c9ea",
+              "spanId": "d036294cbd00f3fa",
+              "name": "anthropic.chat",
+              "kind": "SPAN_KIND_CLIENT",
+              "startTimeUnixNano": "1786391160523593000",
+              "endTimeUnixNano": "1786391163954480000",
+              "attributes": [
+                {
+                  "key": "gen_ai.system",
+                  "value": {
+                    "stringValue": "Anthropic"
+                  }
+                },
+                {
+                  "key": "llm.request.type",
+                  "value": {
+                    "stringValue": "completion"
+                  }
+                },
+                {
+                  "key": "gen_ai.request.model",
+                  "value": {
+                    "stringValue": "claude-sonnet-5"
+                  }
+                },
+                {
+                  "key": "gen_ai.prompt.0.content",
+                  "value": {
+                    "stringValue": "In one sentence, what makes a good API design?"
+                  }
+                },
+                {
+                  "key": "gen_ai.prompt.0.role",
+                  "value": {
+                    "stringValue": "user"
+                  }
+                },
+                {
+                  "key": "gen_ai.response.model",
+                  "value": {
+                    "stringValue": "claude-sonnet-5"
+                  }
+                },
+                {
+                  "key": "gen_ai.completion.0.finish_reason",
+                  "value": {
+                    "stringValue": "end_turn"
+                  }
+                },
+                {
+                  "key": "gen_ai.completion.0.role",
+                  "value": {
+                    "stringValue": "assistant"
+                  }
+                },
+                {
+                  "key": "gen_ai.completion.0.content",
+                  "value": {
+                    "stringValue": "A good API design is intuitive and consistent, exposing clear, well-documented, and minimal interfaces that make common tasks easy while hiding unnecessary complexity, remaining stable and predictable across versions, and gracefully handling errors so developers can use it correctly without needing to understand its internal implementation."
+                  }
+                },
+                {
+                  "key": "gen_ai.usage.prompt_tokens",
+                  "value": {
+                    "intValue": "20"
+                  }
+                },
+                {
+                  "key": "gen_ai.usage.completion_tokens",
+                  "value": {
+                    "intValue": "100"
+                  }
+                },
+                {
+                  "key": "llm.usage.total_tokens",
+                  "value": {
+                    "intValue": "120"
+                  }
+                },
+                {
+                  "key": "gen_ai.usage.cache_read_input_tokens",
+                  "value": {
+                    "intValue": "0"
+                  }
+                },
+                {
+                  "key": "gen_ai.usage.cache_creation_input_tokens",
+                  "value": {
+                    "intValue": "0"
+                  }
+                }
+              ],
+              "status": {
+                "code": "STATUS_CODE_OK"
+              },
+              "flags": 256
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,175 @@
+{
+  "resourceSpans": [
+    {
+      "resource": {
+        "attributes": [
+          {
+            "key": "telemetry.sdk.language",
+            "value": {
+              "stringValue": "python"
+            }
+          },
+          {
+            "key": "telemetry.sdk.name",
+            "value": {
+              "stringValue": "opentelemetry"
+            }
+          },
+          {
+            "key": "telemetry.sdk.version",
+            "value": {
+              "stringValue": "1.45.0"
+            }
+          },
+          {
+            "key": "service.instance.id",
+            "value": {
+              "stringValue": "47d5bf13-8da8-4c6e-848b-878a0f6dccc2"
+            }
+          },
+          {
+            "key": "service.name",
+            "value": {
+              "stringValue": "capture"
+            }
+          }
+        ]
+      },
+      "scopeSpans": [
+        {
+          "scope": {
+            "name": "openinference.instrumentation.anthropic",
+            "version": "3.0.1"
+          },
+          "spans": [
+            {
+              "traceId": "a0eb54d715bcc11f7df17e588ddf6e15",
+              "spanId": "454922b9f57dee97",
+              "name": "messages.create",
+              "kind": "SPAN_KIND_INTERNAL",
+              "startTimeUnixNano": "1791060016718270000",
+              "endTimeUnixNano": "1791060016720995000",
+              "attributes": [
+                {
+                  "key": "llm.provider",
+                  "value": {
+                    "stringValue": "anthropic"
+                  }
+                },
+                {
+                  "key": "llm.system",
+                  "value": {
+                    "stringValue": "anthropic"
+                  }
+                },
+                {
+                  "key": "input.value",
+                  "value": {
+                    "stringValue": "{\"messages\": [{\"role\": \"user\", \"content\": \"Capital of France?\"}], \"model\": \"no-such-model\", \"max_tokens\": 64, \"system\": \"Answer in one word.\"}"
+                  }
+                },
+                {
+                  "key": "input.mime_type",
+                  "value": {
+                    "stringValue": "application/json"
+                  }
+                },
+                {
+                  "key": "session.id",
+                  "value": {
+                    "stringValue": "capture-session"
+                  }
+                },
+                {
+                  "key": "llm.model_name",
+                  "value": {
+                    "stringValue": "no-such-model"
+                  }
+                },
+                {
+                  "key": "llm.request.model_name",
+                  "value": {
+                    "stringValue": "no-such-model"
+                  }
+                },
+                {
+                  "key": "llm.input_messages.1.message.role",
+                  "value": {
+                    "stringValue": "user"
+                  }
+                },
+                {
+                  "key": "llm.input_messages.1.message.content",
+                  "value": {
+                    "stringValue": "Capital of France?"
+                  }
+                },
+                {
+                  "key": "llm.input_messages.0.message.role",
+                  "value": {
+                    "stringValue": "system"
+                  }
+                },
+                {
+                  "key": "llm.input_messages.0.message.content",
+                  "value": {
+                    "stringValue": "Answer in one word."
+                  }
+                },
+                {
+                  "key": "llm.invocation_parameters",
+                  "value": {
+                    "stringValue": "{\"max_tokens\": 64}"
+                  }
+                },
+                {
+                  "key": "openinference.span.kind",
+                  "value": {
+                    "stringValue": "LLM"
+                  }
+                }
+              ],
+              "events": [
+                {
+                  "timeUnixNano": "1791060016720945000",
+                  "name": "exception",
+                  "attributes": [
+                    {
+                      "key": "exception.type",
+                      "value": {
+                        "stringValue": "anthropic.NotFoundError"
+                      }
+                    },
+                    {
+                      "key": "exception.message",
+                      "value": {
+                        "stringValue": "Error code: 404 - {'type': 'error', 'error': {'type': 'not_found_error', 'message': 'model: no-such-model'}}"
+                      }
+                    },
+                    {
+                      "key": "exception.stacktrace",
+                      "value": {
+                        "stringValue": "Traceback (most recent call last):\n  File \"~/.cache/uv/environments-v2/openinference-anthropic-2640127eba38d8a0/lib/python3.13/site-packages/openinference/instrumentation/anthropic/_wrappers.py\", line 248, in __call__\n    response = wrapped(*args, **kwargs)\n  File \"~/.cache/uv/environments-v2/openinference-anthropic-2640127eba38d8a0/lib/python3.13/site-packages/anthropic/_utils/_utils.py\", line 294, in wrapper\n    return func(*args, **kwargs)\n  File \"~/.cache/uv/environments-v2/openinference-anthropic-2640127eba38d8a0/lib/python3.13/site-packages/anthropic/resources/messages/messages.py\", line 1029, in create\n    return self._post(\n           ~~~~~~~~~~^\n        \"/v1/messages\",\n        ^^^^^^^^^^^^^^^\n    ...<26 lines>...\n        stream_cls=Stream[RawMessageStreamEvent],\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n    )\n    ^\n  File \"~/.cache/uv/environments-v2/openinference-anthropic-2640127eba38d8a0/lib/python3.13/site-packages/anthropic/_base_client.py\", line 1543, in post\n    return cast(ResponseT, self.request(cast_to, opts, stream=stream, stream_cls=stream_cls))\n                           ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"~/.cache/uv/environments-v2/openinference-anthropic-2640127eba38d8a0/lib/python3.13/site-packages/anthropic/_base_client.py\", line 1208, in request\n    raise self._make_status_error_from_response(response) from None\nanthropic.NotFoundError: Error code: 404 - {'type': 'error', 'error': {'type': 'not_found_error', 'message': 'model: no-such-model'}}\n"
+                      }
+                    },
+                    {
+                      "key": "exception.escaped",
+                      "value": {
+                        "stringValue": "False"
+                      }
+                    }
+                  ]
+                }
+              ],
+              "status": {
+                "message": "Error code: 404 - {'type': 'error', 'error': {'type': 'not_found_error', 'message': 'model: no-such-model'}}",
+                "code": "STATUS_CODE_ERROR"
+              },
+              "flags": 256
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

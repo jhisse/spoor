@@ -1,0 +1,311 @@
+{
+  "resourceSpans": [
+    {
+      "resource": {
+        "attributes": [
+          {
+            "key": "telemetry.sdk.language",
+            "value": {
+              "stringValue": "python"
+            }
+          },
+          {
+            "key": "telemetry.sdk.name",
+            "value": {
+              "stringValue": "opentelemetry"
+            }
+          },
+          {
+            "key": "telemetry.sdk.version",
+            "value": {
+              "stringValue": "1.45.0"
+            }
+          },
+          {
+            "key": "service.instance.id",
+            "value": {
+              "stringValue": "2fa252ae-1302-41ed-81ac-4648581050dc"
+            }
+          },
+          {
+            "key": "service.name",
+            "value": {
+              "stringValue": "capture"
+            }
+          }
+        ]
+      },
+      "scopeSpans": [
+        {
+          "scope": {
+            "name": "opentelemetry.util.genai.handler",
+            "version": "1.1b0"
+          },
+          "spans": [
+            {
+              "traceId": "aca5c117b4a467c4d852ba9381c41e75",
+              "spanId": "2beb0c01829a5623",
+              "parentSpanId": "7fd2bc0fa8d5eab4",
+              "name": "chat gpt-4o-mini",
+              "kind": "SPAN_KIND_CLIENT",
+              "startTimeUnixNano": "1791060030602183000",
+              "endTimeUnixNano": "1791060030619381000",
+              "attributes": [
+                {
+                  "key": "gen_ai.operation.name",
+                  "value": {
+                    "stringValue": "chat"
+                  }
+                },
+                {
+                  "key": "gen_ai.request.model",
+                  "value": {
+                    "stringValue": "gpt-4o-mini"
+                  }
+                },
+                {
+                  "key": "gen_ai.provider.name",
+                  "value": {
+                    "stringValue": "openai"
+                  }
+                },
+                {
+                  "key": "gen_ai.response.finish_reasons",
+                  "value": {
+                    "arrayValue": {
+                      "values": [
+                        {
+                          "stringValue": "tool_calls"
+                        }
+                      ]
+                    }
+                  }
+                },
+                {
+                  "key": "gen_ai.response.model",
+                  "value": {
+                    "stringValue": "gpt-4o-mini"
+                  }
+                },
+                {
+                  "key": "gen_ai.response.id",
+                  "value": {
+                    "stringValue": "chatcmpl-fake"
+                  }
+                },
+                {
+                  "key": "gen_ai.usage.input_tokens",
+                  "value": {
+                    "intValue": "1200"
+                  }
+                },
+                {
+                  "key": "gen_ai.usage.output_tokens",
+                  "value": {
+                    "intValue": "40"
+                  }
+                },
+                {
+                  "key": "gen_ai.input.messages",
+                  "value": {
+                    "stringValue": "[{\"role\":\"system\",\"parts\":[{\"content\":\"Answer in one word.\",\"type\":\"text\"}]},{\"role\":\"user\",\"parts\":[{\"content\":\"Weather in Paris?\",\"type\":\"text\"}]}]"
+                  }
+                },
+                {
+                  "key": "gen_ai.output.messages",
+                  "value": {
+                    "stringValue": "[{\"role\":\"assistant\",\"parts\":[{\"arguments\":{\"city\":\"Paris\"},\"name\":\"get_weather\",\"id\":\"call_1\",\"type\":\"tool_call\"}],\"finish_reason\":\"tool_calls\"}]"
+                  }
+                }
+              ],
+              "status": {},
+              "flags": 256
+            }
+          ],
+          "schemaUrl": "https://opentelemetry.io/schemas/1.37.0"
+        }
+      ]
+    },
+    {
+      "resource": {
+        "attributes": [
+          {
+            "key": "telemetry.sdk.language",
+            "value": {
+              "stringValue": "python"
+            }
+          },
+          {
+            "key": "telemetry.sdk.name",
+            "value": {
+              "stringValue": "opentelemetry"
+            }
+          },
+          {
+            "key": "telemetry.sdk.version",
+            "value": {
+              "stringValue": "1.45.0"
+            }
+          },
+          {
+            "key": "service.instance.id",
+            "value": {
+              "stringValue": "2fa252ae-1302-41ed-81ac-4648581050dc"
+            }
+          },
+          {
+            "key": "service.name",
+            "value": {
+              "stringValue": "capture"
+            }
+          }
+        ]
+      },
+      "scopeSpans": [
+        {
+          "scope": {
+            "name": "opentelemetry.util.genai.handler",
+            "version": "1.1b0"
+          },
+          "spans": [
+            {
+              "traceId": "aca5c117b4a467c4d852ba9381c41e75",
+              "spanId": "c03d3e5efa62ab88",
+              "parentSpanId": "7fd2bc0fa8d5eab4",
+              "name": "chat gpt-4o-mini",
+              "kind": "SPAN_KIND_CLIENT",
+              "startTimeUnixNano": "1791060030621167000",
+              "endTimeUnixNano": "1791060030622484000",
+              "attributes": [
+                {
+                  "key": "gen_ai.operation.name",
+                  "value": {
+                    "stringValue": "chat"
+                  }
+                },
+                {
+                  "key": "gen_ai.request.model",
+                  "value": {
+                    "stringValue": "gpt-4o-mini"
+                  }
+                },
+                {
+                  "key": "gen_ai.provider.name",
+                  "value": {
+                    "stringValue": "openai"
+                  }
+                },
+                {
+                  "key": "gen_ai.response.finish_reasons",
+                  "value": {
+                    "arrayValue": {
+                      "values": [
+                        {
+                          "stringValue": "stop"
+                        }
+                      ]
+                    }
+                  }
+                },
+                {
+                  "key": "gen_ai.response.model",
+                  "value": {
+                    "stringValue": "gpt-4o-mini"
+                  }
+                },
+                {
+                  "key": "gen_ai.response.id",
+                  "value": {
+                    "stringValue": "chatcmpl-fake"
+                  }
+                },
+                {
+                  "key": "gen_ai.usage.input_tokens",
+                  "value": {
+                    "intValue": "1200"
+                  }
+                },
+                {
+                  "key": "gen_ai.usage.output_tokens",
+                  "value": {
+                    "intValue": "40"
+                  }
+                },
+                {
+                  "key": "gen_ai.input.messages",
+                  "value": {
+                    "stringValue": "[{\"role\":\"system\",\"parts\":[{\"content\":\"Answer in one word.\",\"type\":\"text\"}]},{\"role\":\"user\",\"parts\":[{\"content\":\"Weather in Paris?\",\"type\":\"text\"}]},{\"role\":\"assistant\",\"parts\":[{\"arguments\":{\"city\":\"Paris\"},\"name\":\"get_weather\",\"id\":\"call_1\",\"type\":\"tool_call\"}]},{\"role\":\"tool\",\"parts\":[{\"response\":\"18 C, clear\",\"id\":\"call_1\",\"type\":\"tool_call_response\"}]}]"
+                  }
+                },
+                {
+                  "key": "gen_ai.output.messages",
+                  "value": {
+                    "stringValue": "[{\"role\":\"assistant\",\"parts\":[{\"content\":\"Paris.\",\"type\":\"text\"}],\"finish_reason\":\"stop\"}]"
+                  }
+                }
+              ],
+              "status": {},
+              "flags": 256
+            }
+          ],
+          "schemaUrl": "https://opentelemetry.io/schemas/1.37.0"
+        }
+      ]
+    },
+    {
+      "resource": {
+        "attributes": [
+          {
+            "key": "telemetry.sdk.language",
+            "value": {
+              "stringValue": "python"
+            }
+          },
+          {
+            "key": "telemetry.sdk.name",
+            "value": {
+              "stringValue": "opentelemetry"
+            }
+          },
+          {
+            "key": "telemetry.sdk.version",
+            "value": {
+              "stringValue": "1.45.0"
+            }
+          },
+          {
+            "key": "service.instance.id",
+            "value": {
+              "stringValue": "2fa252ae-1302-41ed-81ac-4648581050dc"
+            }
+          },
+          {
+            "key": "service.name",
+            "value": {
+              "stringValue": "capture"
+            }
+          }
+        ]
+      },
+      "scopeSpans": [
+        {
+          "scope": {
+            "name": "capture"
+          },
+          "spans": [
+            {
+              "traceId": "aca5c117b4a467c4d852ba9381c41e75",
+              "spanId": "7fd2bc0fa8d5eab4",
+              "name": "weather-agent",
+              "kind": "SPAN_KIND_INTERNAL",
+              "startTimeUnixNano": "1791060030601694000",
+              "endTimeUnixNano": "1791060030623670000",
+              "status": {},
+              "flags": 256
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,117 @@
+{{/* span_detail is the selected span: a run of .sec blocks, for the caller's
+     pane to hold. Inside .prose, .code and dd whitespace is kept, so those
+     tags have no line break between them and their text. */}}
+{{define "span_detail"}}
+{{with .SelectedSpan}}
+{{$started := .StartedAt.Format "2006-01-02 15:04:05"}}{{$mix := .Mix}}{{$events := spanEvents .}}
+<div class="sec">
+{{if and $.Trail $.Trace.ID}}<div class="row"><nav class="crumbs grow" aria-label="Path to this span">{{range $.Trail}}{{if eq .ID $.SelectedID}}<span aria-current="true">{{.Name}}</span>{{else}}<a {{template "pick" (spanHref $.Trace.ID .ID $.Keep)}} hx-swap="outerHTML show:#span-top:top">{{.Name}}</a>{{end}}{{end}}</nav><span class="cap end">Span {{$.At}} of {{$.Of}}</span></div>{{end}}
+<div class="span-h"><span class="kind k-{{.Kind}}">{{.Kind}}</span><h2>{{.Name}}</h2>
+{{if .Model}}<span class="chip mono" title="model">{{strVal .Model}}</span>{{end}}
+{{with purpose .}}<span class="chip" title="what the sender says this model call was for">{{.}}</span>{{end}}
+{{if eq .Status "error"}}<span class="badge err"><svg class="st err" aria-hidden="true"><use href="#i-err"/></svg> error</span>{{else if eq .Status "ok"}}<span class="badge"><svg class="st ok" aria-hidden="true"><use href="#i-ok"/></svg> ok</span>{{end}}
+{{if $.SelectedID}}<a class="btn sm quiet jump end" href="#span-tree">Span tree ↓</a>{{end}}</div>
+<dl class="stats sm mt">
+<div><dt>Started</dt><dd title="{{$started}} UTC">{{if $.Trace.ID}}+{{fmtDuration (.StartedAt.Sub $.Trace.StartedAt)}} <small>into the trace</small>{{else}}{{$started}} <small>UTC</small>{{end}}</dd></div>
+<div><dt>Duration</dt><dd>{{fmtDuration (.EndedAt.Sub .StartedAt)}}</dd></div>
+{{if eq .Kind "generation"}}
+<div><dt>Cost</dt><dd>{{if .CacheUnknown}}{{template "cache_unknown" 1}}{{end}}{{costVal .CostUSD}}</dd></div>
+<div><dt>Input</dt><dd>{{if .InputTokens}}<span title="{{int64Val .InputTokens}}">{{fmtCount (int64Val .InputTokens)}}</span> <small>tokens</small>{{else}}? <small>not reported</small>{{end}}</dd></div>
+<div><dt>Output</dt><dd>{{if .OutputTokens}}<span title="{{int64Val .OutputTokens}}">{{fmtCount (int64Val .OutputTokens)}}</span> <small>tokens</small>{{else}}? <small>not reported</small>{{end}}</dd></div>
+{{end}}
+</dl>
+{{if $mix.Total}}<div class="tok-l mt">{{tokenBar $mix 0 480 12}}</div>
+<div class="legend mt">{{legend $mix true}}</div>{{end}}
+{{template "span_health" $.Explain}}
+{{template "span_error" $events}}
+</div>
+{{if $.Trace.ID}}{{template "span_explain" $.Explain}}{{end}}{{/* the static export has nothing to compare with */}}
+
+{{if $.Delta}}{{template "context_delta" $}}{{else if or $.InputMessages $.InputRaw}}
+<div class="sec"><h3>Input</h3>
+{{range $.InputMessages}}{{template "chat_message" .}}{{end}}{{template "raw_io" $.InputRaw}}
+</div>
+{{end}}
+
+{{if or $.OutputMessages $.OutputRaw}}
+<div class="sec"><h3>Output</h3>
+{{range $.OutputMessages}}{{template "chat_message" .}}{{end}}{{if eq .Kind "generation"}}{{template "gen_raw" $.OutputRaw}}{{else}}{{template "raw_io" $.OutputRaw}}{{end}}
+</div>
+{{else if or (eq .Kind "generation") (eq .Kind "tool")}}
+<div class="sec"><h3>Output</h3><p class="cap">This span recorded no output.</p></div>
+{{end}}
+
+{{template "span_events" $events}}
+{{if metaJSON .Metadata}}<div class="sec">{{template "metadata_block" .Metadata}}</div>{{end}}
+{{end}}
+{{end}}
+
+{{/* raw_io: an input or output that is not a list of messages. A JSON object
+     reads as a key/value tree, anything else as text. Given the string. */}}
+{{define "raw_io"}}{{if .}}{{with jsonTree .}}<div class="call">{{template "metadata_tree" .}}</div>{{else}}<div class="code">{{template "long" excerpt .}}</div>{{end}}{{end}}{{end}}
+
+{{/* gen_raw: a model call's prompt or answer recorded as one string reads as text, not as code. */}}
+{{define "gen_raw"}}{{if isJSON .}}{{template "raw_io" .}}{{else if .}}<div class="prose">{{template "long" excerpt .}}</div>{{end}}{{end}}
+
+{{/* long: a text whose tail sits behind a disclosure that says how much it
+     holds. Given a longText; the caller's element sets the type. */}}
+{{define "long"}}{{.Head}}{{if .More}}<details class="more"><summary><span class="closed">Show {{.N}} more characters</span><span class="open">Hide the last {{.N}} characters</span></summary>{{.More}}</details>{{end}}{{end}}
+
+{{/* context_delta: with a basis, the prefix shared with the previous
+     generation is collapsed and the new messages are marked; without one,
+     the whole prompt is shown unmarked and the reason is stated. */}}
+{{define "context_delta"}}
+<div class="sec">
+<h3>Input{{if not .Delta.NoBasis}} · new since the previous generation{{end}}</h3>
+{{if or .Delta.TokenLine .Delta.PrevURL}}<p class="cap">{{.Delta.TokenLine}}{{if .Delta.PrevURL}} <a class="link" href="{{.Delta.PrevURL}}">See the previous generation</a>{{end}}</p>{{end}}
+{{if .Delta.NoBasis}}
+<p class="cap">No basis for comparison: {{.Delta.NoBasis}}.</p>
+{{if or .InputMessages .InputRaw}}<div class="mt">{{range .InputMessages}}{{template "chat_message" .}}{{end}}{{template "gen_raw" .InputRaw}}</div>{{end}}
+{{else}}
+<details class="disc mt"><summary class="cap">{{.Delta.KeptLabel}}</summary>
+<div class="mt kept">{{range .Delta.Kept}}{{template "chat_message" .}}{{end}}</div>
+</details>
+{{if .Delta.RewrittenAt}}<p class="cap warn-t mt">Context rewritten from message {{.Delta.RewrittenAt}} on.{{with .Delta.Rewrite}} {{.Sentence}}{{end}}</p>{{end}}
+{{with .Delta.Rewrite}}{{if .Text}}<p class="cap mt">Was</p><div class="code">{{.Pre}}<mark>{{.Was}}</mark>{{.Post}}</div>
+<p class="cap mt">Now</p><div class="code">{{.Pre}}<mark>{{.Now}}</mark>{{.Post}}</div>{{end}}{{end}}
+<div class="mt">{{range .Delta.New}}{{template "chat_message" .}}{{else}}<p class="cap">No new message in this call.</p>{{end}}</div>
+{{end}}
+</div>
+{{end}}
+
+{{/* metadata_block: a trace's or span's metadata, closed at every level. */}}
+{{define "metadata_block"}}
+{{$tree := metadataTree .}}
+{{$raw := metaJSON .}}
+{{if or $tree $raw}}
+<details class="disc"><summary><h3>Metadata</h3></summary>
+{{if $tree}}<div class="mt">{{template "metadata_tree" $tree}}</div>{{else}}<div class="code mt">{{$raw}}</div>{{end}}
+</details>
+{{end}}
+{{end}}
+
+{{/* metadata_tree: no white space between its tags, because it also sits inside a dd, which keeps it. */}}
+{{define "metadata_tree"}}<dl class="kv">
+{{- range .}}{{if .Children}}<details><summary><i class="tw"></i>{{.Key}}</summary>{{template "metadata_tree" .Children}}</details>
+{{- else}}<dt>{{.Key}}</dt><dd>{{template "long" excerpt .Value}}</dd>
+{{- end}}{{end -}}
+</dl>{{end}}
+
+{{define "chat_message"}}
+<div class="msg {{.Role}}">
+<div class="msg-h">{{.Role}}{{if .New}}<span class="chip info">new</span>{{end}}</div>
+{{if .Reasoning}}<details class="disc"><summary>Reasoning</summary><div class="prose">{{template "long" excerpt .Reasoning}}</div></details>{{end}}
+{{if .Content}}<div class="prose">{{template "long" excerpt .Content}}</div>{{end}}
+{{range .ToolCalls}}
+<div class="call"><div class="call-h"><span class="kind k-tool" title="tool">T</span><b>{{.Name}}</b><span class="cap">tool call</span></div>
+{{if .ArgumentsTree}}{{template "metadata_tree" .ArgumentsTree}}{{else}}<div class="code">{{.Arguments}}</div>{{end}}
+</div>
+{{end}}
+{{range .ToolResults}}
+<div class="call{{if .IsError}} err{{end}}"><div class="call-h"><b>result</b>{{if .IsError}}<span class="badge err"><svg class="st err" aria-hidden="true"><use href="#i-err"/></svg> error</span>{{end}}{{if .ToolUseID}}<span class="cap mono">{{.ToolUseID}}</span>{{end}}</div>
+{{if .ContentTree}}{{template "metadata_tree" .ContentTree}}{{else}}<div class="code">{{template "long" excerpt .Content}}</div>{{end}}
+</div>
+{{end}}
+{{if .FinishReason}}<p class="cap mt">finish_reason: {{.FinishReason}}</p>{{end}}
+</div>
+{{end}}

@@ -1,0 +1,20 @@
+version: "2"
+
+linters:
+  default: none
+  enable:
+    - govet
+    - staticcheck
+    - errcheck
+    - ineffassign
+    - unused
+    - gocyclo
+    - gosec
+  settings:
+    gocyclo:
+      min-complexity: 15
+
+formatters:
+  enable:
+    - gofmt
+    - goimports

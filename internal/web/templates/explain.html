@@ -1,0 +1,37 @@
+{{/* span_health: deterministic pointers on a generation. Given a spanExplain. */}}
+{{define "span_health"}}{{if .Health}}<div class="row mt">
+{{range .Health}}<span class="chip look" title="{{.Title}}"><svg class="st look" aria-hidden="true"><use href="#i-look"/></svg> {{.Label}}</span>{{end}}
+<span class="cap">pointers worth a look, not verdicts</span>
+</div>{{end}}{{end}}
+
+{{/* span_explain: baselines and the cost arithmetic. Given a spanExplain. */}}
+{{define "span_explain"}}
+<div class="sec">
+<h3>Is this normal?{{if .Baselines}} <span class="muted">· against spans of the same kind, name and model in the last 30 days</span>{{end}}</h3>
+{{if .Baselines}}<div class="pair">
+{{range .Baselines}}<div class="base">{{.SVG}}<p><b>{{.Label}}: percentile {{.Percentile}}</b><br>{{.Value}}, among {{.N}} spans from {{.Range}} (log scale)</p></div>{{end}}
+</div>{{else}}<p class="cap">No basis for comparison: fewer than 20 spans of the same kind, name and model in the last 30 days.</p>{{end}}
+{{with .Cost}}
+<details class="disc mt" open><summary><span>Cost <b>{{if .Stored}}{{usd .Stored}}{{else}}–{{end}}</b> · the arithmetic</span>{{if .Reported}}<span class="cap">reported by the SDK</span>{{else if .Differs}}<span class="chip look">differs from today's calculation</span>{{end}}</summary>
+{{if not .Pattern}}
+<p class="cap mt measure">The model <b>{{.Model}}</b> has no price in the table: the calculated cost is unknown, not zero.{{if .Stored}} The stored cost, {{usd .Stored}}, {{if .Reported}}was reported by the SDK{{else}}came from the SDK or from a price since removed from the table{{end}}.{{end}} <a class="link" href="/blind-spots">See every model without a price</a></p>
+{{else}}
+<div class="scroll-x"><table class="calc mt">
+{{range .Lines}}<tr><td>{{.Label}}</td><td class="num">{{commas .Tokens}} × ${{printf "%.6g" .PerMillion}}/M{{if .Estimated}} <a class="chip look" href="/blind-spots" title="the row has no cache price; it is derived from the input price by the rule described on the blind-spots page">estimated</a>{{end}}</td><td class="num">= {{usd .USD}}</td></tr>
+{{else}}<tr><td colspan="3">the SDK reported no tokens; nothing to multiply</td></tr>{{end}}
+<tr class="sum"><td>sum</td><td></td><td class="num">= {{usd .Computed}}</td></tr>
+</table></div>
+<p class="cap mt measure">Price per million tokens, from the table row <code>{{.Pattern}}</code>.
+{{if not .Stored}}<span class="warn-t">No cost was stored at ingestion; the sum uses today's table.</span>
+{{else if .Reported}}The stored cost, {{usd .Stored}}, was reported by the SDK, not calculated by spoor; by the table it would be {{usd .Computed}}.
+{{else if .Differs}}<span class="warn-t">Priced with an older table: stored {{usd .Stored}}, today's table gives {{usd .Computed}}. Run <code>spoor reprice</code> to bring stored costs up to date.</span>{{if and .PricedBy (ne .PricedBy .Pattern)}} The stored cost came from the row <code>{{.PricedBy}}</code>.{{end}}
+{{else}}The sum matches the cost stored at ingestion.{{end}}</p>
+{{if and .Upper (not .Reported)}}<p class="callout mt measure"><b>{{usd .Computed}}–{{usd .Upper}}</b>: the trace does not say whether cache writes were 5-minute or 1-hour. The sum above and the stored cost use the 5-minute rate, the lower figure; at the 1-hour rate (${{printf "%.6g" .Write1hPerMillion}}/M) this call costs {{usd .Upper}}.</p>{{end}}
+{{if .CacheUnknown}}<p class="callout warn mt measure">No cache counts. The sender reported how many tokens went in, not how many of them were read from or written to the provider's prompt cache, so the whole prompt is priced as fresh input. If part of it was read from cache the real cost is lower; if part was written to it, higher.</p>{{end}}
+{{if .LongContext}}<p class="callout warn mt measure">This prompt is above 200k tokens. Google bills Gemini Pro prompts of that size at a higher rate; spoor's table has one rate per model, so this is the base rate and the real cost is higher.</p>{{end}}
+{{if .FastMode}}<p class="callout warn mt measure">Fast mode. Priced at the standard rate: spoor's table has no fast-mode rate. Anthropic bills fast mode at twice the standard price on the Opus models that have it, so the real cost is higher.</p>{{end}}
+{{end}}
+</details>
+{{end}}
+</div>
+{{end}}

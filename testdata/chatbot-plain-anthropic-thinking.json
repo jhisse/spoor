@@ -1,0 +1,413 @@
+{
+  "resourceSpans": [
+    {
+      "resource": {
+        "attributes": [
+          {
+            "key": "telemetry.sdk.language",
+            "value": {
+              "stringValue": "python"
+            }
+          },
+          {
+            "key": "telemetry.sdk.name",
+            "value": {
+              "stringValue": "opentelemetry"
+            }
+          },
+          {
+            "key": "telemetry.sdk.version",
+            "value": {
+              "stringValue": "1.45.0"
+            }
+          },
+          {
+            "key": "service.instance.id",
+            "value": {
+              "stringValue": "40c9204c-6da7-4f71-9fe5-ff1f4f068a05"
+            }
+          },
+          {
+            "key": "service.name",
+            "value": {
+              "stringValue": "bot-plain-anthropic"
+            }
+          }
+        ]
+      },
+      "scopeSpans": [
+        {
+          "scope": {
+            "name": "opentelemetry.instrumentation.anthropic",
+            "version": "0.62.4"
+          },
+          "spans": [
+            {
+              "traceId": "ed6ce84db36bb0fe95e8eebe9d3a3705",
+              "spanId": "7b2f253e4c53a8a1",
+              "parentSpanId": "5e0a7ed3edf53594",
+              "name": "anthropic.chat",
+              "kind": "SPAN_KIND_CLIENT",
+              "startTimeUnixNano": "1791172928513344000",
+              "endTimeUnixNano": "1791172930706063000",
+              "attributes": [
+                {
+                  "key": "gen_ai.provider.name",
+                  "value": {
+                    "stringValue": "anthropic"
+                  }
+                },
+                {
+                  "key": "gen_ai.operation.name",
+                  "value": {
+                    "stringValue": "chat"
+                  }
+                },
+                {
+                  "key": "gen_ai.request.model",
+                  "value": {
+                    "stringValue": "anthropic/claude-haiku-4.5"
+                  }
+                },
+                {
+                  "key": "gen_ai.request.max_tokens",
+                  "value": {
+                    "intValue": "3024"
+                  }
+                },
+                {
+                  "key": "gen_ai.system_instructions",
+                  "value": {
+                    "stringValue": "[{\"type\": \"text\", \"content\": \"You are a concise assistant. Use a tool when it helps, then answer in one or two sentences. Skills you can load: unit-converter.\"}]"
+                  }
+                },
+                {
+                  "key": "gen_ai.input.messages",
+                  "value": {
+                    "stringValue": "[{\"role\": \"user\", \"parts\": [{\"type\": \"text\", \"content\": \"What is 17 * 23, and what time is it in Tokyo?\"}]}]"
+                  }
+                },
+                {
+                  "key": "gen_ai.tool.definitions",
+                  "value": {
+                    "stringValue": "[{\"name\": \"city_info\", \"description\": \"A short fact sheet about a city.\", \"input_schema\": {\"type\": \"object\", \"properties\": {\"city\": {\"type\": \"string\"}}, \"required\": [\"city\"]}}, {\"name\": \"get_time\", \"description\": \"Current time in an IANA timezone.\", \"input_schema\": {\"type\": \"object\", \"properties\": {\"timezone\": {\"type\": \"string\"}}, \"required\": [\"timezone\"]}}, {\"name\": \"calculate\", \"description\": \"Evaluate an arithmetic expression such as (3 + 4) * 2.\", \"input_schema\": {\"type\": \"object\", \"properties\": {\"expression\": {\"type\": \"string\"}}, \"required\": [\"expression\"]}}, {\"name\": \"load_skill\", \"description\": \"Load the instructions of a skill by name. Skills: unit-converter\", \"input_schema\": {\"type\": \"object\", \"properties\": {\"name\": {\"type\": \"string\"}}, \"required\": [\"name\"]}}]"
+                  }
+                },
+                {
+                  "key": "gen_ai.response.model",
+                  "value": {
+                    "stringValue": "anthropic/claude-haiku-4.5"
+                  }
+                },
+                {
+                  "key": "gen_ai.response.id",
+                  "value": {
+                    "stringValue": "gen-1791172928-G08oQbstmccQlbrSQWPz"
+                  }
+                },
+                {
+                  "key": "gen_ai.response.finish_reasons",
+                  "value": {
+                    "arrayValue": {
+                      "values": [
+                        {
+                          "stringValue": "tool_call"
+                        }
+                      ]
+                    }
+                  }
+                },
+                {
+                  "key": "gen_ai.output.messages",
+                  "value": {
+                    "stringValue": "[{\"role\": \"assistant\", \"parts\": [{\"type\": \"reasoning\", \"content\": \"The user is asking two independent questions:\\n1. What is 17 * 23? - I need to use the calculate function\\n2. What time is it in Tokyo? - I need to use the get_time function with timezone \\\"Asia/Tokyo\\\"\\n\\nSince these are independent, I can make both calls in the same block.\"}, {\"type\": \"tool_call\", \"id\": \"toolu_bdrk_019yXiW5AFpPCFC5Nxo4PjYA\", \"name\": \"calculate\", \"arguments\": {\"expression\": \"17 * 23\"}}, {\"type\": \"tool_call\", \"id\": \"toolu_bdrk_01Wc6xJx1t5sXsEDH4E2wAvf\", \"name\": \"get_time\", \"arguments\": {\"timezone\": \"Asia/Tokyo\"}}], \"finish_reason\": \"tool_call\"}]"
+                  }
+                },
+                {
+                  "key": "gen_ai.usage.input_tokens",
+                  "value": {
+                    "intValue": "818"
+                  }
+                },
+                {
+                  "key": "gen_ai.usage.output_tokens",
+                  "value": {
+                    "intValue": "172"
+                  }
+                },
+                {
+                  "key": "gen_ai.usage.total_tokens",
+                  "value": {
+                    "intValue": "990"
+                  }
+                },
+                {
+                  "key": "gen_ai.usage.cache_read.input_tokens",
+                  "value": {
+                    "intValue": "0"
+                  }
+                },
+                {
+                  "key": "gen_ai.usage.cache_creation.input_tokens",
+                  "value": {
+                    "intValue": "0"
+                  }
+                }
+              ],
+              "status": {
+                "code": "STATUS_CODE_OK"
+              },
+              "flags": 256
+            },
+            {
+              "traceId": "ed6ce84db36bb0fe95e8eebe9d3a3705",
+              "spanId": "77bd44edbc1428dc",
+              "parentSpanId": "5e0a7ed3edf53594",
+              "name": "anthropic.chat",
+              "kind": "SPAN_KIND_CLIENT",
+              "startTimeUnixNano": "1791172930707342000",
+              "endTimeUnixNano": "1791172932220503000",
+              "attributes": [
+                {
+                  "key": "gen_ai.provider.name",
+                  "value": {
+                    "stringValue": "anthropic"
+                  }
+                },
+                {
+                  "key": "gen_ai.operation.name",
+                  "value": {
+                    "stringValue": "chat"
+                  }
+                },
+                {
+                  "key": "gen_ai.request.model",
+                  "value": {
+                    "stringValue": "anthropic/claude-haiku-4.5"
+                  }
+                },
+                {
+                  "key": "gen_ai.request.max_tokens",
+                  "value": {
+                    "intValue": "3024"
+                  }
+                },
+                {
+                  "key": "gen_ai.system_instructions",
+                  "value": {
+                    "stringValue": "[{\"type\": \"text\", \"content\": \"You are a concise assistant. Use a tool when it helps, then answer in one or two sentences. Skills you can load: unit-converter.\"}]"
+                  }
+                },
+                {
+                  "key": "gen_ai.input.messages",
+                  "value": {
+                    "stringValue": "[{\"role\": \"user\", \"parts\": [{\"type\": \"text\", \"content\": \"What is 17 * 23, and what time is it in Tokyo?\"}]}, {\"role\": \"assistant\", \"parts\": [{\"type\": \"reasoning\", \"content\": \"The user is asking two independent questions:\\n1. What is 17 * 23? - I need to use the calculate function\\n2. What time is it in Tokyo? - I need to use the get_time function with timezone \\\"Asia/Tokyo\\\"\\n\\nSince these are independent, I can make both calls in the same block.\"}, {\"type\": \"tool_call\", \"id\": \"toolu_bdrk_019yXiW5AFpPCFC5Nxo4PjYA\", \"name\": \"calculate\", \"arguments\": {\"expression\": \"17 * 23\"}}, {\"type\": \"tool_call\", \"id\": \"toolu_bdrk_01Wc6xJx1t5sXsEDH4E2wAvf\", \"name\": \"get_time\", \"arguments\": {\"timezone\": \"Asia/Tokyo\"}}]}, {\"role\": \"user\", \"parts\": [{\"type\": \"tool_call_response\", \"id\": \"toolu_bdrk_019yXiW5AFpPCFC5Nxo4PjYA\", \"response\": \"391\"}, {\"type\": \"tool_call_response\", \"id\": \"toolu_bdrk_01Wc6xJx1t5sXsEDH4E2wAvf\", \"response\": \"2026-10-05T13:02:10+09:00\"}]}]"
+                  }
+                },
+                {
+                  "key": "gen_ai.tool.definitions",
+                  "value": {
+                    "stringValue": "[{\"name\": \"city_info\", \"description\": \"A short fact sheet about a city.\", \"input_schema\": {\"type\": \"object\", \"properties\": {\"city\": {\"type\": \"string\"}}, \"required\": [\"city\"]}}, {\"name\": \"get_time\", \"description\": \"Current time in an IANA timezone.\", \"input_schema\": {\"type\": \"object\", \"properties\": {\"timezone\": {\"type\": \"string\"}}, \"required\": [\"timezone\"]}}, {\"name\": \"calculate\", \"description\": \"Evaluate an arithmetic expression such as (3 + 4) * 2.\", \"input_schema\": {\"type\": \"object\", \"properties\": {\"expression\": {\"type\": \"string\"}}, \"required\": [\"expression\"]}}, {\"name\": \"load_skill\", \"description\": \"Load the instructions of a skill by name. Skills: unit-converter\", \"input_schema\": {\"type\": \"object\", \"properties\": {\"name\": {\"type\": \"string\"}}, \"required\": [\"name\"]}}]"
+                  }
+                },
+                {
+                  "key": "gen_ai.response.model",
+                  "value": {
+                    "stringValue": "anthropic/claude-haiku-4.5"
+                  }
+                },
+                {
+                  "key": "gen_ai.response.id",
+                  "value": {
+                    "stringValue": "gen-1791172930-3IMhWUtMi6FLopxDic1T"
+                  }
+                },
+                {
+                  "key": "gen_ai.response.finish_reasons",
+                  "value": {
+                    "arrayValue": {
+                      "values": [
+                        {
+                          "stringValue": "stop"
+                        }
+                      ]
+                    }
+                  }
+                },
+                {
+                  "key": "gen_ai.output.messages",
+                  "value": {
+                    "stringValue": "[{\"role\": \"assistant\", \"parts\": [{\"type\": \"text\", \"content\": \"17 * 23 = **391**. The current time in Tokyo is **1:02 PM** (13:02) on October 5, 2026.\"}], \"finish_reason\": \"stop\"}]"
+                  }
+                },
+                {
+                  "key": "gen_ai.usage.input_tokens",
+                  "value": {
+                    "intValue": "1068"
+                  }
+                },
+                {
+                  "key": "gen_ai.usage.output_tokens",
+                  "value": {
+                    "intValue": "41"
+                  }
+                },
+                {
+                  "key": "gen_ai.usage.total_tokens",
+                  "value": {
+                    "intValue": "1109"
+                  }
+                },
+                {
+                  "key": "gen_ai.usage.cache_read.input_tokens",
+                  "value": {
+                    "intValue": "0"
+                  }
+                },
+                {
+                  "key": "gen_ai.usage.cache_creation.input_tokens",
+                  "value": {
+                    "intValue": "0"
+                  }
+                }
+              ],
+              "status": {
+                "code": "STATUS_CODE_OK"
+              },
+              "flags": 256
+            }
+          ]
+        },
+        {
+          "scope": {
+            "name": "bot-plain-anthropic"
+          },
+          "spans": [
+            {
+              "traceId": "ed6ce84db36bb0fe95e8eebe9d3a3705",
+              "spanId": "c39782aaa37749ea",
+              "parentSpanId": "5e0a7ed3edf53594",
+              "name": "execute_tool calculate",
+              "kind": "SPAN_KIND_INTERNAL",
+              "startTimeUnixNano": "1791172930706859000",
+              "endTimeUnixNano": "1791172930706978000",
+              "attributes": [
+                {
+                  "key": "gen_ai.operation.name",
+                  "value": {
+                    "stringValue": "execute_tool"
+                  }
+                },
+                {
+                  "key": "gen_ai.tool.name",
+                  "value": {
+                    "stringValue": "calculate"
+                  }
+                },
+                {
+                  "key": "gen_ai.tool.call.id",
+                  "value": {
+                    "stringValue": "toolu_bdrk_019yXiW5AFpPCFC5Nxo4PjYA"
+                  }
+                },
+                {
+                  "key": "gen_ai.tool.call.arguments",
+                  "value": {
+                    "stringValue": "{\"expression\": \"17 * 23\"}"
+                  }
+                },
+                {
+                  "key": "gen_ai.tool.call.result",
+                  "value": {
+                    "stringValue": "391"
+                  }
+                }
+              ],
+              "status": {},
+              "flags": 256
+            },
+            {
+              "traceId": "ed6ce84db36bb0fe95e8eebe9d3a3705",
+              "spanId": "d542be32e4a2bd63",
+              "parentSpanId": "5e0a7ed3edf53594",
+              "name": "execute_tool get_time",
+              "kind": "SPAN_KIND_INTERNAL",
+              "startTimeUnixNano": "1791172930707044000",
+              "endTimeUnixNano": "1791172930707288000",
+              "attributes": [
+                {
+                  "key": "gen_ai.operation.name",
+                  "value": {
+                    "stringValue": "execute_tool"
+                  }
+                },
+                {
+                  "key": "gen_ai.tool.name",
+                  "value": {
+                    "stringValue": "get_time"
+                  }
+                },
+                {
+                  "key": "gen_ai.tool.call.id",
+                  "value": {
+                    "stringValue": "toolu_bdrk_01Wc6xJx1t5sXsEDH4E2wAvf"
+                  }
+                },
+                {
+                  "key": "gen_ai.tool.call.arguments",
+                  "value": {
+                    "stringValue": "{\"timezone\": \"Asia/Tokyo\"}"
+                  }
+                },
+                {
+                  "key": "gen_ai.tool.call.result",
+                  "value": {
+                    "stringValue": "2026-10-05T13:02:10+09:00"
+                  }
+                }
+              ],
+              "status": {},
+              "flags": 256
+            },
+            {
+              "traceId": "ed6ce84db36bb0fe95e8eebe9d3a3705",
+              "spanId": "5e0a7ed3edf53594",
+              "name": "invoke_agent plain-anthropic",
+              "kind": "SPAN_KIND_INTERNAL",
+              "startTimeUnixNano": "1791172928513304000",
+              "endTimeUnixNano": "1791172932222934000",
+              "attributes": [
+                {
+                  "key": "gen_ai.operation.name",
+                  "value": {
+                    "stringValue": "invoke_agent"
+                  }
+                },
+                {
+                  "key": "gen_ai.agent.name",
+                  "value": {
+                    "stringValue": "plain-anthropic"
+                  }
+                },
+                {
+                  "key": "gen_ai.conversation.id",
+                  "value": {
+                    "stringValue": "ae86352e-6c48-44db-80bf-521c63fbcb22"
+                  }
+                },
+                {
+                  "key": "session.id",
+                  "value": {
+                    "stringValue": "ae86352e-6c48-44db-80bf-521c63fbcb22"
+                  }
+                }
+              ],
+              "status": {},
+              "flags": 256
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

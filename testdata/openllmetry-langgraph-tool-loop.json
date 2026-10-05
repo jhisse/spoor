@@ -1,0 +1,306 @@
+{
+  "resourceSpans": [
+    {
+      "resource": {
+        "attributes": [
+          {
+            "key": "service.name",
+            "value": {
+              "stringValue": "spoor-testdata-capture"
+            }
+          }
+        ]
+      },
+      "scopeSpans": [
+        {
+          "scope": {
+            "name": "opentelemetry.instrumentation.anthropic",
+            "version": "0.36.1"
+          },
+          "spans": [
+            {
+              "traceId": "889b2de5476f0cdab4fdf25df57027f5",
+              "spanId": "ffcc43b352aa291c",
+              "parentSpanId": "2a083a22e3e2c94c",
+              "name": "anthropic.chat",
+              "kind": "SPAN_KIND_CLIENT",
+              "startTimeUnixNano": "1786397027960528000",
+              "endTimeUnixNano": "1786397029844142000",
+              "attributes": [
+                {
+                  "key": "gen_ai.system",
+                  "value": {
+                    "stringValue": "Anthropic"
+                  }
+                },
+                {
+                  "key": "llm.request.type",
+                  "value": {
+                    "stringValue": "completion"
+                  }
+                },
+                {
+                  "key": "gen_ai.request.model",
+                  "value": {
+                    "stringValue": "claude-haiku-4-5"
+                  }
+                },
+                {
+                  "key": "gen_ai.prompt.0.content",
+                  "value": {
+                    "stringValue": "What is the stock price of GOOG right now?"
+                  }
+                },
+                {
+                  "key": "gen_ai.prompt.0.role",
+                  "value": {
+                    "stringValue": "user"
+                  }
+                },
+                {
+                  "key": "llm.request.functions.0.name",
+                  "value": {
+                    "stringValue": "get_stock_price"
+                  }
+                },
+                {
+                  "key": "llm.request.functions.0.description",
+                  "value": {
+                    "stringValue": "Get the current stock price for a given ticker symbol."
+                  }
+                },
+                {
+                  "key": "llm.request.functions.0.input_schema",
+                  "value": {
+                    "stringValue": "{\"properties\": {\"ticker\": {\"type\": \"string\"}}, \"required\": [\"ticker\"], \"type\": \"object\"}"
+                  }
+                },
+                {
+                  "key": "gen_ai.response.model",
+                  "value": {
+                    "stringValue": "claude-haiku-4-5-20251001"
+                  }
+                },
+                {
+                  "key": "gen_ai.completion.0.finish_reason",
+                  "value": {
+                    "stringValue": "tool_use"
+                  }
+                },
+                {
+                  "key": "gen_ai.completion.0.role",
+                  "value": {
+                    "stringValue": "assistant"
+                  }
+                },
+                {
+                  "key": "gen_ai.completion.0.tool_calls.0.id",
+                  "value": {
+                    "stringValue": "toolu_01VTj8Br4GDTn7ewFdgVmFK5"
+                  }
+                },
+                {
+                  "key": "gen_ai.completion.0.tool_calls.0.name",
+                  "value": {
+                    "stringValue": "get_stock_price"
+                  }
+                },
+                {
+                  "key": "gen_ai.completion.0.tool_calls.0.arguments",
+                  "value": {
+                    "stringValue": "{\"ticker\": \"GOOG\"}"
+                  }
+                },
+                {
+                  "key": "gen_ai.usage.prompt_tokens",
+                  "value": {
+                    "intValue": "575"
+                  }
+                },
+                {
+                  "key": "gen_ai.usage.completion_tokens",
+                  "value": {
+                    "intValue": "58"
+                  }
+                },
+                {
+                  "key": "llm.usage.total_tokens",
+                  "value": {
+                    "intValue": "633"
+                  }
+                },
+                {
+                  "key": "gen_ai.usage.cache_read_input_tokens",
+                  "value": {
+                    "intValue": "0"
+                  }
+                },
+                {
+                  "key": "gen_ai.usage.cache_creation_input_tokens",
+                  "value": {
+                    "intValue": "0"
+                  }
+                }
+              ],
+              "status": {
+                "code": "STATUS_CODE_OK"
+              },
+              "flags": 256
+            },
+            {
+              "traceId": "889b2de5476f0cdab4fdf25df57027f5",
+              "spanId": "bd65b2718fac8c7d",
+              "parentSpanId": "2a083a22e3e2c94c",
+              "name": "anthropic.chat",
+              "kind": "SPAN_KIND_CLIENT",
+              "startTimeUnixNano": "1786397029848684000",
+              "endTimeUnixNano": "1786397030908250000",
+              "attributes": [
+                {
+                  "key": "gen_ai.system",
+                  "value": {
+                    "stringValue": "Anthropic"
+                  }
+                },
+                {
+                  "key": "llm.request.type",
+                  "value": {
+                    "stringValue": "completion"
+                  }
+                },
+                {
+                  "key": "gen_ai.request.model",
+                  "value": {
+                    "stringValue": "claude-haiku-4-5"
+                  }
+                },
+                {
+                  "key": "gen_ai.prompt.0.content",
+                  "value": {
+                    "stringValue": "What is the stock price of GOOG right now?"
+                  }
+                },
+                {
+                  "key": "gen_ai.prompt.0.role",
+                  "value": {
+                    "stringValue": "user"
+                  }
+                },
+                {
+                  "key": "gen_ai.prompt.1.content",
+                  "value": {
+                    "stringValue": "[{\"type\": \"tool_use\", \"name\": \"get_stock_price\", \"input\": {\"ticker\": \"GOOG\"}, \"id\": \"toolu_01VTj8Br4GDTn7ewFdgVmFK5\", \"caller\": {\"type\": \"direct\"}}]"
+                  }
+                },
+                {
+                  "key": "gen_ai.prompt.1.role",
+                  "value": {
+                    "stringValue": "assistant"
+                  }
+                },
+                {
+                  "key": "gen_ai.prompt.2.content",
+                  "value": {
+                    "stringValue": "[{\"type\": \"tool_result\", \"content\": \"$312.44\", \"tool_use_id\": \"toolu_01VTj8Br4GDTn7ewFdgVmFK5\", \"is_error\": false}]"
+                  }
+                },
+                {
+                  "key": "gen_ai.prompt.2.role",
+                  "value": {
+                    "stringValue": "user"
+                  }
+                },
+                {
+                  "key": "llm.request.functions.0.name",
+                  "value": {
+                    "stringValue": "get_stock_price"
+                  }
+                },
+                {
+                  "key": "llm.request.functions.0.description",
+                  "value": {
+                    "stringValue": "Get the current stock price for a given ticker symbol."
+                  }
+                },
+                {
+                  "key": "llm.request.functions.0.input_schema",
+                  "value": {
+                    "stringValue": "{\"properties\": {\"ticker\": {\"type\": \"string\"}}, \"required\": [\"ticker\"], \"type\": \"object\"}"
+                  }
+                },
+                {
+                  "key": "gen_ai.response.model",
+                  "value": {
+                    "stringValue": "claude-haiku-4-5-20251001"
+                  }
+                },
+                {
+                  "key": "gen_ai.completion.0.finish_reason",
+                  "value": {
+                    "stringValue": "end_turn"
+                  }
+                },
+                {
+                  "key": "gen_ai.completion.0.role",
+                  "value": {
+                    "stringValue": "assistant"
+                  }
+                },
+                {
+                  "key": "gen_ai.completion.0.content",
+                  "value": {
+                    "stringValue": "The current stock price of GOOG (Google/Alphabet Inc.) is **$312.44**."
+                  }
+                },
+                {
+                  "key": "gen_ai.usage.prompt_tokens",
+                  "value": {
+                    "intValue": "649"
+                  }
+                },
+                {
+                  "key": "gen_ai.usage.completion_tokens",
+                  "value": {
+                    "intValue": "25"
+                  }
+                },
+                {
+                  "key": "llm.usage.total_tokens",
+                  "value": {
+                    "intValue": "674"
+                  }
+                },
+                {
+                  "key": "gen_ai.usage.cache_read_input_tokens",
+                  "value": {
+                    "intValue": "0"
+                  }
+                },
+                {
+                  "key": "gen_ai.usage.cache_creation_input_tokens",
+                  "value": {
+                    "intValue": "0"
+                  }
+                }
+              ],
+              "status": {
+                "code": "STATUS_CODE_OK"
+              },
+              "flags": 256
+            },
+            {
+              "traceId": "889b2de5476f0cdab4fdf25df57027f5",
+              "spanId": "2a083a22e3e2c94c",
+              "name": "langgraph.agent_run",
+              "kind": "SPAN_KIND_INTERNAL",
+              "startTimeUnixNano": "1786397027942163000",
+              "endTimeUnixNano": "1786397030911689000",
+              "status": {},
+              "flags": 256
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,143 @@
+{{define "title"}}spoor — Traces{{end}}
+
+{{/* Filtering, paging and the live switch swap #trace-list whole. The live poll swaps only
+     #trace-results (plus the count, the footer and the chart's figure, out of band), so a filter being typed is left alone. */}}
+{{define "content"}}
+<div id="trace-list">
+<div class="head"><h1>Traces</h1>
+<div class="row"><span class="cap" id="list-count">{{if or .Traces .Chips}}{{.Total}} {{if eq .Total "1"}}trace{{else}}traces{{end}}{{if .Chips}} match{{if eq .Total "1"}}es{{end}}{{end}}{{end}}{{with .Meter}} · {{if .Rate}}<b title="the cost of the traces started in the last 10 minutes, as an hourly rate">{{.Rate}} now</b> over {{.Traces}} {{if eq .Traces 1}}trace{{else}}traces{{end}}{{if .Uncosted}}, {{.Uncosted}} without a cost{{end}}{{else if .Traces}}{{.Traces}} {{if eq .Traces 1}}trace{{else}}traces{{end}} in the last 10 minutes, none with a cost{{else}}nothing in the last 10 minutes{{end}}{{end}}</span>
+<a class="btn sm{{if .Live}} on{{end}}" href="{{.ToggleURL}}" hx-get="{{.ToggleURL}}" hx-target="#trace-list" hx-swap="outerHTML" hx-push-url="true" title="{{if .Live}}Stop reloading the list{{else}}Reload the list every 5 seconds{{end}}"><svg class="st {{if .Live}}ok{{else}}unset{{end}}" aria-hidden="true"><use href="#i-{{if .Live}}ok{{else}}unset{{end}}"/></svg> {{if .Live}}Live · every 5 s{{else}}Go live{{end}}</a>
+<a class="btn sm{{if .Odd}} on{{end}}" href="{{.OddURL}}" hx-get="{{.OddURL}}" hx-target="#trace-list" hx-swap="outerHTML" hx-push-url="true" title="{{if .Odd}}Back to newest first{{else}}The newest 200 traces, the furthest from the typical trace of the same name first{{end}}">{{if .Odd}}Odd first · on{{else}}Odd first{{end}}</a></div></div>
+<div class="panel">
+{{if or .Traces .Chips}}<form class="filters" action="/" hx-get="/" hx-target="#trace-list" hx-swap="outerHTML" hx-push-url="true"
+      hx-trigger="submit, change from:select, change from:input[type='datetime-local'], change from:input[type='checkbox']">
+<label class="field"><span>Search inside spans</span><input class="in" id="f-q" type="search" name="q" placeholder="Words in prompts, outputs, tool calls, errors, names" value="{{.Form.Get "q"}}"></label>
+<label class="field"><span>Model</span><select class="in" id="f-model" name="model">
+<option value="">Any model</option>
+{{range .Models}}<option{{if eq . ($.Form.Get "model")}} selected{{end}}>{{.}}</option>{{end}}
+</select></label>
+<label class="check"><input type="checkbox" name="failed" value="1"{{if .Form.Get "failed"}} checked{{end}}> That span failed</label>
+<button class="btn primary" type="submit">Search</button>
+<details class="disc hint"{{if .More}} open{{end}}><summary class="cap">More filters<span class="only-wide"> · status, period, span kind, tool, cost, duration, tokens</span> · how the search matches</summary>
+<div class="filters-more">
+<label class="field"><span>Trace status</span><select class="in" id="f-status" name="status">
+<option value="">Any status</option>
+{{range .Statuses}}<option{{if eq (print .) ($.Form.Get "status")}} selected{{end}}>{{.}}</option>{{end}}
+</select></label>
+<label class="field"><span>From (UTC)</span><input class="in" id="f-from" type="datetime-local" name="from" value="{{.Form.Get "from"}}"></label>
+<label class="field"><span>To (UTC)</span><input class="in" id="f-to" type="datetime-local" name="to" value="{{.Form.Get "to"}}"></label>
+<label class="field"><span>Span kind</span><select class="in" id="f-kind" name="kind">
+<option value="">Any kind</option>
+{{range .Kinds}}<option{{if eq (print .) ($.Form.Get "kind")}} selected{{end}}>{{.}}</option>{{end}}
+</select></label>
+<label class="field"><span>Tool</span><select class="in" id="f-tool" name="tool">
+<option value="">Any tool</option>
+{{range .Tools}}<option{{if eq . ($.Form.Get "tool")}} selected{{end}}>{{.}}</option>{{end}}
+</select></label>
+{{range .RangeFields}}<div class="field"><span>{{.Label}}</span><span class="range"><input class="in" type="number" name="{{.Param}}_min" min="0" step="any" placeholder="from" aria-label="{{.Label}}, from" value="{{$.Form.Get (print .Param "_min")}}"><input class="in" type="number" name="{{.Param}}_max" min="0" step="any" placeholder="under" aria-label="{{.Label}}, under" value="{{$.Form.Get (print .Param "_max")}}"></span></div>{{end}}
+</div>
+<p class="cap mt">The search lists the traces with a span that holds every word, matched from its start: <code>err</code> finds <code>error</code>. <code>"exact phrase"</code> · <code>-excluded</code> · case and accents are ignored.</p>
+<p class="cap">The search words, model, kind, tool and “failed” describe one span together: <em>tool Bash, failed, holding “permission”</em> is one failed Bash call with that word, not three things somewhere in the trace.</p>
+</details>
+{{range $k := .Carried}}{{with $.Form.Get $k}}<input type="hidden" name="{{$k}}" value="{{.}}">{{end}}{{end}}
+</form>{{end}}
+{{if .Chips}}<div class="band" hx-target="#trace-list" hx-swap="outerHTML" hx-push-url="true"><h3>Filters</h3>
+{{range .Chips}}<a class="chip x" href="{{.URL}}" hx-get="{{.URL}}" title="Remove this filter">{{.Label}}<span aria-hidden="true">×</span><span class="sr"> remove</span></a>{{end}}
+<a class="link cap end" href="/">Clear all</a></div>{{end}}
+{{template "trace_histogram" .}}
+<div id="trace-results"{{if .Live}} hx-trigger="every 5s" hx-get="{{.PollURL}}" hx-select="#trace-results" hx-select-oob="#list-count,#list-foot,#list-chart" hx-swap="outerHTML"{{end}}>
+{{if .Latest}}<div class="sec">
+<div class="chart-h"><h3>Latest sessions <span class="muted">· of the newest traces on this page, at most three · one bar per model call, each drawing on its own scale</span></h3><a class="link cap" href="{{.URL "sessions" (.Form.Get "service")}}">All sessions →</a></div>
+<div class="latest">{{range .Latest}}<a href="{{sessionURL .ID}}" title="Session {{.ID}}.{{.Ctx.Why}}">
+<span class="row">{{template "status_glyph" .Status}}<b>{{relTime .EndedAt}}</b><span class="mono muted">{{printf "%.8s" .ID}}</span><b class="end">{{template "cache_unknown" .CacheUnknown}}{{costVal .TotalCostUSD}}</b></span>
+{{if .Subject}}<span class="ellip" title="{{.Subject}}">{{.Subject}}</span>{{end}}
+<span class="cap">{{.TraceCount}} {{if eq .TraceCount 1}}turn{{else}}turns{{end}} over {{.Wall}} · {{.Ctx.Calls}} model {{if eq .Ctx.Calls 1}}call{{else}}calls{{end}}{{if .Ctx.Peak}}, the largest {{fmtCount .Ctx.Peak}} tokens{{end}}</span>
+<span class="row">{{.Ctx.SVG}}{{template "ctx_marks" .Ctx}}</span>
+</a>{{end}}</div>
+</div>{{end}}
+{{if .Traces}}
+<table class="data cards traces">
+<thead><tr><th>Trace</th><th>Model</th>{{if not (.Form.Get "service")}}<th>Service</th>{{end}}<th>Started</th><th class="num">Duration</th>{{if .Scale.Context}}<th>Context <small>· per model call</small></th>{{end}}<th class="num">Tokens{{if .Scale.Tokens}} <small>· bar 0–{{fmtCount .Scale.Tokens}}</small>{{end}}</th><th class="num">Cost</th></tr></thead>
+<tbody>
+{{range .Traces}}{{$row := .}}
+<tr{{if .Hit}} class="has-why"{{end}}>
+<td class="main"><span class="cellmain">{{template "status_glyph" .Status}}<a class="rowlink name" href="{{.URL}}" title="{{.Name}}">{{.Name}}</a><span class="mono muted">{{printf "%.8s" .ID}}</span>{{if .Rootless}}<span class="chip look" title="root span not received yet: the name is the oldest span's and the totals cover what has arrived">◷ in progress</span>{{end}}{{if .Why}}<span class="chip look">{{.Why}}</span>{{end}}</span>{{with .Asked}}<span class="ask" title="{{.}}">{{.}}</span>{{end}}</td>
+<td class="dim" data-l=""><span class="ellip" title="{{range $i, $m := .Models}}{{if $i}}, {{end}}{{$m}}{{end}}">{{if .Models}}{{index .Models 0}}{{with .MoreModels}} <span class="muted">+{{.}}</span>{{end}}{{else}}–{{end}}</span></td>
+{{if not ($.Form.Get "service")}}<td class="dim" data-l=""><span class="ellip" title="{{strVal .Service}}">{{if .Service}}{{strVal .Service}}{{else}}—{{end}}</span></td>{{end}}
+<td class="dim" data-l="" title="{{.StartedAt.Format "2006-01-02 15:04:05"}} UTC">{{relTime .StartedAt}}</td>
+<td class="num">{{fmtDuration (.EndedAt.Sub .StartedAt)}}</td>
+{{if $.Scale.Context}}<td class="ctxcol">{{with .Ctx}}<span class="row" title="{{.Calls}} model calls, the largest {{fmtCount .Peak}} tokens.{{.Why}}">{{.SVG}}{{template "ctx_marks" .}}</span>{{end}}</td>{{end}}
+<td class="num wide"><span class="cellbar">{{tokenSum .TotalInputTokens .TotalOutputTokens}}<span class="tokcell">{{tokenBar .Mix $.Scale.Tokens 64 6}}</span></span></td>
+<td class="num end" data-l="cost">{{template "cache_unknown" .CacheUnknown}}{{costVal .TotalCostUSD}}</td>
+</tr>
+{{with .Hit}}<tr class="why"><td colspan="8"><a class="hit" href="{{$row.URL}}" tabindex="-1"><span class="kind k-{{.Kind}}" title="{{.Kind}}">{{kindLetter .Kind}}</span><span class="nm">{{.SpanName}}</span>{{if eq .Status "error"}}<svg class="st err" role="img" aria-label="error"><use href="#i-err"/></svg>{{end}}{{if $row.MoreHits}}<span class="cap">and {{$row.MoreHits}} more {{if eq $row.MoreHits 1}}span{{else}}spans{{end}}</span>{{end}}{{with .Snippet}}<span class="mono">{{snippet .}}</span>{{end}}</a></td></tr>{{end}}
+{{end}}
+</tbody>
+</table>
+{{else}}
+<div class="empty">
+{{if .Chips}}
+<h2>No trace matches {{if eq (len .Chips) 1}}this filter{{else}}these {{len .Chips}} filters together{{end}}</h2>
+{{if .NoTerm}}<p>The search text names nothing to look for: it needs at least one word that is not excluded with <code>-</code>.</p>{{end}}
+<p>Dropping one of them would list:</p>
+<ul class="widen">{{range .Chips}}<li><b>{{.Without}}</b> {{if eq .Without "1"}}trace{{else}}traces{{end}} without <a class="link" href="{{.URL}}">{{.Label}}</a></li>{{end}}</ul>
+{{if .Form.Get "q"}}<p class="cap">A word is matched from its start: <code>time</code> finds <code>timeout</code>, not <code>runtime</code>. Tool results sent as span events are searched; text an SDK did not send is not.</p>{{end}}
+<p class="mt"><a class="btn" href="/">Clear all filters</a></p>
+{{else}}
+<h2>No traces yet</h2>
+<p>spoor stores the traces your LLM application sends over OTLP/HTTP. Point any OpenTelemetry exporter at <code>{{.IngestURL}}</code>, or send one real capture now:</p>
+<pre class="code">curl -s {{.UIURL}}/sample.pb | curl -X POST {{.IngestURL}} -H "Content-Type: application/x-protobuf" --data-binary @-</pre>
+<p>No key is needed: whoever can reach that port can send. Just want to look around? Run <code>spoor demo</code>.</p>
+{{end}}
+</div>
+{{end}}
+</div>
+</div>
+<div class="foot" id="list-foot">{{if .Traces}}
+<div class="legend">{{.Legend}}{{.Scale.Marks}}<span class="muted">Bars share one scale across the page.</span>{{if .Scale.Context}}<span class="muted">Context: one bar per model call, for a trace with two or more, each row on its own scale (its largest call is in the tooltip); underlined where the cache was lost; est. = the estimated extra cost of that input.</span>{{end}}<a class="link muted" href="/blind-spots" title="how many, on the Blind spots page">? = not reported by the SDK</a><a class="link muted" href="/blind-spots" title="which models, on the Blind spots page">– = no price for the model</a><a class="link muted" href="/blind-spots" title="how many, on the Blind spots page">~ = priced without cache counts from the sender</a></div>
+<div class="row"><span class="cap">{{if .Odd}}{{len .Traces}} of the newest {{.OddPool}} traces, the furthest from the typical trace of the same service and name first: the largest ratio of its cost, duration or tokens to the median among them{{if .Unranked}}; {{.Unranked}} with fewer than {{oddMin}} of the same name to compare with are last, newest first{{end}}{{else}}{{len .Traces}} of {{.Total}} traces, newest first{{end}}</span>{{if .NextURL}}<a class="btn sm" href="{{.NextURL}}" hx-get="{{.NextURL}}" hx-target="#trace-list" hx-swap="outerHTML show:#trace-list:top" hx-push-url="true">Next page →</a>{{end}}</div>
+{{end}}</div>
+</div>
+{{end}}
+
+{{/* ctx_marks: what a contextSpark's steps did to their context, in the context chart's letters. */}}
+{{define "ctx_marks"}}{{if .Shrank}}<span class="cap" title="smaller context: a compaction or a sub-agent's first call"><b class="warn-t">C</b>{{if gt .Shrank 1}}×{{.Shrank}}{{end}}</span>{{end}}{{if .Breaks}}<span class="cap" title="cache break"><b class="warn-t">B</b>{{if gt .Breaks 1}}×{{.Breaks}}{{end}}</span>{{end}}{{if .Expiries}}<span class="cap" title="cache expiry: a cache break after 5 minutes or more without a call"><b class="warn-t">E</b>{{if gt .Expiries 1}}×{{.Expiries}}{{end}}</span>{{end}}{{if .Extra}}<span class="cap">+{{.ExtraUSD}} est.</span>{{end}}{{end}}
+
+{{/* Navigation for many traces, closed until a period or the heat map is set. The live poll re-reads
+     only its figure, so it stays open or closed as the reader left it. One grid for both charts: the
+     heat map's columns sit under the histogram's bars and share its time axis. */}}
+{{define "trace_histogram"}}{{with .Histogram}}
+<div class="band"><details class="disc grow"{{if .Open}} open{{end}}><summary><h3>Traces over time</h3><span class="cap">histogram and heat map<span class="only-wide"> · click a bar or a cell to list its period</span></span></summary>
+<figure class="mt" id="list-chart">
+<div class="chart-h"><h3 class="muted">UTC · 1 bar = {{.Width}}</h3>
+<div class="legend"><span><i class="sw s-ok"></i>ok</span><span><i class="sw s-unset"></i>unset</span><span><i class="sw s-err"></i>error, also capped above the bar</span></div></div>
+<div class="hist"><div class="y"><span>{{.Max}}</span><span>0</span></div>
+<svg viewBox="0 0 {{len .Bars}} 64" preserveAspectRatio="none" role="img" aria-label="{{.Total}} traces by start time, in {{len .Bars}} bars; the periods are links in the list below">
+{{range $i, $b := .Bars}}<a href="{{.URL}}" tabindex="-1"><title>{{.Title}}</title><rect x="{{$i}}" width="1" height="64" fill="transparent"/><rect x="{{$i}}.15" y="{{.OKY}}" width=".7" height="{{.OKPx}}" class="f-ok"/><rect x="{{$i}}.15" y="{{.UnsetY}}" width=".7" height="{{.UnsetPx}}" class="f-unset"/>{{if .ErrorPx}}<rect x="{{$i}}.15" y="{{.ErrorY}}" width=".7" height="{{.ErrorPx}}" class="f-err"/><rect x="{{$i}}.15" y="{{.ErrorCap}}" width=".7" height="3" class="f-err"/>{{end}}</a>{{end}}
+</svg>
+<div class="x">{{range .Ticks}}<span>{{.}}</span>{{end}}</div>
+{{template "trace_heatmap" .Heat}}</div>
+{{template "trace_links" .}}
+</figure></details></div>
+{{end}}{{end}}
+
+{{/* The charts' links as a list. Bars and cells are narrow and out of the tab order, so this is the
+     way to them by keyboard, by touch and for a screen reader. */}}
+{{define "trace_links"}}
+<details class="disc mt"><summary><h3>As a list</h3><span class="cap">the same links, one line each</span></summary>
+<p class="cap mt">Periods with traces</p>
+<ul class="periods">{{range .Bars}}{{if .N}}<li><a class="link" href="{{.URL}}">{{.Title}}</a></li>{{end}}{{end}}</ul>
+{{with .Heat}}{{if .Cells}}<p class="cap mt">Heat map cells</p>
+<ul class="periods">{{range .Cells}}<li><a class="link" href="{{.URL}}">{{.Title}}</a></li>{{end}}</ul>{{end}}{{end}}
+</details>
+{{end}}
+
+{{/* The heat map is drawn only when ?y= names its measure; closed, it is this one line. */}}
+{{define "trace_heatmap"}}{{with .}}
+<div class="chart-h heat-h"><h3>Heat map per trace <span class="seg">{{range .Switch}}<a href="{{.URL}}" hx-get="{{.URL}}" hx-target="#trace-list" hx-swap="outerHTML" hx-push-url="true"{{if .Single}} aria-current="true"{{end}}>{{.Title}}</a>{{end}}</span> <span class="muted">{{if .Cells}}· the same periods · log scale, a row starts at its label · click a cell to list its period and range{{end}}{{if and .Measure .Missing}} · {{.Missing}} with unknown {{.Measure}} not shown{{end}}</span></h3>
+{{if .Cells}}<div class="legend"><span><i class="sw ht-1"></i>1 trace, opens it</span>{{if gt .Max 1}}<span><span class="ramp"><i class="sw ht-2"></i><i class="sw ht-3"></i><i class="sw ht-4"></i><i class="sw ht-5"></i><i class="sw ht-6"></i></span>more traces, up to {{.Max}}</span>{{end}}</div>{{end}}</div>
+{{if .Cells}}<div class="rows">{{range .Labels}}<div>{{.}}</div>{{end}}</div>
+<div class="heat"><svg viewBox="0 0 {{.Cols}} {{len .Labels}}" preserveAspectRatio="none" role="img" aria-label="Heat map of traces by start time and {{.Measure}}; the cells are links in the list below">
+{{range .Cells}}<a href="{{.URL}}" tabindex="-1"><rect x="{{.X}}.04" y="{{.Y}}.06" width=".92" height=".88" class="ht-{{.Step}}"><title>{{.Title}}</title></rect></a>{{end}}
+</svg></div>{{end}}
+{{end}}{{end}}

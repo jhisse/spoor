@@ -1,0 +1,752 @@
+{
+  "resourceSpans": [
+    {
+      "resource": {
+        "attributes": [
+          {
+            "key": "telemetry.sdk.language",
+            "value": {
+              "stringValue": "python"
+            }
+          },
+          {
+            "key": "telemetry.sdk.name",
+            "value": {
+              "stringValue": "opentelemetry"
+            }
+          },
+          {
+            "key": "telemetry.sdk.version",
+            "value": {
+              "stringValue": "1.45.0"
+            }
+          },
+          {
+            "key": "service.instance.id",
+            "value": {
+              "stringValue": "6b39fb45-43e0-46b4-8f25-6f18ab8b3af9"
+            }
+          },
+          {
+            "key": "service.name",
+            "value": {
+              "stringValue": "capture"
+            }
+          }
+        ]
+      },
+      "scopeSpans": [
+        {
+          "scope": {
+            "name": "openinference.instrumentation.openai",
+            "version": "0.1.63"
+          },
+          "spans": [
+            {
+              "traceId": "8d4a96dd00a720752da82e06f0a9d096",
+              "spanId": "bcc278eac1bd4157",
+              "parentSpanId": "d8a192ef8794edee",
+              "name": "ChatCompletion",
+              "kind": "SPAN_KIND_INTERNAL",
+              "startTimeUnixNano": "1791168873124790000",
+              "endTimeUnixNano": "1791168873155578000",
+              "attributes": [
+                {
+                  "key": "llm.system",
+                  "value": {
+                    "stringValue": "openai"
+                  }
+                },
+                {
+                  "key": "input.value",
+                  "value": {
+                    "stringValue": "{\"messages\": [{\"role\": \"system\", \"content\": \"You are Researcher. You research.\\nYour personal goal is: Answer the question\"}, {\"role\": \"user\", \"content\": \"\\nCurrent Task: What is the capital of France?\\n\\nThis is the expected criteria for your final answer: One word.\\nyou MUST return the actual complete content as the final answer, not a summary.\\n\\nProvide your complete response:\"}], \"model\": \"gpt-4o-mini\"}"
+                  }
+                },
+                {
+                  "key": "input.mime_type",
+                  "value": {
+                    "stringValue": "application/json"
+                  }
+                },
+                {
+                  "key": "output.value",
+                  "value": {
+                    "stringValue": "{\"id\":\"chatcmpl-fake\",\"choices\":[{\"finish_reason\":\"stop\",\"index\":0,\"message\":{\"content\":\"Paris.\",\"role\":\"assistant\"}}],\"created\":1,\"model\":\"gpt-4o-mini\",\"object\":\"chat.completion\",\"usage\":{\"completion_tokens\":40,\"prompt_tokens\":1200,\"total_tokens\":1240,\"completion_tokens_details\":{\"reasoning_tokens\":32},\"prompt_tokens_details\":{\"cached_tokens\":1024}}}"
+                  }
+                },
+                {
+                  "key": "output.mime_type",
+                  "value": {
+                    "stringValue": "application/json"
+                  }
+                },
+                {
+                  "key": "session.id",
+                  "value": {
+                    "stringValue": "capture-session"
+                  }
+                },
+                {
+                  "key": "llm.invocation_parameters",
+                  "value": {
+                    "stringValue": "{\"model\": \"gpt-4o-mini\"}"
+                  }
+                },
+                {
+                  "key": "llm.input_messages.0.message.role",
+                  "value": {
+                    "stringValue": "system"
+                  }
+                },
+                {
+                  "key": "llm.input_messages.0.message.content",
+                  "value": {
+                    "stringValue": "You are Researcher. You research.\nYour personal goal is: Answer the question"
+                  }
+                },
+                {
+                  "key": "llm.input_messages.1.message.role",
+                  "value": {
+                    "stringValue": "user"
+                  }
+                },
+                {
+                  "key": "llm.input_messages.1.message.content",
+                  "value": {
+                    "stringValue": "\nCurrent Task: What is the capital of France?\n\nThis is the expected criteria for your final answer: One word.\nyou MUST return the actual complete content as the final answer, not a summary.\n\nProvide your complete response:"
+                  }
+                },
+                {
+                  "key": "llm.model_name",
+                  "value": {
+                    "stringValue": "gpt-4o-mini"
+                  }
+                },
+                {
+                  "key": "llm.token_count.total",
+                  "value": {
+                    "intValue": "1240"
+                  }
+                },
+                {
+                  "key": "llm.token_count.prompt",
+                  "value": {
+                    "intValue": "1200"
+                  }
+                },
+                {
+                  "key": "llm.token_count.completion",
+                  "value": {
+                    "intValue": "40"
+                  }
+                },
+                {
+                  "key": "llm.token_count.prompt_details.cache_read",
+                  "value": {
+                    "intValue": "1024"
+                  }
+                },
+                {
+                  "key": "llm.token_count.completion_details.reasoning",
+                  "value": {
+                    "intValue": "32"
+                  }
+                },
+                {
+                  "key": "llm.output_messages.0.message.role",
+                  "value": {
+                    "stringValue": "assistant"
+                  }
+                },
+                {
+                  "key": "llm.output_messages.0.message.content",
+                  "value": {
+                    "stringValue": "Paris."
+                  }
+                },
+                {
+                  "key": "llm.finish_reason",
+                  "value": {
+                    "stringValue": "stop"
+                  }
+                },
+                {
+                  "key": "openinference.span.kind",
+                  "value": {
+                    "stringValue": "LLM"
+                  }
+                }
+              ],
+              "status": {
+                "code": "STATUS_CODE_OK"
+              },
+              "flags": 256
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "resource": {
+        "attributes": [
+          {
+            "key": "telemetry.sdk.language",
+            "value": {
+              "stringValue": "python"
+            }
+          },
+          {
+            "key": "telemetry.sdk.name",
+            "value": {
+              "stringValue": "opentelemetry"
+            }
+          },
+          {
+            "key": "telemetry.sdk.version",
+            "value": {
+              "stringValue": "1.45.0"
+            }
+          },
+          {
+            "key": "service.instance.id",
+            "value": {
+              "stringValue": "6b39fb45-43e0-46b4-8f25-6f18ab8b3af9"
+            }
+          },
+          {
+            "key": "service.name",
+            "value": {
+              "stringValue": "capture"
+            }
+          }
+        ]
+      },
+      "scopeSpans": [
+        {
+          "scope": {
+            "name": "openinference.instrumentation.crewai",
+            "version": "1.1.20"
+          },
+          "spans": [
+            {
+              "traceId": "8d4a96dd00a720752da82e06f0a9d096",
+              "spanId": "d8a192ef8794edee",
+              "parentSpanId": "83dbab9ff9b6e8d3",
+              "name": "Researcher._execute_core",
+              "kind": "SPAN_KIND_INTERNAL",
+              "startTimeUnixNano": "1791168872863320000",
+              "endTimeUnixNano": "1791168873162849000",
+              "attributes": [
+                {
+                  "key": "input.value",
+                  "value": {
+                    "stringValue": "{\"agent\": {\"entity_type\": \"agent\", \"id\": \"b566e256-2c8b-4034-8542-5d8edeb1d0c1\", \"role\": \"Researcher\", \"goal\": \"Answer the question\", \"backstory\": \"You research.\", \"cache\": true, \"verbose\": false, \"max_rpm\": null, \"allow_delegation\": false, \"tools\": [], \"max_iter\": 25, \"tool_failure_policy\": null, \"i18n\": {\"prompt_file\": null}, \"cache_handler\": null, \"tools_results\": [], \"max_tokens\": null, \"knowledge\": null, \"knowledge_sources\": null, \"knowledge_storage\": null, \"security_config\": {\"fingerprint\": {\"metadata\": {}}}, \"checkpoint\": null, \"adapted_agent\": false, \"knowledge_config\": null, \"apps\": null, \"mcps\": null, \"memory\": null, \"skills\": null, \"execution_context\": null, \"checkpoint_kickoff_event_id\": null, \"max_execution_time\": null, \"use_system_prompt\": true, \"system_template\": null, \"prompt_template\": null, \"response_template\": null, \"allow_code_execution\": false, \"respect_context_window\": true, \"max_retry_limit\": 2, \"multimodal\": false, \"inject_date\": false, \"date_format\": \"%Y-%m-%d\", \"code_execution_mode\": \"safe\", \"planning_config\": null, \"planning\": false, \"reasoning\": false, \"max_reasoning_attempts\": null, \"embedder\": null, \"agent_knowledge_context\": null, \"crew_knowledge_context\": null, \"knowledge_search_query\": null, \"from_repository\": null, \"guardrail_max_retries\": 3, \"a2a\": null, \"key\": \"aac7d95a1dcbef68ee21a7a9aed3f2bd\"}, \"context\": \"\", \"tools\": []}"
+                  }
+                },
+                {
+                  "key": "input.mime_type",
+                  "value": {
+                    "stringValue": "application/json"
+                  }
+                },
+                {
+                  "key": "task_key",
+                  "value": {
+                    "stringValue": "9b6345308b246251fc2e20edec14e4ec"
+                  }
+                },
+                {
+                  "key": "task_id",
+                  "value": {
+                    "stringValue": "ee8739a1-25e7-4f7f-82dd-50c44aa045f1"
+                  }
+                },
+                {
+                  "key": "graph.node.id",
+                  "value": {
+                    "stringValue": "Researcher"
+                  }
+                },
+                {
+                  "key": "crew_key",
+                  "value": {
+                    "stringValue": "04e0b17f52b0b81337b28d7d06cdf90a"
+                  }
+                },
+                {
+                  "key": "crew_id",
+                  "value": {
+                    "stringValue": "0448cd74-4d02-4725-955e-2ef4b3cfb4d5"
+                  }
+                },
+                {
+                  "key": "output.value",
+                  "value": {
+                    "stringValue": "{\"description\": \"What is the capital of France?\", \"name\": \"What is the capital of France?\", \"expected_output\": \"One word.\", \"summary\": \"What is the capital of France?...\", \"raw\": \"Paris.\", \"pydantic\": null, \"json_dict\": null, \"agent\": \"Researcher\", \"output_format\": \"raw\", \"messages\": [{\"role\": \"system\", \"content\": \"You are Researcher. You research.\\nYour personal goal is: Answer the question\"}, {\"role\": \"user\", \"content\": \"\\nCurrent Task: What is the capital of France?\\n\\nThis is the expected criteria for your final answer: One word.\\nyou MUST return the actual complete content as the final answer, not a summary.\\n\\nProvide your complete response:\"}], \"tool_failures\": []}"
+                  }
+                },
+                {
+                  "key": "output.mime_type",
+                  "value": {
+                    "stringValue": "application/json"
+                  }
+                },
+                {
+                  "key": "session.id",
+                  "value": {
+                    "stringValue": "capture-session"
+                  }
+                },
+                {
+                  "key": "openinference.span.kind",
+                  "value": {
+                    "stringValue": "AGENT"
+                  }
+                }
+              ],
+              "status": {
+                "code": "STATUS_CODE_OK"
+              },
+              "flags": 256
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "resource": {
+        "attributes": [
+          {
+            "key": "telemetry.sdk.language",
+            "value": {
+              "stringValue": "python"
+            }
+          },
+          {
+            "key": "telemetry.sdk.name",
+            "value": {
+              "stringValue": "opentelemetry"
+            }
+          },
+          {
+            "key": "telemetry.sdk.version",
+            "value": {
+              "stringValue": "1.45.0"
+            }
+          },
+          {
+            "key": "service.instance.id",
+            "value": {
+              "stringValue": "6b39fb45-43e0-46b4-8f25-6f18ab8b3af9"
+            }
+          },
+          {
+            "key": "service.name",
+            "value": {
+              "stringValue": "capture"
+            }
+          }
+        ]
+      },
+      "scopeSpans": [
+        {
+          "scope": {
+            "name": "openinference.instrumentation.openai",
+            "version": "0.1.63"
+          },
+          "spans": [
+            {
+              "traceId": "8d4a96dd00a720752da82e06f0a9d096",
+              "spanId": "af7ffe6651692679",
+              "parentSpanId": "1a9137178719d3fb",
+              "name": "ChatCompletion",
+              "kind": "SPAN_KIND_INTERNAL",
+              "startTimeUnixNano": "1791168873169063000",
+              "endTimeUnixNano": "1791168873170111000",
+              "attributes": [
+                {
+                  "key": "llm.system",
+                  "value": {
+                    "stringValue": "openai"
+                  }
+                },
+                {
+                  "key": "input.value",
+                  "value": {
+                    "stringValue": "{\"messages\": [{\"role\": \"system\", \"content\": \"You are Writer. You write.\\nYour personal goal is: Write a headline\"}, {\"role\": \"user\", \"content\": \"\\nCurrent Task: Turn the answer into a headline.\\n\\nThis is the expected criteria for your final answer: One word.\\nyou MUST return the actual complete content as the final answer, not a summary.\\n\\nThis is the context you're working with:\\nParis.\\n\\nProvide your complete response:\"}], \"model\": \"gpt-4o-mini\"}"
+                  }
+                },
+                {
+                  "key": "input.mime_type",
+                  "value": {
+                    "stringValue": "application/json"
+                  }
+                },
+                {
+                  "key": "output.value",
+                  "value": {
+                    "stringValue": "{\"id\":\"chatcmpl-fake\",\"choices\":[{\"finish_reason\":\"stop\",\"index\":0,\"message\":{\"content\":\"Paris.\",\"role\":\"assistant\"}}],\"created\":1,\"model\":\"gpt-4o-mini\",\"object\":\"chat.completion\",\"usage\":{\"completion_tokens\":40,\"prompt_tokens\":1200,\"total_tokens\":1240,\"completion_tokens_details\":{\"reasoning_tokens\":32},\"prompt_tokens_details\":{\"cached_tokens\":1024}}}"
+                  }
+                },
+                {
+                  "key": "output.mime_type",
+                  "value": {
+                    "stringValue": "application/json"
+                  }
+                },
+                {
+                  "key": "session.id",
+                  "value": {
+                    "stringValue": "capture-session"
+                  }
+                },
+                {
+                  "key": "llm.invocation_parameters",
+                  "value": {
+                    "stringValue": "{\"model\": \"gpt-4o-mini\"}"
+                  }
+                },
+                {
+                  "key": "llm.input_messages.0.message.role",
+                  "value": {
+                    "stringValue": "system"
+                  }
+                },
+                {
+                  "key": "llm.input_messages.0.message.content",
+                  "value": {
+                    "stringValue": "You are Writer. You write.\nYour personal goal is: Write a headline"
+                  }
+                },
+                {
+                  "key": "llm.input_messages.1.message.role",
+                  "value": {
+                    "stringValue": "user"
+                  }
+                },
+                {
+                  "key": "llm.input_messages.1.message.content",
+                  "value": {
+                    "stringValue": "\nCurrent Task: Turn the answer into a headline.\n\nThis is the expected criteria for your final answer: One word.\nyou MUST return the actual complete content as the final answer, not a summary.\n\nThis is the context you're working with:\nParis.\n\nProvide your complete response:"
+                  }
+                },
+                {
+                  "key": "llm.model_name",
+                  "value": {
+                    "stringValue": "gpt-4o-mini"
+                  }
+                },
+                {
+                  "key": "llm.token_count.total",
+                  "value": {
+                    "intValue": "1240"
+                  }
+                },
+                {
+                  "key": "llm.token_count.prompt",
+                  "value": {
+                    "intValue": "1200"
+                  }
+                },
+                {
+                  "key": "llm.token_count.completion",
+                  "value": {
+                    "intValue": "40"
+                  }
+                },
+                {
+                  "key": "llm.token_count.prompt_details.cache_read",
+                  "value": {
+                    "intValue": "1024"
+                  }
+                },
+                {
+                  "key": "llm.token_count.completion_details.reasoning",
+                  "value": {
+                    "intValue": "32"
+                  }
+                },
+                {
+                  "key": "llm.output_messages.0.message.role",
+                  "value": {
+                    "stringValue": "assistant"
+                  }
+                },
+                {
+                  "key": "llm.output_messages.0.message.content",
+                  "value": {
+                    "stringValue": "Paris."
+                  }
+                },
+                {
+                  "key": "llm.finish_reason",
+                  "value": {
+                    "stringValue": "stop"
+                  }
+                },
+                {
+                  "key": "openinference.span.kind",
+                  "value": {
+                    "stringValue": "LLM"
+                  }
+                }
+              ],
+              "status": {
+                "code": "STATUS_CODE_OK"
+              },
+              "flags": 256
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "resource": {
+        "attributes": [
+          {
+            "key": "telemetry.sdk.language",
+            "value": {
+              "stringValue": "python"
+            }
+          },
+          {
+            "key": "telemetry.sdk.name",
+            "value": {
+              "stringValue": "opentelemetry"
+            }
+          },
+          {
+            "key": "telemetry.sdk.version",
+            "value": {
+              "stringValue": "1.45.0"
+            }
+          },
+          {
+            "key": "service.instance.id",
+            "value": {
+              "stringValue": "6b39fb45-43e0-46b4-8f25-6f18ab8b3af9"
+            }
+          },
+          {
+            "key": "service.name",
+            "value": {
+              "stringValue": "capture"
+            }
+          }
+        ]
+      },
+      "scopeSpans": [
+        {
+          "scope": {
+            "name": "openinference.instrumentation.crewai",
+            "version": "1.1.20"
+          },
+          "spans": [
+            {
+              "traceId": "8d4a96dd00a720752da82e06f0a9d096",
+              "spanId": "1a9137178719d3fb",
+              "parentSpanId": "83dbab9ff9b6e8d3",
+              "name": "Writer._execute_core",
+              "kind": "SPAN_KIND_INTERNAL",
+              "startTimeUnixNano": "1791168873166739000",
+              "endTimeUnixNano": "1791168873174717000",
+              "attributes": [
+                {
+                  "key": "input.value",
+                  "value": {
+                    "stringValue": "{\"agent\": {\"entity_type\": \"agent\", \"id\": \"5c5928dd-b4dc-4489-9791-e48da1afb71a\", \"role\": \"Writer\", \"goal\": \"Write a headline\", \"backstory\": \"You write.\", \"cache\": true, \"verbose\": false, \"max_rpm\": null, \"allow_delegation\": false, \"tools\": [], \"max_iter\": 25, \"tool_failure_policy\": null, \"i18n\": {\"prompt_file\": null}, \"cache_handler\": null, \"tools_results\": [], \"max_tokens\": null, \"knowledge\": null, \"knowledge_sources\": null, \"knowledge_storage\": null, \"security_config\": {\"fingerprint\": {\"metadata\": {}}}, \"checkpoint\": null, \"adapted_agent\": false, \"knowledge_config\": null, \"apps\": null, \"mcps\": null, \"memory\": null, \"skills\": null, \"execution_context\": null, \"checkpoint_kickoff_event_id\": null, \"max_execution_time\": null, \"use_system_prompt\": true, \"system_template\": null, \"prompt_template\": null, \"response_template\": null, \"allow_code_execution\": false, \"respect_context_window\": true, \"max_retry_limit\": 2, \"multimodal\": false, \"inject_date\": false, \"date_format\": \"%Y-%m-%d\", \"code_execution_mode\": \"safe\", \"planning_config\": null, \"planning\": false, \"reasoning\": false, \"max_reasoning_attempts\": null, \"embedder\": null, \"agent_knowledge_context\": null, \"crew_knowledge_context\": null, \"knowledge_search_query\": null, \"from_repository\": null, \"guardrail_max_retries\": 3, \"a2a\": null, \"key\": \"353759b01eac36493ca56f515def24a5\"}, \"context\": \"Paris.\", \"tools\": []}"
+                  }
+                },
+                {
+                  "key": "input.mime_type",
+                  "value": {
+                    "stringValue": "application/json"
+                  }
+                },
+                {
+                  "key": "task_key",
+                  "value": {
+                    "stringValue": "6cd4b88ee3c91a4edd80bbedb3963144"
+                  }
+                },
+                {
+                  "key": "task_id",
+                  "value": {
+                    "stringValue": "8b96b41a-25e8-4dea-a2ac-fad744c366e1"
+                  }
+                },
+                {
+                  "key": "graph.node.id",
+                  "value": {
+                    "stringValue": "Writer"
+                  }
+                },
+                {
+                  "key": "crew_key",
+                  "value": {
+                    "stringValue": "04e0b17f52b0b81337b28d7d06cdf90a"
+                  }
+                },
+                {
+                  "key": "crew_id",
+                  "value": {
+                    "stringValue": "0448cd74-4d02-4725-955e-2ef4b3cfb4d5"
+                  }
+                },
+                {
+                  "key": "graph.node.parent_id",
+                  "value": {
+                    "stringValue": "Researcher"
+                  }
+                },
+                {
+                  "key": "output.value",
+                  "value": {
+                    "stringValue": "{\"description\": \"Turn the answer into a headline.\", \"name\": \"Turn the answer into a headline.\", \"expected_output\": \"One word.\", \"summary\": \"Turn the answer into a headline....\", \"raw\": \"Paris.\", \"pydantic\": null, \"json_dict\": null, \"agent\": \"Writer\", \"output_format\": \"raw\", \"messages\": [{\"role\": \"system\", \"content\": \"You are Writer. You write.\\nYour personal goal is: Write a headline\"}, {\"role\": \"user\", \"content\": \"\\nCurrent Task: Turn the answer into a headline.\\n\\nThis is the expected criteria for your final answer: One word.\\nyou MUST return the actual complete content as the final answer, not a summary.\\n\\nThis is the context you're working with:\\nParis.\\n\\nProvide your complete response:\"}], \"tool_failures\": []}"
+                  }
+                },
+                {
+                  "key": "output.mime_type",
+                  "value": {
+                    "stringValue": "application/json"
+                  }
+                },
+                {
+                  "key": "session.id",
+                  "value": {
+                    "stringValue": "capture-session"
+                  }
+                },
+                {
+                  "key": "openinference.span.kind",
+                  "value": {
+                    "stringValue": "AGENT"
+                  }
+                }
+              ],
+              "status": {
+                "code": "STATUS_CODE_OK"
+              },
+              "flags": 256
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "resource": {
+        "attributes": [
+          {
+            "key": "telemetry.sdk.language",
+            "value": {
+              "stringValue": "python"
+            }
+          },
+          {
+            "key": "telemetry.sdk.name",
+            "value": {
+              "stringValue": "opentelemetry"
+            }
+          },
+          {
+            "key": "telemetry.sdk.version",
+            "value": {
+              "stringValue": "1.45.0"
+            }
+          },
+          {
+            "key": "service.instance.id",
+            "value": {
+              "stringValue": "6b39fb45-43e0-46b4-8f25-6f18ab8b3af9"
+            }
+          },
+          {
+            "key": "service.name",
+            "value": {
+              "stringValue": "capture"
+            }
+          }
+        ]
+      },
+      "scopeSpans": [
+        {
+          "scope": {
+            "name": "openinference.instrumentation.crewai",
+            "version": "1.1.20"
+          },
+          "spans": [
+            {
+              "traceId": "8d4a96dd00a720752da82e06f0a9d096",
+              "spanId": "83dbab9ff9b6e8d3",
+              "name": "Crew_0448cd74-4d02-4725-955e-2ef4b3cfb4d5.kickoff",
+              "kind": "SPAN_KIND_INTERNAL",
+              "startTimeUnixNano": "1791168872853930000",
+              "endTimeUnixNano": "1791168873178462000",
+              "attributes": [
+                {
+                  "key": "crew_key",
+                  "value": {
+                    "stringValue": "04e0b17f52b0b81337b28d7d06cdf90a"
+                  }
+                },
+                {
+                  "key": "crew_id",
+                  "value": {
+                    "stringValue": "0448cd74-4d02-4725-955e-2ef4b3cfb4d5"
+                  }
+                },
+                {
+                  "key": "crew_inputs",
+                  "value": {
+                    "stringValue": ""
+                  }
+                },
+                {
+                  "key": "crew_agents",
+                  "value": {
+                    "stringValue": "[{\"key\": \"aac7d95a1dcbef68ee21a7a9aed3f2bd\", \"id\": \"b566e256-2c8b-4034-8542-5d8edeb1d0c1\", \"role\": \"Researcher\", \"goal\": \"Answer the question\", \"backstory\": \"You research.\", \"verbose?\": false, \"max_iter\": 25, \"max_rpm\": null, \"delegation_enabled\": false, \"tools_names\": []}, {\"key\": \"353759b01eac36493ca56f515def24a5\", \"id\": \"5c5928dd-b4dc-4489-9791-e48da1afb71a\", \"role\": \"Writer\", \"goal\": \"Write a headline\", \"backstory\": \"You write.\", \"verbose?\": false, \"max_iter\": 25, \"max_rpm\": null, \"delegation_enabled\": false, \"tools_names\": []}]"
+                  }
+                },
+                {
+                  "key": "crew_tasks",
+                  "value": {
+                    "stringValue": "[{\"id\": \"ee8739a1-25e7-4f7f-82dd-50c44aa045f1\", \"description\": \"What is the capital of France?\", \"expected_output\": \"One word.\", \"async_execution?\": false, \"human_input?\": false, \"agent_role\": \"Researcher\", \"agent_key\": \"aac7d95a1dcbef68ee21a7a9aed3f2bd\", \"context\": null, \"tools_names\": []}, {\"id\": \"8b96b41a-25e8-4dea-a2ac-fad744c366e1\", \"description\": \"Turn the answer into a headline.\", \"expected_output\": \"One word.\", \"async_execution?\": false, \"human_input?\": false, \"agent_role\": \"Writer\", \"agent_key\": \"353759b01eac36493ca56f515def24a5\", \"context\": [\"What is the capital of France?\"], \"tools_names\": []}]"
+                  }
+                },
+                {
+                  "key": "output.value",
+                  "value": {
+                    "stringValue": "{\"raw\": \"Paris.\", \"pydantic\": null, \"json_dict\": null, \"tasks_output\": [{\"description\": \"What is the capital of France?\", \"name\": \"What is the capital of France?\", \"expected_output\": \"One word.\", \"summary\": \"What is the capital of France?...\", \"raw\": \"Paris.\", \"pydantic\": null, \"json_dict\": null, \"agent\": \"Researcher\", \"output_format\": \"raw\", \"messages\": [{\"role\": \"system\", \"content\": \"You are Researcher. You research.\\nYour personal goal is: Answer the question\"}, {\"role\": \"user\", \"content\": \"\\nCurrent Task: What is the capital of France?\\n\\nThis is the expected criteria for your final answer: One word.\\nyou MUST return the actual complete content as the final answer, not a summary.\\n\\nProvide your complete response:\"}], \"tool_failures\": []}, {\"description\": \"Turn the answer into a headline.\", \"name\": \"Turn the answer into a headline.\", \"expected_output\": \"One word.\", \"summary\": \"Turn the answer into a headline....\", \"raw\": \"Paris.\", \"pydantic\": null, \"json_dict\": null, \"agent\": \"Writer\", \"output_format\": \"raw\", \"messages\": [{\"role\": \"system\", \"content\": \"You are Writer. You write.\\nYour personal goal is: Write a headline\"}, {\"role\": \"user\", \"content\": \"\\nCurrent Task: Turn the answer into a headline.\\n\\nThis is the expected criteria for your final answer: One word.\\nyou MUST return the actual complete content as the final answer, not a summary.\\n\\nThis is the context you're working with:\\nParis.\\n\\nProvide your complete response:\"}], \"tool_failures\": []}], \"token_usage\": {\"total_tokens\": 2480, \"prompt_tokens\": 2400, \"cached_prompt_tokens\": 2048, \"completion_tokens\": 80, \"reasoning_tokens\": 64, \"cache_creation_tokens\": 0, \"successful_requests\": 2}}"
+                  }
+                },
+                {
+                  "key": "output.mime_type",
+                  "value": {
+                    "stringValue": "application/json"
+                  }
+                },
+                {
+                  "key": "session.id",
+                  "value": {
+                    "stringValue": "capture-session"
+                  }
+                },
+                {
+                  "key": "openinference.span.kind",
+                  "value": {
+                    "stringValue": "CHAIN"
+                  }
+                }
+              ],
+              "status": {
+                "code": "STATUS_CODE_OK"
+              },
+              "flags": 256
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

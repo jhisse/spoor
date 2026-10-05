@@ -1,0 +1,71 @@
+{{define "title"}}spoor — {{.Trace.Name}}{{end}}
+{{define "width"}} wide{{end}}
+
+{{/* kbd_ok is the guard of every keyboard shortcut: not with a modifier (Alt+← is the browser's back),
+     and not while a control that has its own use for keys has focus. */}}
+{{/* read_pick: a link of the Read view loads the whole trace page again, which keeps ?view=read. */}}
+{{define "read_pick"}}href="{{.}}" hx-get="{{.}}" hx-target="#trace-detail" hx-swap="outerHTML" hx-push-url="true"{{end}}
+{{define "kbd_ok"}}!ctrlKey&&!metaKey&&!altKey&&!target.isContentEditable&&!target.closest('input,select,textarea,button,summary'){{end}}
+
+{{/* content: the header line, what was asked, the numbers, the Tree | Read switch with the
+     pointers, the search the reader came with, and the workspace: the tree, and beside it the
+     context per step above the selected span (or the same chart above the transcript). On a wide
+     screen the tree view fills the window and the page does not scroll, so the arrow keys move
+     the selection and nothing else. */}}
+{{define "content"}}
+<div id="trace-detail"{{if not .Read}} class="fit"{{end}}>
+<nav class="crumbs" aria-label="Breadcrumb"><a href="{{.ListURL}}">{{if .Search}}Search results{{else}}Traces{{end}}</a>{{if .Trace.SessionID}}<a href="{{sessionURL (strVal .Trace.SessionID)}}" title="{{strVal .Trace.SessionID}}">Session {{printf "%.8s" (strVal .Trace.SessionID)}}</a>{{end}}<span>{{.Trace.Name}}</span></nav>
+<div class="head">
+<h1>{{template "status_glyph" .Trace.Status}} {{.Trace.Name}} <span class="sub" title="{{.Trace.ID}}">{{printf "%.8s" .Trace.ID}}</span></h1>
+<div class="row">
+{{if .Prev}}<a class="btn sm" href="/traces/{{.Prev.ID}}" hx-get="/traces/{{.Prev.ID}}" hx-target="#trace-detail" hx-swap="outerHTML" hx-push-url="true" hx-trigger="click, keyup[key=='ArrowLeft' && {{template "kbd_ok"}}] from:body" title="{{.Prev.Name}}"><kbd>←</kbd> Previous</a>
+{{else}}<span class="btn sm" aria-disabled="true">← Previous</span>{{end}}
+{{if .Next}}<a class="btn sm" href="/traces/{{.Next.ID}}" hx-get="/traces/{{.Next.ID}}" hx-target="#trace-detail" hx-swap="outerHTML" hx-push-url="true" hx-trigger="click, keyup[key=='ArrowRight' && {{template "kbd_ok"}}] from:body" title="{{.Next.Name}}">Next <kbd>→</kbd></a>
+{{else}}<span class="btn sm" aria-disabled="true">Next →</span>{{end}}
+</div>
+</div>
+{{with .Asked}}<p class="asked" title="{{.}}">{{.}}</p>{{end}}
+{{if rootless .Roots}}<div class="callout warn"><h3>In progress — root span not received yet</h3><p class="measure">The sender exports the root when the whole turn ends; until then the trace is named after its oldest span and the {{len .Roots}} top-level rows are spans waiting for their parent. Totals cover what has arrived. If the root never arrives, the trace stays like this.</p></div>{{end}}
+<div class="panel">
+<div class="band">
+<dl class="stats grow">
+<div><dt>Status</dt><dd{{if eq .Trace.Status "error"}} class="err-t"{{end}}>{{.Trace.Status}}</dd></div>
+<div><dt>Started</dt><dd title="{{.Trace.StartedAt.Format "2006-01-02 15:04:05"}} UTC">{{relTime .Trace.StartedAt}}</dd></div>
+<div><dt>Duration</dt><dd>{{fmtDuration (.Trace.EndedAt.Sub .Trace.StartedAt)}}</dd></div>
+<div><dt>Cost</dt><dd>{{template "cache_unknown" .Totals.CacheUnknown}}{{costVal .Totals.CostUSD}}</dd></div>
+<div><dt>Tokens</dt><dd class="row">{{tokenPair .Totals.InputTokens .Totals.OutputTokens}}{{tokenBar .Totals.Tokens 0 120 8}}</dd></div>
+<div><dt>Spans</dt><dd>{{.Totals.SpanCount}}</dd></div>
+{{if .Totals.Models}}<div><dt>Models</dt><dd class="plain mono">{{range $i, $m := .Totals.Models}}{{if $i}}, {{end}}{{$m}}{{end}}</dd></div>{{end}}
+<div><dt>Service</dt><dd class="plain">{{if .Trace.Service}}{{strVal .Trace.Service}}{{else}}—{{end}}</dd></div>
+</dl>
+<div class="meta">{{template "metadata_block" .Trace.Metadata}}</div>
+</div>
+</div>
+<div class="bar">{{template "view_switch" .}}{{template "look_chips" .}}</div>
+{{template "trace_search" .}}
+{{if .Read}}<div class="mt">{{template "context_band" .}}</div>{{template "read_view" .}}{{else}}
+<div class="ws"><i id="span-top" class="ws-top"></i>
+<div class="pane" id="span-tree">{{template "tree_pane" .}}</div>
+<div class="col">
+{{template "context_band" .}}
+<div class="pane" id="span-detail">
+{{template "span_detail" .}}
+<i id="span-end" hidden></i></div>
+</div>
+</div>
+{{end}}
+</div>
+{{end}}
+
+{{/* trace_search: the search the reader came with. Its spans in this trace are marked in the
+     tree and stepped through with n and p; the words are marked in the selected span. */}}
+{{define "trace_search"}}{{with .Search}}
+<div class="panel mt"><div class="band" id="find"><h3>Search</h3>
+{{range .Labels}}<span class="chip">{{.}}</span>{{end}}
+{{if not .Total}}<span>No span of this trace matches.</span>
+{{else}}<span>{{if .At}}Span <b>{{.At}}</b> of {{.Total}} that match{{else}}{{.Total}} {{if eq .Total 1}}span matches{{else}}spans match{{end}}; the selected one does not{{end}}</span>
+{{if or (gt .Total 1) (not .At)}}<a class="btn sm" {{if $.Read}}{{template "read_pick" .PrevURL}}{{else}}{{template "pick" .PrevURL}} hx-swap="outerHTML show:#span-top:top"{{end}} hx-trigger="click, keyup[key=='p' && {{template "kbd_ok"}}] from:body"><kbd>p</kbd> Previous</a>
+<a class="btn sm" {{if $.Read}}{{template "read_pick" .NextURL}}{{else}}{{template "pick" .NextURL}} hx-swap="outerHTML show:#span-top:top"{{end}} hx-trigger="click, keyup[key=='n' && {{template "kbd_ok"}}] from:body">Next <kbd>n</kbd></a>{{end}}
+{{end}}
+<a class="link cap end" href="{{.ClearURL}}">Clear search</a></div></div>
+{{end}}{{end}}

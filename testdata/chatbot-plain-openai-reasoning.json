@@ -1,0 +1,404 @@
+{
+  "resourceSpans": [
+    {
+      "resource": {
+        "attributes": [
+          {
+            "key": "telemetry.sdk.language",
+            "value": {
+              "stringValue": "python"
+            }
+          },
+          {
+            "key": "telemetry.sdk.name",
+            "value": {
+              "stringValue": "opentelemetry"
+            }
+          },
+          {
+            "key": "telemetry.sdk.version",
+            "value": {
+              "stringValue": "1.45.0"
+            }
+          },
+          {
+            "key": "service.instance.id",
+            "value": {
+              "stringValue": "73371998-e759-4d06-889c-a1553d092092"
+            }
+          },
+          {
+            "key": "service.name",
+            "value": {
+              "stringValue": "bot-plain-openai"
+            }
+          }
+        ]
+      },
+      "scopeSpans": [
+        {
+          "scope": {
+            "name": "opentelemetry.util.genai.handler",
+            "version": "1.1b0"
+          },
+          "spans": [
+            {
+              "traceId": "a4f03a05d31c285076ee8a8831212fa0",
+              "spanId": "9d58a4744c95aa40",
+              "parentSpanId": "e6cb32e146148d3f",
+              "name": "chat openai/gpt-5-mini",
+              "kind": "SPAN_KIND_CLIENT",
+              "startTimeUnixNano": "1791172916439950000",
+              "endTimeUnixNano": "1791172919809094000",
+              "attributes": [
+                {
+                  "key": "gen_ai.operation.name",
+                  "value": {
+                    "stringValue": "chat"
+                  }
+                },
+                {
+                  "key": "gen_ai.request.model",
+                  "value": {
+                    "stringValue": "openai/gpt-5-mini"
+                  }
+                },
+                {
+                  "key": "gen_ai.provider.name",
+                  "value": {
+                    "stringValue": "openai"
+                  }
+                },
+                {
+                  "key": "gen_ai.response.finish_reasons",
+                  "value": {
+                    "arrayValue": {
+                      "values": [
+                        {
+                          "stringValue": "tool_calls"
+                        }
+                      ]
+                    }
+                  }
+                },
+                {
+                  "key": "gen_ai.response.model",
+                  "value": {
+                    "stringValue": "openai/gpt-5-mini"
+                  }
+                },
+                {
+                  "key": "gen_ai.response.id",
+                  "value": {
+                    "stringValue": "gen-1791172916-XyAQEHIFswdZfz3BY2dt"
+                  }
+                },
+                {
+                  "key": "gen_ai.usage.input_tokens",
+                  "value": {
+                    "intValue": "174"
+                  }
+                },
+                {
+                  "key": "gen_ai.usage.output_tokens",
+                  "value": {
+                    "intValue": "163"
+                  }
+                },
+                {
+                  "key": "gen_ai.input.messages",
+                  "value": {
+                    "stringValue": "[{\"role\":\"system\",\"parts\":[{\"content\":\"You are a concise assistant. Use a tool when it helps, then answer in one or two sentences. Skills you can load: unit-converter.\",\"type\":\"text\"}]},{\"role\":\"user\",\"parts\":[{\"content\":\"What is 17 * 23, and what time is it in Tokyo?\",\"type\":\"text\"}]}]"
+                  }
+                },
+                {
+                  "key": "gen_ai.output.messages",
+                  "value": {
+                    "stringValue": "[{\"role\":\"assistant\",\"parts\":[{\"arguments\":{\"expression\":\"17 * 23\"},\"name\":\"calculate\",\"id\":\"call_WdWdzDb6UIm8PCCN7FIIQ3DU\",\"type\":\"tool_call\"},{\"arguments\":{\"timezone\":\"Asia/Tokyo\"},\"name\":\"get_time\",\"id\":\"call_hStb7MVCQgK4Hb6x57JCyBmS\",\"type\":\"tool_call\"}],\"finish_reason\":\"tool_calls\"}]"
+                  }
+                },
+                {
+                  "key": "openai.response.service_tier",
+                  "value": {
+                    "stringValue": "default"
+                  }
+                }
+              ],
+              "status": {},
+              "flags": 256
+            }
+          ],
+          "schemaUrl": "https://opentelemetry.io/schemas/1.37.0"
+        },
+        {
+          "scope": {
+            "name": "bot-plain-openai"
+          },
+          "spans": [
+            {
+              "traceId": "a4f03a05d31c285076ee8a8831212fa0",
+              "spanId": "03826de6d0e6d527",
+              "parentSpanId": "e6cb32e146148d3f",
+              "name": "execute_tool calculate",
+              "kind": "SPAN_KIND_INTERNAL",
+              "startTimeUnixNano": "1791172919810425000",
+              "endTimeUnixNano": "1791172919810519000",
+              "attributes": [
+                {
+                  "key": "gen_ai.operation.name",
+                  "value": {
+                    "stringValue": "execute_tool"
+                  }
+                },
+                {
+                  "key": "gen_ai.tool.name",
+                  "value": {
+                    "stringValue": "calculate"
+                  }
+                },
+                {
+                  "key": "gen_ai.tool.call.id",
+                  "value": {
+                    "stringValue": "call_WdWdzDb6UIm8PCCN7FIIQ3DU"
+                  }
+                },
+                {
+                  "key": "gen_ai.tool.call.arguments",
+                  "value": {
+                    "stringValue": "{\"expression\":\"17 * 23\"}"
+                  }
+                },
+                {
+                  "key": "gen_ai.tool.call.result",
+                  "value": {
+                    "stringValue": "391"
+                  }
+                }
+              ],
+              "status": {},
+              "flags": 256
+            },
+            {
+              "traceId": "a4f03a05d31c285076ee8a8831212fa0",
+              "spanId": "c9f3e1b54f722ab2",
+              "parentSpanId": "e6cb32e146148d3f",
+              "name": "execute_tool get_time",
+              "kind": "SPAN_KIND_INTERNAL",
+              "startTimeUnixNano": "1791172919810600000",
+              "endTimeUnixNano": "1791172919810949000",
+              "attributes": [
+                {
+                  "key": "gen_ai.operation.name",
+                  "value": {
+                    "stringValue": "execute_tool"
+                  }
+                },
+                {
+                  "key": "gen_ai.tool.name",
+                  "value": {
+                    "stringValue": "get_time"
+                  }
+                },
+                {
+                  "key": "gen_ai.tool.call.id",
+                  "value": {
+                    "stringValue": "call_hStb7MVCQgK4Hb6x57JCyBmS"
+                  }
+                },
+                {
+                  "key": "gen_ai.tool.call.arguments",
+                  "value": {
+                    "stringValue": "{\"timezone\":\"Asia/Tokyo\"}"
+                  }
+                },
+                {
+                  "key": "gen_ai.tool.call.result",
+                  "value": {
+                    "stringValue": "2026-10-05T13:01:59+09:00"
+                  }
+                }
+              ],
+              "status": {},
+              "flags": 256
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "resource": {
+        "attributes": [
+          {
+            "key": "telemetry.sdk.language",
+            "value": {
+              "stringValue": "python"
+            }
+          },
+          {
+            "key": "telemetry.sdk.name",
+            "value": {
+              "stringValue": "opentelemetry"
+            }
+          },
+          {
+            "key": "telemetry.sdk.version",
+            "value": {
+              "stringValue": "1.45.0"
+            }
+          },
+          {
+            "key": "service.instance.id",
+            "value": {
+              "stringValue": "73371998-e759-4d06-889c-a1553d092092"
+            }
+          },
+          {
+            "key": "service.name",
+            "value": {
+              "stringValue": "bot-plain-openai"
+            }
+          }
+        ]
+      },
+      "scopeSpans": [
+        {
+          "scope": {
+            "name": "opentelemetry.util.genai.handler",
+            "version": "1.1b0"
+          },
+          "spans": [
+            {
+              "traceId": "a4f03a05d31c285076ee8a8831212fa0",
+              "spanId": "0523ab3e7a4e975e",
+              "parentSpanId": "e6cb32e146148d3f",
+              "name": "chat openai/gpt-5-mini",
+              "kind": "SPAN_KIND_CLIENT",
+              "startTimeUnixNano": "1791172919811053000",
+              "endTimeUnixNano": "1791172923211101000",
+              "attributes": [
+                {
+                  "key": "gen_ai.operation.name",
+                  "value": {
+                    "stringValue": "chat"
+                  }
+                },
+                {
+                  "key": "gen_ai.request.model",
+                  "value": {
+                    "stringValue": "openai/gpt-5-mini"
+                  }
+                },
+                {
+                  "key": "gen_ai.provider.name",
+                  "value": {
+                    "stringValue": "openai"
+                  }
+                },
+                {
+                  "key": "gen_ai.response.finish_reasons",
+                  "value": {
+                    "arrayValue": {
+                      "values": [
+                        {
+                          "stringValue": "stop"
+                        }
+                      ]
+                    }
+                  }
+                },
+                {
+                  "key": "gen_ai.response.model",
+                  "value": {
+                    "stringValue": "openai/gpt-5-mini"
+                  }
+                },
+                {
+                  "key": "gen_ai.response.id",
+                  "value": {
+                    "stringValue": "gen-1791172919-poJHHbPQPEbJNWM5bfOT"
+                  }
+                },
+                {
+                  "key": "gen_ai.usage.input_tokens",
+                  "value": {
+                    "intValue": "357"
+                  }
+                },
+                {
+                  "key": "gen_ai.usage.output_tokens",
+                  "value": {
+                    "intValue": "205"
+                  }
+                },
+                {
+                  "key": "gen_ai.input.messages",
+                  "value": {
+                    "stringValue": "[{\"role\":\"system\",\"parts\":[{\"content\":\"You are a concise assistant. Use a tool when it helps, then answer in one or two sentences. Skills you can load: unit-converter.\",\"type\":\"text\"}]},{\"role\":\"user\",\"parts\":[{\"content\":\"What is 17 * 23, and what time is it in Tokyo?\",\"type\":\"text\"}]},{\"role\":\"assistant\",\"parts\":[{\"arguments\":{\"expression\":\"17 * 23\"},\"name\":\"calculate\",\"id\":\"call_WdWdzDb6UIm8PCCN7FIIQ3DU\",\"type\":\"tool_call\"},{\"arguments\":{\"timezone\":\"Asia/Tokyo\"},\"name\":\"get_time\",\"id\":\"call_hStb7MVCQgK4Hb6x57JCyBmS\",\"type\":\"tool_call\"}]},{\"role\":\"tool\",\"parts\":[{\"response\":\"391\",\"id\":\"call_WdWdzDb6UIm8PCCN7FIIQ3DU\",\"type\":\"tool_call_response\"}]},{\"role\":\"tool\",\"parts\":[{\"response\":\"2026-10-05T13:01:59+09:00\",\"id\":\"call_hStb7MVCQgK4Hb6x57JCyBmS\",\"type\":\"tool_call_response\"}]}]"
+                  }
+                },
+                {
+                  "key": "gen_ai.output.messages",
+                  "value": {
+                    "stringValue": "[{\"role\":\"assistant\",\"parts\":[{\"content\":\"17 \\u00d7 23 = 391. The current time in Tokyo is 13:01:59 JST on 2026-10-05.\",\"type\":\"text\"}],\"finish_reason\":\"stop\"}]"
+                  }
+                },
+                {
+                  "key": "openai.response.service_tier",
+                  "value": {
+                    "stringValue": "default"
+                  }
+                }
+              ],
+              "status": {},
+              "flags": 256
+            }
+          ],
+          "schemaUrl": "https://opentelemetry.io/schemas/1.37.0"
+        },
+        {
+          "scope": {
+            "name": "bot-plain-openai"
+          },
+          "spans": [
+            {
+              "traceId": "a4f03a05d31c285076ee8a8831212fa0",
+              "spanId": "e6cb32e146148d3f",
+              "name": "invoke_agent plain-openai",
+              "kind": "SPAN_KIND_INTERNAL",
+              "startTimeUnixNano": "1791172916439611000",
+              "endTimeUnixNano": "1791172923211195000",
+              "attributes": [
+                {
+                  "key": "gen_ai.operation.name",
+                  "value": {
+                    "stringValue": "invoke_agent"
+                  }
+                },
+                {
+                  "key": "gen_ai.agent.name",
+                  "value": {
+                    "stringValue": "plain-openai"
+                  }
+                },
+                {
+                  "key": "gen_ai.conversation.id",
+                  "value": {
+                    "stringValue": "581d954c-3995-47dc-9d5a-2591c215b9b5"
+                  }
+                },
+                {
+                  "key": "session.id",
+                  "value": {
+                    "stringValue": "581d954c-3995-47dc-9d5a-2591c215b9b5"
+                  }
+                }
+              ],
+              "status": {},
+              "flags": 256
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

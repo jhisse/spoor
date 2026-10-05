@@ -1,0 +1,1030 @@
+{
+  "resourceSpans": [
+    {
+      "resource": {
+        "attributes": [
+          {
+            "key": "telemetry.sdk.language",
+            "value": {
+              "stringValue": "python"
+            }
+          },
+          {
+            "key": "telemetry.sdk.name",
+            "value": {
+              "stringValue": "opentelemetry"
+            }
+          },
+          {
+            "key": "telemetry.sdk.version",
+            "value": {
+              "stringValue": "1.45.0"
+            }
+          },
+          {
+            "key": "service.instance.id",
+            "value": {
+              "stringValue": "5b2702ea-d93f-45ff-af64-22c61257b0bf"
+            }
+          },
+          {
+            "key": "service.name",
+            "value": {
+              "stringValue": "capture"
+            }
+          }
+        ]
+      },
+      "scopeSpans": [
+        {
+          "scope": {
+            "name": "openinference.instrumentation.langchain",
+            "version": "0.1.78"
+          },
+          "spans": [
+            {
+              "traceId": "1190092edf5fb739cc74a4976897e3ce",
+              "spanId": "27c57698d3ba65c6",
+              "parentSpanId": "9a3a87524df43073",
+              "name": "ChatOpenAI",
+              "kind": "SPAN_KIND_INTERNAL",
+              "startTimeUnixNano": "1791060018268190976",
+              "endTimeUnixNano": "1791060018286989824",
+              "attributes": [
+                {
+                  "key": "session.id",
+                  "value": {
+                    "stringValue": "capture-session"
+                  }
+                },
+                {
+                  "key": "input.value",
+                  "value": {
+                    "stringValue": "{\"messages\": [[{\"lc\": 1, \"type\": \"constructor\", \"id\": [\"langchain\", \"schema\", \"messages\", \"SystemMessage\"], \"kwargs\": {\"content\": \"Answer in one word.\", \"type\": \"system\"}}, {\"lc\": 1, \"type\": \"constructor\", \"id\": [\"langchain\", \"schema\", \"messages\", \"HumanMessage\"], \"kwargs\": {\"content\": \"Weather in Paris?\", \"type\": \"human\", \"id\": \"d88f1e50-f1f4-40b1-852a-b6120e682924\"}}]]}"
+                  }
+                },
+                {
+                  "key": "input.mime_type",
+                  "value": {
+                    "stringValue": "application/json"
+                  }
+                },
+                {
+                  "key": "output.value",
+                  "value": {
+                    "stringValue": "{\"generations\": [[{\"text\": \"\", \"generation_info\": {\"finish_reason\": \"tool_calls\", \"logprobs\": null}, \"type\": \"ChatGeneration\", \"message\": {\"lc\": 1, \"type\": \"constructor\", \"id\": [\"langchain\", \"schema\", \"messages\", \"AIMessage\"], \"kwargs\": {\"content\": \"\", \"additional_kwargs\": {\"refusal\": null}, \"response_metadata\": {\"token_usage\": {\"completion_tokens\": 40, \"prompt_tokens\": 1200, \"total_tokens\": 1240, \"completion_tokens_details\": {\"accepted_prediction_tokens\": null, \"audio_tokens\": null, \"reasoning_tokens\": 32, \"rejected_prediction_tokens\": null, \"text_tokens\": null}, \"prompt_tokens_details\": {\"audio_tokens\": null, \"cache_write_tokens\": null, \"cached_tokens\": 1024, \"image_tokens\": null, \"text_tokens\": null}}, \"model_provider\": \"openai\", \"model_name\": \"gpt-4o-mini\", \"system_fingerprint\": null, \"id\": \"chatcmpl-fake\", \"finish_reason\": \"tool_calls\", \"logprobs\": null}, \"type\": \"ai\", \"id\": \"lc_run--01a1037f-045c-7871-8e36-3c5fee88d58b-0\", \"tool_calls\": [{\"name\": \"get_weather\", \"args\": {\"city\": \"Paris\"}, \"id\": \"call_1\", \"type\": \"tool_call\"}], \"usage_metadata\": {\"input_tokens\": 1200, \"output_tokens\": 40, \"total_tokens\": 1240, \"input_token_details\": {\"cache_read\": 1024}, \"output_token_details\": {\"reasoning\": 32}}, \"invalid_tool_calls\": []}}}]], \"llm_output\": {\"token_usage\": {\"completion_tokens\": 40, \"prompt_tokens\": 1200, \"total_tokens\": 1240, \"completion_tokens_details\": {\"accepted_prediction_tokens\": null, \"audio_tokens\": null, \"reasoning_tokens\": 32, \"rejected_prediction_tokens\": null, \"text_tokens\": null}, \"prompt_tokens_details\": {\"audio_tokens\": null, \"cache_write_tokens\": null, \"cached_tokens\": 1024, \"image_tokens\": null, \"text_tokens\": null}}, \"model_provider\": \"openai\", \"model_name\": \"gpt-4o-mini\", \"system_fingerprint\": null, \"id\": \"chatcmpl-fake\"}, \"run\": null, \"type\": \"LLMResult\"}"
+                  }
+                },
+                {
+                  "key": "output.mime_type",
+                  "value": {
+                    "stringValue": "application/json"
+                  }
+                },
+                {
+                  "key": "llm.input_messages.0.message.role",
+                  "value": {
+                    "stringValue": "system"
+                  }
+                },
+                {
+                  "key": "llm.input_messages.0.message.content",
+                  "value": {
+                    "stringValue": "Answer in one word."
+                  }
+                },
+                {
+                  "key": "llm.input_messages.1.message.role",
+                  "value": {
+                    "stringValue": "user"
+                  }
+                },
+                {
+                  "key": "llm.input_messages.1.message.content",
+                  "value": {
+                    "stringValue": "Weather in Paris?"
+                  }
+                },
+                {
+                  "key": "llm.output_messages.0.message.role",
+                  "value": {
+                    "stringValue": "assistant"
+                  }
+                },
+                {
+                  "key": "llm.output_messages.0.message.tool_calls.0.tool_call.id",
+                  "value": {
+                    "stringValue": "call_1"
+                  }
+                },
+                {
+                  "key": "llm.output_messages.0.message.tool_calls.0.tool_call.function.name",
+                  "value": {
+                    "stringValue": "get_weather"
+                  }
+                },
+                {
+                  "key": "llm.output_messages.0.message.tool_calls.0.tool_call.function.arguments",
+                  "value": {
+                    "stringValue": "{\"city\": \"Paris\"}"
+                  }
+                },
+                {
+                  "key": "llm.invocation_parameters",
+                  "value": {
+                    "stringValue": "{\"model\": \"gpt-4o-mini\", \"model_name\": \"gpt-4o-mini\", \"stream\": false, \"_type\": \"openai-chat\", \"stop\": null, \"tools\": [{\"type\": \"function\", \"function\": {\"name\": \"get_weather\", \"description\": \"Weather in a city\", \"parameters\": {\"properties\": {\"city\": {\"type\": \"string\"}}, \"required\": [\"city\"], \"type\": \"object\"}}}]}"
+                  }
+                },
+                {
+                  "key": "llm.tools.0.tool.json_schema",
+                  "value": {
+                    "stringValue": "{\"type\": \"function\", \"function\": {\"name\": \"get_weather\", \"description\": \"Weather in a city\", \"parameters\": {\"properties\": {\"city\": {\"type\": \"string\"}}, \"required\": [\"city\"], \"type\": \"object\"}}}"
+                  }
+                },
+                {
+                  "key": "llm.provider",
+                  "value": {
+                    "stringValue": "openai"
+                  }
+                },
+                {
+                  "key": "llm.system",
+                  "value": {
+                    "stringValue": "openai"
+                  }
+                },
+                {
+                  "key": "llm.model_name",
+                  "value": {
+                    "stringValue": "gpt-4o-mini"
+                  }
+                },
+                {
+                  "key": "llm.token_count.prompt",
+                  "value": {
+                    "intValue": "1200"
+                  }
+                },
+                {
+                  "key": "llm.token_count.completion",
+                  "value": {
+                    "intValue": "40"
+                  }
+                },
+                {
+                  "key": "llm.token_count.total",
+                  "value": {
+                    "intValue": "1240"
+                  }
+                },
+                {
+                  "key": "llm.token_count.completion_details.reasoning",
+                  "value": {
+                    "intValue": "32"
+                  }
+                },
+                {
+                  "key": "llm.token_count.prompt_details.cache_read",
+                  "value": {
+                    "intValue": "1024"
+                  }
+                },
+                {
+                  "key": "llm.finish_reason",
+                  "value": {
+                    "stringValue": "tool_calls"
+                  }
+                },
+                {
+                  "key": "metadata",
+                  "value": {
+                    "stringValue": "{\"ls_integration\": \"langchain_chat_model\", \"langgraph_step\": 1, \"langgraph_node\": \"model\", \"langgraph_triggers\": [\"branch:to:model\"], \"langgraph_path\": [\"__pregel_pull\", \"model\"], \"langgraph_checkpoint_ns\": \"model:c6d880f6-9492-2294-96fe-566af38574db\", \"checkpoint_ns\": \"model:c6d880f6-9492-2294-96fe-566af38574db\", \"ls_provider\": \"openai\", \"ls_model_name\": \"gpt-4o-mini\", \"ls_model_type\": \"chat\", \"ls_temperature\": null, \"lc_versions\": {\"langchain-core\": \"1.6.6\", \"langchain\": \"1.4.3\", \"langchain-openai\": \"1.6.7\"}}"
+                  }
+                },
+                {
+                  "key": "openinference.span.kind",
+                  "value": {
+                    "stringValue": "LLM"
+                  }
+                }
+              ],
+              "status": {
+                "code": "STATUS_CODE_OK"
+              },
+              "flags": 256
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "resource": {
+        "attributes": [
+          {
+            "key": "telemetry.sdk.language",
+            "value": {
+              "stringValue": "python"
+            }
+          },
+          {
+            "key": "telemetry.sdk.name",
+            "value": {
+              "stringValue": "opentelemetry"
+            }
+          },
+          {
+            "key": "telemetry.sdk.version",
+            "value": {
+              "stringValue": "1.45.0"
+            }
+          },
+          {
+            "key": "service.instance.id",
+            "value": {
+              "stringValue": "5b2702ea-d93f-45ff-af64-22c61257b0bf"
+            }
+          },
+          {
+            "key": "service.name",
+            "value": {
+              "stringValue": "capture"
+            }
+          }
+        ]
+      },
+      "scopeSpans": [
+        {
+          "scope": {
+            "name": "openinference.instrumentation.langchain",
+            "version": "0.1.78"
+          },
+          "spans": [
+            {
+              "traceId": "1190092edf5fb739cc74a4976897e3ce",
+              "spanId": "9a3a87524df43073",
+              "parentSpanId": "1b5dc682b60a9aea",
+              "name": "model",
+              "kind": "SPAN_KIND_INTERNAL",
+              "startTimeUnixNano": "1791060018267427072",
+              "endTimeUnixNano": "1791060018289830912",
+              "attributes": [
+                {
+                  "key": "session.id",
+                  "value": {
+                    "stringValue": "capture-session"
+                  }
+                },
+                {
+                  "key": "input.value",
+                  "value": {
+                    "stringValue": "{\"messages\": [{\"type\": \"human\", \"data\": {\"content\": \"Weather in Paris?\", \"additional_kwargs\": {}, \"response_metadata\": {}, \"type\": \"human\", \"name\": null, \"id\": \"d88f1e50-f1f4-40b1-852a-b6120e682924\"}}]}"
+                  }
+                },
+                {
+                  "key": "input.mime_type",
+                  "value": {
+                    "stringValue": "application/json"
+                  }
+                },
+                {
+                  "key": "output.value",
+                  "value": {
+                    "stringValue": "[{\"graph\": null, \"update\": {\"messages\": [{\"type\": \"ai\", \"data\": {\"content\": \"\", \"additional_kwargs\": {\"refusal\": null}, \"response_metadata\": {\"token_usage\": {\"completion_tokens\": 40, \"prompt_tokens\": 1200, \"total_tokens\": 1240, \"completion_tokens_details\": {\"accepted_prediction_tokens\": null, \"audio_tokens\": null, \"reasoning_tokens\": 32, \"rejected_prediction_tokens\": null, \"text_tokens\": null}, \"prompt_tokens_details\": {\"audio_tokens\": null, \"cache_write_tokens\": null, \"cached_tokens\": 1024, \"image_tokens\": null, \"text_tokens\": null}}, \"model_provider\": \"openai\", \"model_name\": \"gpt-4o-mini\", \"system_fingerprint\": null, \"id\": \"chatcmpl-fake\", \"finish_reason\": \"tool_calls\", \"logprobs\": null}, \"type\": \"ai\", \"name\": null, \"id\": \"lc_run--01a1037f-045c-7871-8e36-3c5fee88d58b-0\", \"tool_calls\": [{\"name\": \"get_weather\", \"args\": {\"city\": \"Paris\"}, \"id\": \"call_1\", \"type\": \"tool_call\"}], \"invalid_tool_calls\": [], \"usage_metadata\": {\"input_tokens\": 1200, \"output_tokens\": 40, \"total_tokens\": 1240, \"input_token_details\": {\"cache_read\": 1024}, \"output_token_details\": {\"reasoning\": 32}}}}]}, \"resume\": null, \"goto\": []}]"
+                  }
+                },
+                {
+                  "key": "output.mime_type",
+                  "value": {
+                    "stringValue": "application/json"
+                  }
+                },
+                {
+                  "key": "llm.input_messages.0.message.role",
+                  "value": {
+                    "stringValue": "user"
+                  }
+                },
+                {
+                  "key": "llm.input_messages.0.message.content",
+                  "value": {
+                    "stringValue": "Weather in Paris?"
+                  }
+                },
+                {
+                  "key": "metadata",
+                  "value": {
+                    "stringValue": "{\"ls_integration\": \"langchain_create_agent\", \"langgraph_step\": 1, \"langgraph_node\": \"model\", \"langgraph_triggers\": [\"branch:to:model\"], \"langgraph_path\": [\"__pregel_pull\", \"model\"], \"langgraph_checkpoint_ns\": \"model:c6d880f6-9492-2294-96fe-566af38574db\"}"
+                  }
+                },
+                {
+                  "key": "openinference.span.kind",
+                  "value": {
+                    "stringValue": "CHAIN"
+                  }
+                }
+              ],
+              "status": {
+                "code": "STATUS_CODE_OK"
+              },
+              "flags": 256
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "resource": {
+        "attributes": [
+          {
+            "key": "telemetry.sdk.language",
+            "value": {
+              "stringValue": "python"
+            }
+          },
+          {
+            "key": "telemetry.sdk.name",
+            "value": {
+              "stringValue": "opentelemetry"
+            }
+          },
+          {
+            "key": "telemetry.sdk.version",
+            "value": {
+              "stringValue": "1.45.0"
+            }
+          },
+          {
+            "key": "service.instance.id",
+            "value": {
+              "stringValue": "5b2702ea-d93f-45ff-af64-22c61257b0bf"
+            }
+          },
+          {
+            "key": "service.name",
+            "value": {
+              "stringValue": "capture"
+            }
+          }
+        ]
+      },
+      "scopeSpans": [
+        {
+          "scope": {
+            "name": "openinference.instrumentation.langchain",
+            "version": "0.1.78"
+          },
+          "spans": [
+            {
+              "traceId": "1190092edf5fb739cc74a4976897e3ce",
+              "spanId": "f73313e092c1d860",
+              "parentSpanId": "2b0ad76efefe2686",
+              "name": "get_weather",
+              "kind": "SPAN_KIND_INTERNAL",
+              "startTimeUnixNano": "1791060018292785920",
+              "endTimeUnixNano": "1791060018293057792",
+              "attributes": [
+                {
+                  "key": "session.id",
+                  "value": {
+                    "stringValue": "capture-session"
+                  }
+                },
+                {
+                  "key": "input.value",
+                  "value": {
+                    "stringValue": "Paris"
+                  }
+                },
+                {
+                  "key": "output.value",
+                  "value": {
+                    "stringValue": "{\"type\": \"tool\", \"data\": {\"content\": \"18 C, clear\", \"additional_kwargs\": {}, \"response_metadata\": {}, \"type\": \"tool\", \"name\": \"get_weather\", \"id\": null, \"tool_call_id\": \"call_1\", \"artifact\": null, \"status\": \"success\"}}"
+                  }
+                },
+                {
+                  "key": "output.mime_type",
+                  "value": {
+                    "stringValue": "application/json"
+                  }
+                },
+                {
+                  "key": "tool.name",
+                  "value": {
+                    "stringValue": "get_weather"
+                  }
+                },
+                {
+                  "key": "tool.description",
+                  "value": {
+                    "stringValue": "Weather in a city"
+                  }
+                },
+                {
+                  "key": "metadata",
+                  "value": {
+                    "stringValue": "{\"ls_integration\": \"langchain_create_agent\", \"langgraph_step\": 2, \"langgraph_node\": \"tools\", \"langgraph_triggers\": [\"__pregel_push\"], \"langgraph_path\": [\"__pregel_push\", 0, false], \"langgraph_checkpoint_ns\": \"tools:f739df1f-18a1-91e7-b610-1a795ce50d11\", \"checkpoint_ns\": \"tools:f739df1f-18a1-91e7-b610-1a795ce50d11\"}"
+                  }
+                },
+                {
+                  "key": "openinference.span.kind",
+                  "value": {
+                    "stringValue": "TOOL"
+                  }
+                }
+              ],
+              "status": {
+                "code": "STATUS_CODE_OK"
+              },
+              "flags": 256
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "resource": {
+        "attributes": [
+          {
+            "key": "telemetry.sdk.language",
+            "value": {
+              "stringValue": "python"
+            }
+          },
+          {
+            "key": "telemetry.sdk.name",
+            "value": {
+              "stringValue": "opentelemetry"
+            }
+          },
+          {
+            "key": "telemetry.sdk.version",
+            "value": {
+              "stringValue": "1.45.0"
+            }
+          },
+          {
+            "key": "service.instance.id",
+            "value": {
+              "stringValue": "5b2702ea-d93f-45ff-af64-22c61257b0bf"
+            }
+          },
+          {
+            "key": "service.name",
+            "value": {
+              "stringValue": "capture"
+            }
+          }
+        ]
+      },
+      "scopeSpans": [
+        {
+          "scope": {
+            "name": "openinference.instrumentation.langchain",
+            "version": "0.1.78"
+          },
+          "spans": [
+            {
+              "traceId": "1190092edf5fb739cc74a4976897e3ce",
+              "spanId": "2b0ad76efefe2686",
+              "parentSpanId": "1b5dc682b60a9aea",
+              "name": "tools",
+              "kind": "SPAN_KIND_INTERNAL",
+              "startTimeUnixNano": "1791060018292224000",
+              "endTimeUnixNano": "1791060018295110912",
+              "attributes": [
+                {
+                  "key": "session.id",
+                  "value": {
+                    "stringValue": "capture-session"
+                  }
+                },
+                {
+                  "key": "input.value",
+                  "value": {
+                    "stringValue": "[{\"name\": \"get_weather\", \"args\": {\"city\": \"Paris\"}, \"id\": \"call_1\", \"type\": \"tool_call\"}]"
+                  }
+                },
+                {
+                  "key": "input.mime_type",
+                  "value": {
+                    "stringValue": "application/json"
+                  }
+                },
+                {
+                  "key": "output.value",
+                  "value": {
+                    "stringValue": "{\"messages\": [{\"type\": \"tool\", \"data\": {\"content\": \"18 C, clear\", \"additional_kwargs\": {}, \"response_metadata\": {}, \"type\": \"tool\", \"name\": \"get_weather\", \"id\": \"a0c5e7ed-6709-49df-a8f7-12153155a624\", \"tool_call_id\": \"call_1\", \"artifact\": null, \"status\": \"success\"}}]}"
+                  }
+                },
+                {
+                  "key": "output.mime_type",
+                  "value": {
+                    "stringValue": "application/json"
+                  }
+                },
+                {
+                  "key": "metadata",
+                  "value": {
+                    "stringValue": "{\"ls_integration\": \"langchain_create_agent\", \"langgraph_step\": 2, \"langgraph_node\": \"tools\", \"langgraph_triggers\": [\"__pregel_push\"], \"langgraph_path\": [\"__pregel_push\", 0, false], \"langgraph_checkpoint_ns\": \"tools:f739df1f-18a1-91e7-b610-1a795ce50d11\"}"
+                  }
+                },
+                {
+                  "key": "openinference.span.kind",
+                  "value": {
+                    "stringValue": "CHAIN"
+                  }
+                }
+              ],
+              "status": {
+                "code": "STATUS_CODE_OK"
+              },
+              "flags": 256
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "resource": {
+        "attributes": [
+          {
+            "key": "telemetry.sdk.language",
+            "value": {
+              "stringValue": "python"
+            }
+          },
+          {
+            "key": "telemetry.sdk.name",
+            "value": {
+              "stringValue": "opentelemetry"
+            }
+          },
+          {
+            "key": "telemetry.sdk.version",
+            "value": {
+              "stringValue": "1.45.0"
+            }
+          },
+          {
+            "key": "service.instance.id",
+            "value": {
+              "stringValue": "5b2702ea-d93f-45ff-af64-22c61257b0bf"
+            }
+          },
+          {
+            "key": "service.name",
+            "value": {
+              "stringValue": "capture"
+            }
+          }
+        ]
+      },
+      "scopeSpans": [
+        {
+          "scope": {
+            "name": "openinference.instrumentation.langchain",
+            "version": "0.1.78"
+          },
+          "spans": [
+            {
+              "traceId": "1190092edf5fb739cc74a4976897e3ce",
+              "spanId": "8cefe158bebb5c6a",
+              "parentSpanId": "0cc4f1d6683693ff",
+              "name": "ChatOpenAI",
+              "kind": "SPAN_KIND_INTERNAL",
+              "startTimeUnixNano": "1791060018297518080",
+              "endTimeUnixNano": "1791060018299382016",
+              "attributes": [
+                {
+                  "key": "session.id",
+                  "value": {
+                    "stringValue": "capture-session"
+                  }
+                },
+                {
+                  "key": "input.value",
+                  "value": {
+                    "stringValue": "{\"messages\": [[{\"lc\": 1, \"type\": \"constructor\", \"id\": [\"langchain\", \"schema\", \"messages\", \"SystemMessage\"], \"kwargs\": {\"content\": \"Answer in one word.\", \"type\": \"system\"}}, {\"lc\": 1, \"type\": \"constructor\", \"id\": [\"langchain\", \"schema\", \"messages\", \"HumanMessage\"], \"kwargs\": {\"content\": \"Weather in Paris?\", \"type\": \"human\", \"id\": \"d88f1e50-f1f4-40b1-852a-b6120e682924\"}}, {\"lc\": 1, \"type\": \"constructor\", \"id\": [\"langchain\", \"schema\", \"messages\", \"AIMessage\"], \"kwargs\": {\"content\": \"\", \"additional_kwargs\": {\"refusal\": null}, \"response_metadata\": {\"token_usage\": {\"completion_tokens\": 40, \"prompt_tokens\": 1200, \"total_tokens\": 1240, \"completion_tokens_details\": {\"accepted_prediction_tokens\": null, \"audio_tokens\": null, \"reasoning_tokens\": 32, \"rejected_prediction_tokens\": null, \"text_tokens\": null}, \"prompt_tokens_details\": {\"audio_tokens\": null, \"cache_write_tokens\": null, \"cached_tokens\": 1024, \"image_tokens\": null, \"text_tokens\": null}}, \"model_provider\": \"openai\", \"model_name\": \"gpt-4o-mini\", \"system_fingerprint\": null, \"id\": \"chatcmpl-fake\", \"finish_reason\": \"tool_calls\", \"logprobs\": null}, \"type\": \"ai\", \"id\": \"lc_run--01a1037f-045c-7871-8e36-3c5fee88d58b-0\", \"tool_calls\": [{\"name\": \"get_weather\", \"args\": {\"city\": \"Paris\"}, \"id\": \"call_1\", \"type\": \"tool_call\"}], \"usage_metadata\": {\"input_tokens\": 1200, \"output_tokens\": 40, \"total_tokens\": 1240, \"input_token_details\": {\"cache_read\": 1024}, \"output_token_details\": {\"reasoning\": 32}}, \"invalid_tool_calls\": []}}, {\"lc\": 1, \"type\": \"constructor\", \"id\": [\"langchain\", \"schema\", \"messages\", \"ToolMessage\"], \"kwargs\": {\"content\": \"18 C, clear\", \"type\": \"tool\", \"name\": \"get_weather\", \"id\": \"a0c5e7ed-6709-49df-a8f7-12153155a624\", \"tool_call_id\": \"call_1\", \"status\": \"success\"}}]]}"
+                  }
+                },
+                {
+                  "key": "input.mime_type",
+                  "value": {
+                    "stringValue": "application/json"
+                  }
+                },
+                {
+                  "key": "output.value",
+                  "value": {
+                    "stringValue": "{\"generations\": [[{\"text\": \"Paris.\", \"generation_info\": {\"finish_reason\": \"stop\", \"logprobs\": null}, \"type\": \"ChatGeneration\", \"message\": {\"lc\": 1, \"type\": \"constructor\", \"id\": [\"langchain\", \"schema\", \"messages\", \"AIMessage\"], \"kwargs\": {\"content\": \"Paris.\", \"additional_kwargs\": {\"refusal\": null}, \"response_metadata\": {\"token_usage\": {\"completion_tokens\": 40, \"prompt_tokens\": 1200, \"total_tokens\": 1240, \"completion_tokens_details\": {\"accepted_prediction_tokens\": null, \"audio_tokens\": null, \"reasoning_tokens\": 32, \"rejected_prediction_tokens\": null, \"text_tokens\": null}, \"prompt_tokens_details\": {\"audio_tokens\": null, \"cache_write_tokens\": null, \"cached_tokens\": 1024, \"image_tokens\": null, \"text_tokens\": null}}, \"model_provider\": \"openai\", \"model_name\": \"gpt-4o-mini\", \"system_fingerprint\": null, \"id\": \"chatcmpl-fake\", \"finish_reason\": \"stop\", \"logprobs\": null}, \"type\": \"ai\", \"id\": \"lc_run--01a1037f-0479-7aa0-8ce4-b2069f1734ea-0\", \"usage_metadata\": {\"input_tokens\": 1200, \"output_tokens\": 40, \"total_tokens\": 1240, \"input_token_details\": {\"cache_read\": 1024}, \"output_token_details\": {\"reasoning\": 32}}, \"tool_calls\": [], \"invalid_tool_calls\": []}}}]], \"llm_output\": {\"token_usage\": {\"completion_tokens\": 40, \"prompt_tokens\": 1200, \"total_tokens\": 1240, \"completion_tokens_details\": {\"accepted_prediction_tokens\": null, \"audio_tokens\": null, \"reasoning_tokens\": 32, \"rejected_prediction_tokens\": null, \"text_tokens\": null}, \"prompt_tokens_details\": {\"audio_tokens\": null, \"cache_write_tokens\": null, \"cached_tokens\": 1024, \"image_tokens\": null, \"text_tokens\": null}}, \"model_provider\": \"openai\", \"model_name\": \"gpt-4o-mini\", \"system_fingerprint\": null, \"id\": \"chatcmpl-fake\"}, \"run\": null, \"type\": \"LLMResult\"}"
+                  }
+                },
+                {
+                  "key": "output.mime_type",
+                  "value": {
+                    "stringValue": "application/json"
+                  }
+                },
+                {
+                  "key": "llm.input_messages.0.message.role",
+                  "value": {
+                    "stringValue": "system"
+                  }
+                },
+                {
+                  "key": "llm.input_messages.0.message.content",
+                  "value": {
+                    "stringValue": "Answer in one word."
+                  }
+                },
+                {
+                  "key": "llm.input_messages.1.message.role",
+                  "value": {
+                    "stringValue": "user"
+                  }
+                },
+                {
+                  "key": "llm.input_messages.1.message.content",
+                  "value": {
+                    "stringValue": "Weather in Paris?"
+                  }
+                },
+                {
+                  "key": "llm.input_messages.2.message.role",
+                  "value": {
+                    "stringValue": "assistant"
+                  }
+                },
+                {
+                  "key": "llm.input_messages.2.message.tool_calls.0.tool_call.id",
+                  "value": {
+                    "stringValue": "call_1"
+                  }
+                },
+                {
+                  "key": "llm.input_messages.2.message.tool_calls.0.tool_call.function.name",
+                  "value": {
+                    "stringValue": "get_weather"
+                  }
+                },
+                {
+                  "key": "llm.input_messages.2.message.tool_calls.0.tool_call.function.arguments",
+                  "value": {
+                    "stringValue": "{\"city\": \"Paris\"}"
+                  }
+                },
+                {
+                  "key": "llm.input_messages.3.message.role",
+                  "value": {
+                    "stringValue": "tool"
+                  }
+                },
+                {
+                  "key": "llm.input_messages.3.message.content",
+                  "value": {
+                    "stringValue": "18 C, clear"
+                  }
+                },
+                {
+                  "key": "llm.input_messages.3.message.tool_call_id",
+                  "value": {
+                    "stringValue": "call_1"
+                  }
+                },
+                {
+                  "key": "llm.input_messages.3.message.name",
+                  "value": {
+                    "stringValue": "get_weather"
+                  }
+                },
+                {
+                  "key": "llm.output_messages.0.message.role",
+                  "value": {
+                    "stringValue": "assistant"
+                  }
+                },
+                {
+                  "key": "llm.output_messages.0.message.content",
+                  "value": {
+                    "stringValue": "Paris."
+                  }
+                },
+                {
+                  "key": "llm.invocation_parameters",
+                  "value": {
+                    "stringValue": "{\"model\": \"gpt-4o-mini\", \"model_name\": \"gpt-4o-mini\", \"stream\": false, \"_type\": \"openai-chat\", \"stop\": null, \"tools\": [{\"type\": \"function\", \"function\": {\"name\": \"get_weather\", \"description\": \"Weather in a city\", \"parameters\": {\"properties\": {\"city\": {\"type\": \"string\"}}, \"required\": [\"city\"], \"type\": \"object\"}}}]}"
+                  }
+                },
+                {
+                  "key": "llm.tools.0.tool.json_schema",
+                  "value": {
+                    "stringValue": "{\"type\": \"function\", \"function\": {\"name\": \"get_weather\", \"description\": \"Weather in a city\", \"parameters\": {\"properties\": {\"city\": {\"type\": \"string\"}}, \"required\": [\"city\"], \"type\": \"object\"}}}"
+                  }
+                },
+                {
+                  "key": "llm.provider",
+                  "value": {
+                    "stringValue": "openai"
+                  }
+                },
+                {
+                  "key": "llm.system",
+                  "value": {
+                    "stringValue": "openai"
+                  }
+                },
+                {
+                  "key": "llm.model_name",
+                  "value": {
+                    "stringValue": "gpt-4o-mini"
+                  }
+                },
+                {
+                  "key": "llm.token_count.prompt",
+                  "value": {
+                    "intValue": "1200"
+                  }
+                },
+                {
+                  "key": "llm.token_count.completion",
+                  "value": {
+                    "intValue": "40"
+                  }
+                },
+                {
+                  "key": "llm.token_count.total",
+                  "value": {
+                    "intValue": "1240"
+                  }
+                },
+                {
+                  "key": "llm.token_count.completion_details.reasoning",
+                  "value": {
+                    "intValue": "32"
+                  }
+                },
+                {
+                  "key": "llm.token_count.prompt_details.cache_read",
+                  "value": {
+                    "intValue": "1024"
+                  }
+                },
+                {
+                  "key": "llm.finish_reason",
+                  "value": {
+                    "stringValue": "stop"
+                  }
+                },
+                {
+                  "key": "metadata",
+                  "value": {
+                    "stringValue": "{\"ls_integration\": \"langchain_chat_model\", \"langgraph_step\": 3, \"langgraph_node\": \"model\", \"langgraph_triggers\": [\"branch:to:model\"], \"langgraph_path\": [\"__pregel_pull\", \"model\"], \"langgraph_checkpoint_ns\": \"model:b6301440-de54-e2b2-74a6-8529d6972c7a\", \"checkpoint_ns\": \"model:b6301440-de54-e2b2-74a6-8529d6972c7a\", \"ls_provider\": \"openai\", \"ls_model_name\": \"gpt-4o-mini\", \"ls_model_type\": \"chat\", \"ls_temperature\": null, \"lc_versions\": {\"langchain-core\": \"1.6.6\", \"langchain\": \"1.4.3\", \"langchain-openai\": \"1.6.7\"}}"
+                  }
+                },
+                {
+                  "key": "openinference.span.kind",
+                  "value": {
+                    "stringValue": "LLM"
+                  }
+                }
+              ],
+              "status": {
+                "code": "STATUS_CODE_OK"
+              },
+              "flags": 256
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "resource": {
+        "attributes": [
+          {
+            "key": "telemetry.sdk.language",
+            "value": {
+              "stringValue": "python"
+            }
+          },
+          {
+            "key": "telemetry.sdk.name",
+            "value": {
+              "stringValue": "opentelemetry"
+            }
+          },
+          {
+            "key": "telemetry.sdk.version",
+            "value": {
+              "stringValue": "1.45.0"
+            }
+          },
+          {
+            "key": "service.instance.id",
+            "value": {
+              "stringValue": "5b2702ea-d93f-45ff-af64-22c61257b0bf"
+            }
+          },
+          {
+            "key": "service.name",
+            "value": {
+              "stringValue": "capture"
+            }
+          }
+        ]
+      },
+      "scopeSpans": [
+        {
+          "scope": {
+            "name": "openinference.instrumentation.langchain",
+            "version": "0.1.78"
+          },
+          "spans": [
+            {
+              "traceId": "1190092edf5fb739cc74a4976897e3ce",
+              "spanId": "0cc4f1d6683693ff",
+              "parentSpanId": "1b5dc682b60a9aea",
+              "name": "model",
+              "kind": "SPAN_KIND_INTERNAL",
+              "startTimeUnixNano": "1791060018297195008",
+              "endTimeUnixNano": "1791060018301858048",
+              "attributes": [
+                {
+                  "key": "session.id",
+                  "value": {
+                    "stringValue": "capture-session"
+                  }
+                },
+                {
+                  "key": "input.value",
+                  "value": {
+                    "stringValue": "{\"messages\": [{\"type\": \"human\", \"data\": {\"content\": \"Weather in Paris?\", \"additional_kwargs\": {}, \"response_metadata\": {}, \"type\": \"human\", \"name\": null, \"id\": \"d88f1e50-f1f4-40b1-852a-b6120e682924\"}}, {\"type\": \"ai\", \"data\": {\"content\": \"\", \"additional_kwargs\": {\"refusal\": null}, \"response_metadata\": {\"token_usage\": {\"completion_tokens\": 40, \"prompt_tokens\": 1200, \"total_tokens\": 1240, \"completion_tokens_details\": {\"accepted_prediction_tokens\": null, \"audio_tokens\": null, \"reasoning_tokens\": 32, \"rejected_prediction_tokens\": null, \"text_tokens\": null}, \"prompt_tokens_details\": {\"audio_tokens\": null, \"cache_write_tokens\": null, \"cached_tokens\": 1024, \"image_tokens\": null, \"text_tokens\": null}}, \"model_provider\": \"openai\", \"model_name\": \"gpt-4o-mini\", \"system_fingerprint\": null, \"id\": \"chatcmpl-fake\", \"finish_reason\": \"tool_calls\", \"logprobs\": null}, \"type\": \"ai\", \"name\": null, \"id\": \"lc_run--01a1037f-045c-7871-8e36-3c5fee88d58b-0\", \"tool_calls\": [{\"name\": \"get_weather\", \"args\": {\"city\": \"Paris\"}, \"id\": \"call_1\", \"type\": \"tool_call\"}], \"invalid_tool_calls\": [], \"usage_metadata\": {\"input_tokens\": 1200, \"output_tokens\": 40, \"total_tokens\": 1240, \"input_token_details\": {\"cache_read\": 1024}, \"output_token_details\": {\"reasoning\": 32}}}}, {\"type\": \"tool\", \"data\": {\"content\": \"18 C, clear\", \"additional_kwargs\": {}, \"response_metadata\": {}, \"type\": \"tool\", \"name\": \"get_weather\", \"id\": \"a0c5e7ed-6709-49df-a8f7-12153155a624\", \"tool_call_id\": \"call_1\", \"artifact\": null, \"status\": \"success\"}}]}"
+                  }
+                },
+                {
+                  "key": "input.mime_type",
+                  "value": {
+                    "stringValue": "application/json"
+                  }
+                },
+                {
+                  "key": "output.value",
+                  "value": {
+                    "stringValue": "[{\"graph\": null, \"update\": {\"messages\": [{\"type\": \"ai\", \"data\": {\"content\": \"Paris.\", \"additional_kwargs\": {\"refusal\": null}, \"response_metadata\": {\"token_usage\": {\"completion_tokens\": 40, \"prompt_tokens\": 1200, \"total_tokens\": 1240, \"completion_tokens_details\": {\"accepted_prediction_tokens\": null, \"audio_tokens\": null, \"reasoning_tokens\": 32, \"rejected_prediction_tokens\": null, \"text_tokens\": null}, \"prompt_tokens_details\": {\"audio_tokens\": null, \"cache_write_tokens\": null, \"cached_tokens\": 1024, \"image_tokens\": null, \"text_tokens\": null}}, \"model_provider\": \"openai\", \"model_name\": \"gpt-4o-mini\", \"system_fingerprint\": null, \"id\": \"chatcmpl-fake\", \"finish_reason\": \"stop\", \"logprobs\": null}, \"type\": \"ai\", \"name\": null, \"id\": \"lc_run--01a1037f-0479-7aa0-8ce4-b2069f1734ea-0\", \"tool_calls\": [], \"invalid_tool_calls\": [], \"usage_metadata\": {\"input_tokens\": 1200, \"output_tokens\": 40, \"total_tokens\": 1240, \"input_token_details\": {\"cache_read\": 1024}, \"output_token_details\": {\"reasoning\": 32}}}}]}, \"resume\": null, \"goto\": []}]"
+                  }
+                },
+                {
+                  "key": "output.mime_type",
+                  "value": {
+                    "stringValue": "application/json"
+                  }
+                },
+                {
+                  "key": "llm.input_messages.0.message.role",
+                  "value": {
+                    "stringValue": "user"
+                  }
+                },
+                {
+                  "key": "llm.input_messages.0.message.content",
+                  "value": {
+                    "stringValue": "Weather in Paris?"
+                  }
+                },
+                {
+                  "key": "metadata",
+                  "value": {
+                    "stringValue": "{\"ls_integration\": \"langchain_create_agent\", \"langgraph_step\": 3, \"langgraph_node\": \"model\", \"langgraph_triggers\": [\"branch:to:model\"], \"langgraph_path\": [\"__pregel_pull\", \"model\"], \"langgraph_checkpoint_ns\": \"model:b6301440-de54-e2b2-74a6-8529d6972c7a\"}"
+                  }
+                },
+                {
+                  "key": "openinference.span.kind",
+                  "value": {
+                    "stringValue": "CHAIN"
+                  }
+                }
+              ],
+              "status": {
+                "code": "STATUS_CODE_OK"
+              },
+              "flags": 256
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "resource": {
+        "attributes": [
+          {
+            "key": "telemetry.sdk.language",
+            "value": {
+              "stringValue": "python"
+            }
+          },
+          {
+            "key": "telemetry.sdk.name",
+            "value": {
+              "stringValue": "opentelemetry"
+            }
+          },
+          {
+            "key": "telemetry.sdk.version",
+            "value": {
+              "stringValue": "1.45.0"
+            }
+          },
+          {
+            "key": "service.instance.id",
+            "value": {
+              "stringValue": "5b2702ea-d93f-45ff-af64-22c61257b0bf"
+            }
+          },
+          {
+            "key": "service.name",
+            "value": {
+              "stringValue": "capture"
+            }
+          }
+        ]
+      },
+      "scopeSpans": [
+        {
+          "scope": {
+            "name": "openinference.instrumentation.langchain",
+            "version": "0.1.78"
+          },
+          "spans": [
+            {
+              "traceId": "1190092edf5fb739cc74a4976897e3ce",
+              "spanId": "1b5dc682b60a9aea",
+              "name": "LangGraph",
+              "kind": "SPAN_KIND_INTERNAL",
+              "startTimeUnixNano": "1791060018266410240",
+              "endTimeUnixNano": "1791060018304410880",
+              "attributes": [
+                {
+                  "key": "session.id",
+                  "value": {
+                    "stringValue": "capture-session"
+                  }
+                },
+                {
+                  "key": "input.value",
+                  "value": {
+                    "stringValue": "{\"messages\": [[\"user\", \"Weather in Paris?\"]]}"
+                  }
+                },
+                {
+                  "key": "input.mime_type",
+                  "value": {
+                    "stringValue": "application/json"
+                  }
+                },
+                {
+                  "key": "output.value",
+                  "value": {
+                    "stringValue": "{\"messages\": [{\"type\": \"human\", \"data\": {\"content\": \"Weather in Paris?\", \"additional_kwargs\": {}, \"response_metadata\": {}, \"type\": \"human\", \"name\": null, \"id\": \"d88f1e50-f1f4-40b1-852a-b6120e682924\"}}, {\"type\": \"ai\", \"data\": {\"content\": \"\", \"additional_kwargs\": {\"refusal\": null}, \"response_metadata\": {\"token_usage\": {\"completion_tokens\": 40, \"prompt_tokens\": 1200, \"total_tokens\": 1240, \"completion_tokens_details\": {\"accepted_prediction_tokens\": null, \"audio_tokens\": null, \"reasoning_tokens\": 32, \"rejected_prediction_tokens\": null, \"text_tokens\": null}, \"prompt_tokens_details\": {\"audio_tokens\": null, \"cache_write_tokens\": null, \"cached_tokens\": 1024, \"image_tokens\": null, \"text_tokens\": null}}, \"model_provider\": \"openai\", \"model_name\": \"gpt-4o-mini\", \"system_fingerprint\": null, \"id\": \"chatcmpl-fake\", \"finish_reason\": \"tool_calls\", \"logprobs\": null}, \"type\": \"ai\", \"name\": null, \"id\": \"lc_run--01a1037f-045c-7871-8e36-3c5fee88d58b-0\", \"tool_calls\": [{\"name\": \"get_weather\", \"args\": {\"city\": \"Paris\"}, \"id\": \"call_1\", \"type\": \"tool_call\"}], \"invalid_tool_calls\": [], \"usage_metadata\": {\"input_tokens\": 1200, \"output_tokens\": 40, \"total_tokens\": 1240, \"input_token_details\": {\"cache_read\": 1024}, \"output_token_details\": {\"reasoning\": 32}}}}, {\"type\": \"tool\", \"data\": {\"content\": \"18 C, clear\", \"additional_kwargs\": {}, \"response_metadata\": {}, \"type\": \"tool\", \"name\": \"get_weather\", \"id\": \"a0c5e7ed-6709-49df-a8f7-12153155a624\", \"tool_call_id\": \"call_1\", \"artifact\": null, \"status\": \"success\"}}, {\"type\": \"ai\", \"data\": {\"content\": \"Paris.\", \"additional_kwargs\": {\"refusal\": null}, \"response_metadata\": {\"token_usage\": {\"completion_tokens\": 40, \"prompt_tokens\": 1200, \"total_tokens\": 1240, \"completion_tokens_details\": {\"accepted_prediction_tokens\": null, \"audio_tokens\": null, \"reasoning_tokens\": 32, \"rejected_prediction_tokens\": null, \"text_tokens\": null}, \"prompt_tokens_details\": {\"audio_tokens\": null, \"cache_write_tokens\": null, \"cached_tokens\": 1024, \"image_tokens\": null, \"text_tokens\": null}}, \"model_provider\": \"openai\", \"model_name\": \"gpt-4o-mini\", \"system_fingerprint\": null, \"id\": \"chatcmpl-fake\", \"finish_reason\": \"stop\", \"logprobs\": null}, \"type\": \"ai\", \"name\": null, \"id\": \"lc_run--01a1037f-0479-7aa0-8ce4-b2069f1734ea-0\", \"tool_calls\": [], \"invalid_tool_calls\": [], \"usage_metadata\": {\"input_tokens\": 1200, \"output_tokens\": 40, \"total_tokens\": 1240, \"input_token_details\": {\"cache_read\": 1024}, \"output_token_details\": {\"reasoning\": 32}}}}]}"
+                  }
+                },
+                {
+                  "key": "output.mime_type",
+                  "value": {
+                    "stringValue": "application/json"
+                  }
+                },
+                {
+                  "key": "llm.input_messages.0.message.role",
+                  "value": {
+                    "stringValue": "user"
+                  }
+                },
+                {
+                  "key": "llm.input_messages.0.message.content",
+                  "value": {
+                    "stringValue": "Weather in Paris?"
+                  }
+                },
+                {
+                  "key": "metadata",
+                  "value": {
+                    "stringValue": "{\"ls_integration\": \"langchain_create_agent\"}"
+                  }
+                },
+                {
+                  "key": "openinference.span.kind",
+                  "value": {
+                    "stringValue": "CHAIN"
+                  }
+                }
+              ],
+              "status": {
+                "code": "STATUS_CODE_OK"
+              },
+              "flags": 256
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

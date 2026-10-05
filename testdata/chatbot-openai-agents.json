@@ -1,0 +1,1033 @@
+{
+  "resourceSpans": [
+    {
+      "resource": {
+        "attributes": [
+          {
+            "key": "telemetry.sdk.language",
+            "value": {
+              "stringValue": "python"
+            }
+          },
+          {
+            "key": "telemetry.sdk.name",
+            "value": {
+              "stringValue": "opentelemetry"
+            }
+          },
+          {
+            "key": "telemetry.sdk.version",
+            "value": {
+              "stringValue": "1.45.0"
+            }
+          },
+          {
+            "key": "service.instance.id",
+            "value": {
+              "stringValue": "2bdce03c-0087-4853-b596-4f9ed198419b"
+            }
+          },
+          {
+            "key": "service.name",
+            "value": {
+              "stringValue": "bot-openai-agents"
+            }
+          }
+        ]
+      },
+      "scopeSpans": [
+        {
+          "scope": {
+            "name": "openinference.instrumentation.openai_agents",
+            "version": "2.5.2"
+          },
+          "spans": [
+            {
+              "traceId": "0ac702c08935f8ec3f5566b080371395",
+              "spanId": "6e89548cbb31cabb",
+              "parentSpanId": "8942674ec3ada9cc",
+              "name": "no_override",
+              "kind": "SPAN_KIND_INTERNAL",
+              "startTimeUnixNano": "1791172933882766848",
+              "endTimeUnixNano": "1791172933882808832",
+              "attributes": [
+                {
+                  "key": "session.id",
+                  "value": {
+                    "stringValue": "36800eec-2fc0-4102-9995-5c378399d90e"
+                  }
+                },
+                {
+                  "key": "openinference.span.kind",
+                  "value": {
+                    "stringValue": "GUARDRAIL"
+                  }
+                }
+              ],
+              "status": {
+                "code": "STATUS_CODE_OK"
+              },
+              "flags": 256
+            },
+            {
+              "traceId": "0ac702c08935f8ec3f5566b080371395",
+              "spanId": "36f6f9814e415607",
+              "parentSpanId": "8942674ec3ada9cc",
+              "name": "generation",
+              "kind": "SPAN_KIND_INTERNAL",
+              "startTimeUnixNano": "1791172933883379968",
+              "endTimeUnixNano": "1791172935308656896",
+              "attributes": [
+                {
+                  "key": "llm.system",
+                  "value": {
+                    "stringValue": "openai"
+                  }
+                },
+                {
+                  "key": "session.id",
+                  "value": {
+                    "stringValue": "36800eec-2fc0-4102-9995-5c378399d90e"
+                  }
+                },
+                {
+                  "key": "llm.model_name",
+                  "value": {
+                    "stringValue": "openai/gpt-4o-mini"
+                  }
+                },
+                {
+                  "key": "llm.invocation_parameters",
+                  "value": {
+                    "stringValue": "{\"base_url\": \"https://openrouter.ai/api/v1/\"}"
+                  }
+                },
+                {
+                  "key": "input.value",
+                  "value": {
+                    "stringValue": "[{\"content\": \"You are a concise assistant. Use a tool when it helps, then answer in one or two sentences. Skills you can load: unit-converter. Hand arithmetic to the calculator.\", \"role\": \"system\"}, {\"role\": \"user\", \"content\": \"What is 17 * 23, and what time is it in Tokyo?\"}]"
+                  }
+                },
+                {
+                  "key": "input.mime_type",
+                  "value": {
+                    "stringValue": "application/json"
+                  }
+                },
+                {
+                  "key": "llm.input_messages.0.message.role",
+                  "value": {
+                    "stringValue": "system"
+                  }
+                },
+                {
+                  "key": "llm.input_messages.0.message.content",
+                  "value": {
+                    "stringValue": "You are a concise assistant. Use a tool when it helps, then answer in one or two sentences. Skills you can load: unit-converter. Hand arithmetic to the calculator."
+                  }
+                },
+                {
+                  "key": "llm.input_messages.1.message.role",
+                  "value": {
+                    "stringValue": "user"
+                  }
+                },
+                {
+                  "key": "llm.input_messages.1.message.content",
+                  "value": {
+                    "stringValue": "What is 17 * 23, and what time is it in Tokyo?"
+                  }
+                },
+                {
+                  "key": "output.value",
+                  "value": {
+                    "stringValue": "[{\"content\": null, \"refusal\": null, \"role\": \"assistant\", \"annotations\": null, \"audio\": null, \"function_call\": null, \"tool_calls\": [{\"id\": \"call_XTNogclCsl29Rz2b349y4EQ2\", \"function\": {\"arguments\": \"{}\", \"name\": \"transfer_to_calculator\"}, \"type\": \"function\", \"index\": 0}, {\"id\": \"call_0U7EWifwxSH78TkwvqEwU63p\", \"function\": {\"arguments\": \"{\\\"timezone\\\": \\\"Asia/Tokyo\\\"}\", \"name\": \"get_time\"}, \"type\": \"function\", \"index\": 1}], \"reasoning\": null}]"
+                  }
+                },
+                {
+                  "key": "output.mime_type",
+                  "value": {
+                    "stringValue": "application/json"
+                  }
+                },
+                {
+                  "key": "llm.output_messages.0.message.role",
+                  "value": {
+                    "stringValue": "assistant"
+                  }
+                },
+                {
+                  "key": "llm.output_messages.0.message.tool_calls.0.tool_call.id",
+                  "value": {
+                    "stringValue": "call_XTNogclCsl29Rz2b349y4EQ2"
+                  }
+                },
+                {
+                  "key": "llm.output_messages.0.message.tool_calls.0.tool_call.function.name",
+                  "value": {
+                    "stringValue": "transfer_to_calculator"
+                  }
+                },
+                {
+                  "key": "llm.output_messages.0.message.tool_calls.1.tool_call.id",
+                  "value": {
+                    "stringValue": "call_0U7EWifwxSH78TkwvqEwU63p"
+                  }
+                },
+                {
+                  "key": "llm.output_messages.0.message.tool_calls.1.tool_call.function.name",
+                  "value": {
+                    "stringValue": "get_time"
+                  }
+                },
+                {
+                  "key": "llm.output_messages.0.message.tool_calls.1.tool_call.function.arguments",
+                  "value": {
+                    "stringValue": "{\"timezone\": \"Asia/Tokyo\"}"
+                  }
+                },
+                {
+                  "key": "llm.token_count.prompt",
+                  "value": {
+                    "intValue": "254"
+                  }
+                },
+                {
+                  "key": "llm.token_count.completion",
+                  "value": {
+                    "intValue": "46"
+                  }
+                },
+                {
+                  "key": "openinference.span.kind",
+                  "value": {
+                    "stringValue": "LLM"
+                  }
+                }
+              ],
+              "status": {
+                "code": "STATUS_CODE_OK"
+              },
+              "flags": 256
+            },
+            {
+              "traceId": "0ac702c08935f8ec3f5566b080371395",
+              "spanId": "e59c418adfa7ef16",
+              "parentSpanId": "8942674ec3ada9cc",
+              "name": "get_time",
+              "kind": "SPAN_KIND_INTERNAL",
+              "startTimeUnixNano": "1791172935309864960",
+              "endTimeUnixNano": "1791172935310842112",
+              "attributes": [
+                {
+                  "key": "session.id",
+                  "value": {
+                    "stringValue": "36800eec-2fc0-4102-9995-5c378399d90e"
+                  }
+                },
+                {
+                  "key": "tool.name",
+                  "value": {
+                    "stringValue": "get_time"
+                  }
+                },
+                {
+                  "key": "input.value",
+                  "value": {
+                    "stringValue": "{\"timezone\": \"Asia/Tokyo\"}"
+                  }
+                },
+                {
+                  "key": "input.mime_type",
+                  "value": {
+                    "stringValue": "application/json"
+                  }
+                },
+                {
+                  "key": "output.value",
+                  "value": {
+                    "stringValue": "2026-10-05T13:02:15+09:00"
+                  }
+                },
+                {
+                  "key": "tool.description",
+                  "value": {
+                    "stringValue": "Current date and time in an IANA timezone, such as Asia/Tokyo."
+                  }
+                },
+                {
+                  "key": "tool.parameters",
+                  "value": {
+                    "stringValue": "{\"properties\": {\"timezone\": {\"default\": \"UTC\", \"title\": \"Timezone\", \"type\": \"string\"}}, \"title\": \"get_time_args\", \"type\": \"object\", \"additionalProperties\": false, \"required\": [\"timezone\"]}"
+                  }
+                },
+                {
+                  "key": "openinference.span.kind",
+                  "value": {
+                    "stringValue": "TOOL"
+                  }
+                }
+              ],
+              "status": {
+                "code": "STATUS_CODE_OK"
+              },
+              "flags": 256
+            },
+            {
+              "traceId": "0ac702c08935f8ec3f5566b080371395",
+              "spanId": "b580594afa6261d5",
+              "parentSpanId": "8942674ec3ada9cc",
+              "name": "handoff to calculator",
+              "kind": "SPAN_KIND_INTERNAL",
+              "startTimeUnixNano": "1791172935311064832",
+              "endTimeUnixNano": "1791172935311245824",
+              "attributes": [
+                {
+                  "key": "session.id",
+                  "value": {
+                    "stringValue": "36800eec-2fc0-4102-9995-5c378399d90e"
+                  }
+                },
+                {
+                  "key": "input.value",
+                  "value": {
+                    "stringValue": "assistant"
+                  }
+                },
+                {
+                  "key": "output.value",
+                  "value": {
+                    "stringValue": "calculator"
+                  }
+                },
+                {
+                  "key": "openinference.span.kind",
+                  "value": {
+                    "stringValue": "TOOL"
+                  }
+                }
+              ],
+              "status": {
+                "code": "STATUS_CODE_OK"
+              },
+              "flags": 256
+            },
+            {
+              "traceId": "0ac702c08935f8ec3f5566b080371395",
+              "spanId": "8942674ec3ada9cc",
+              "parentSpanId": "b52b87128dd241c3",
+              "name": "turn",
+              "kind": "SPAN_KIND_INTERNAL",
+              "startTimeUnixNano": "1791172933882617856",
+              "endTimeUnixNano": "1791172935311341056",
+              "attributes": [
+                {
+                  "key": "session.id",
+                  "value": {
+                    "stringValue": "36800eec-2fc0-4102-9995-5c378399d90e"
+                  }
+                },
+                {
+                  "key": "openinference.span.kind",
+                  "value": {
+                    "stringValue": "CHAIN"
+                  }
+                }
+              ],
+              "status": {
+                "code": "STATUS_CODE_OK"
+              },
+              "flags": 256
+            },
+            {
+              "traceId": "0ac702c08935f8ec3f5566b080371395",
+              "spanId": "b52b87128dd241c3",
+              "parentSpanId": "22680516719791c0",
+              "name": "assistant",
+              "kind": "SPAN_KIND_INTERNAL",
+              "startTimeUnixNano": "1791172933882533120",
+              "endTimeUnixNano": "1791172935311735040",
+              "attributes": [
+                {
+                  "key": "session.id",
+                  "value": {
+                    "stringValue": "36800eec-2fc0-4102-9995-5c378399d90e"
+                  }
+                },
+                {
+                  "key": "graph.node.id",
+                  "value": {
+                    "stringValue": "assistant"
+                  }
+                },
+                {
+                  "key": "agent.name",
+                  "value": {
+                    "stringValue": "assistant"
+                  }
+                },
+                {
+                  "key": "openinference.span.kind",
+                  "value": {
+                    "stringValue": "AGENT"
+                  }
+                }
+              ],
+              "status": {
+                "code": "STATUS_CODE_OK"
+              },
+              "flags": 256
+            },
+            {
+              "traceId": "0ac702c08935f8ec3f5566b080371395",
+              "spanId": "9f92376485b14a0f",
+              "parentSpanId": "acf90f9ce2501bc1",
+              "name": "generation",
+              "kind": "SPAN_KIND_INTERNAL",
+              "startTimeUnixNano": "1791172935312377856",
+              "endTimeUnixNano": "1791172936213795840",
+              "attributes": [
+                {
+                  "key": "llm.system",
+                  "value": {
+                    "stringValue": "openai"
+                  }
+                },
+                {
+                  "key": "session.id",
+                  "value": {
+                    "stringValue": "36800eec-2fc0-4102-9995-5c378399d90e"
+                  }
+                },
+                {
+                  "key": "llm.model_name",
+                  "value": {
+                    "stringValue": "openai/gpt-4o-mini"
+                  }
+                },
+                {
+                  "key": "llm.invocation_parameters",
+                  "value": {
+                    "stringValue": "{\"base_url\": \"https://openrouter.ai/api/v1/\"}"
+                  }
+                },
+                {
+                  "key": "input.value",
+                  "value": {
+                    "stringValue": "[{\"content\": \"Compute with the calculate tool and answer briefly.\", \"role\": \"system\"}, {\"role\": \"user\", \"content\": \"What is 17 * 23, and what time is it in Tokyo?\"}, {\"role\": \"assistant\", \"content\": null, \"tool_calls\": [{\"id\": \"call_XTNogclCsl29Rz2b349y4EQ2\", \"type\": \"function\", \"function\": {\"name\": \"transfer_to_calculator\", \"arguments\": \"{}\"}}, {\"id\": \"call_0U7EWifwxSH78TkwvqEwU63p\", \"type\": \"function\", \"function\": {\"name\": \"get_time\", \"arguments\": \"{\\\"timezone\\\": \\\"Asia/Tokyo\\\"}\"}}]}, {\"role\": \"tool\", \"tool_call_id\": \"call_0U7EWifwxSH78TkwvqEwU63p\", \"content\": \"2026-10-05T13:02:15+09:00\"}, {\"role\": \"tool\", \"tool_call_id\": \"call_XTNogclCsl29Rz2b349y4EQ2\", \"content\": \"{\\\"assistant\\\": \\\"calculator\\\"}\"}]"
+                  }
+                },
+                {
+                  "key": "input.mime_type",
+                  "value": {
+                    "stringValue": "application/json"
+                  }
+                },
+                {
+                  "key": "llm.input_messages.0.message.role",
+                  "value": {
+                    "stringValue": "system"
+                  }
+                },
+                {
+                  "key": "llm.input_messages.0.message.content",
+                  "value": {
+                    "stringValue": "Compute with the calculate tool and answer briefly."
+                  }
+                },
+                {
+                  "key": "llm.input_messages.1.message.role",
+                  "value": {
+                    "stringValue": "user"
+                  }
+                },
+                {
+                  "key": "llm.input_messages.1.message.content",
+                  "value": {
+                    "stringValue": "What is 17 * 23, and what time is it in Tokyo?"
+                  }
+                },
+                {
+                  "key": "llm.input_messages.2.message.role",
+                  "value": {
+                    "stringValue": "assistant"
+                  }
+                },
+                {
+                  "key": "llm.input_messages.2.message.tool_calls.0.tool_call.id",
+                  "value": {
+                    "stringValue": "call_XTNogclCsl29Rz2b349y4EQ2"
+                  }
+                },
+                {
+                  "key": "llm.input_messages.2.message.tool_calls.0.tool_call.function.name",
+                  "value": {
+                    "stringValue": "transfer_to_calculator"
+                  }
+                },
+                {
+                  "key": "llm.input_messages.2.message.tool_calls.1.tool_call.id",
+                  "value": {
+                    "stringValue": "call_0U7EWifwxSH78TkwvqEwU63p"
+                  }
+                },
+                {
+                  "key": "llm.input_messages.2.message.tool_calls.1.tool_call.function.name",
+                  "value": {
+                    "stringValue": "get_time"
+                  }
+                },
+                {
+                  "key": "llm.input_messages.2.message.tool_calls.1.tool_call.function.arguments",
+                  "value": {
+                    "stringValue": "{\"timezone\": \"Asia/Tokyo\"}"
+                  }
+                },
+                {
+                  "key": "llm.input_messages.3.message.role",
+                  "value": {
+                    "stringValue": "tool"
+                  }
+                },
+                {
+                  "key": "llm.input_messages.3.message.content",
+                  "value": {
+                    "stringValue": "2026-10-05T13:02:15+09:00"
+                  }
+                },
+                {
+                  "key": "llm.input_messages.3.message.tool_call_id",
+                  "value": {
+                    "stringValue": "call_0U7EWifwxSH78TkwvqEwU63p"
+                  }
+                },
+                {
+                  "key": "llm.input_messages.4.message.role",
+                  "value": {
+                    "stringValue": "tool"
+                  }
+                },
+                {
+                  "key": "llm.input_messages.4.message.content",
+                  "value": {
+                    "stringValue": "{\"assistant\": \"calculator\"}"
+                  }
+                },
+                {
+                  "key": "llm.input_messages.4.message.tool_call_id",
+                  "value": {
+                    "stringValue": "call_XTNogclCsl29Rz2b349y4EQ2"
+                  }
+                },
+                {
+                  "key": "output.value",
+                  "value": {
+                    "stringValue": "[{\"content\": null, \"refusal\": null, \"role\": \"assistant\", \"annotations\": null, \"audio\": null, \"function_call\": null, \"tool_calls\": [{\"id\": \"call_b8MwMrvxdf2G3X6ilxlrOOpS\", \"function\": {\"arguments\": \"{\\\"expression\\\":\\\"17 * 23\\\"}\", \"name\": \"calculate\"}, \"type\": \"function\", \"index\": 0}], \"reasoning\": null}]"
+                  }
+                },
+                {
+                  "key": "output.mime_type",
+                  "value": {
+                    "stringValue": "application/json"
+                  }
+                },
+                {
+                  "key": "llm.output_messages.0.message.role",
+                  "value": {
+                    "stringValue": "assistant"
+                  }
+                },
+                {
+                  "key": "llm.output_messages.0.message.tool_calls.0.tool_call.id",
+                  "value": {
+                    "stringValue": "call_b8MwMrvxdf2G3X6ilxlrOOpS"
+                  }
+                },
+                {
+                  "key": "llm.output_messages.0.message.tool_calls.0.tool_call.function.name",
+                  "value": {
+                    "stringValue": "calculate"
+                  }
+                },
+                {
+                  "key": "llm.output_messages.0.message.tool_calls.0.tool_call.function.arguments",
+                  "value": {
+                    "stringValue": "{\"expression\":\"17 * 23\"}"
+                  }
+                },
+                {
+                  "key": "llm.token_count.prompt",
+                  "value": {
+                    "intValue": "165"
+                  }
+                },
+                {
+                  "key": "llm.token_count.completion",
+                  "value": {
+                    "intValue": "16"
+                  }
+                },
+                {
+                  "key": "openinference.span.kind",
+                  "value": {
+                    "stringValue": "LLM"
+                  }
+                }
+              ],
+              "status": {
+                "code": "STATUS_CODE_OK"
+              },
+              "flags": 256
+            },
+            {
+              "traceId": "0ac702c08935f8ec3f5566b080371395",
+              "spanId": "5f8c68390800727d",
+              "parentSpanId": "acf90f9ce2501bc1",
+              "name": "calculate",
+              "kind": "SPAN_KIND_INTERNAL",
+              "startTimeUnixNano": "1791172936216527872",
+              "endTimeUnixNano": "1791172936218578176",
+              "attributes": [
+                {
+                  "key": "session.id",
+                  "value": {
+                    "stringValue": "36800eec-2fc0-4102-9995-5c378399d90e"
+                  }
+                },
+                {
+                  "key": "tool.name",
+                  "value": {
+                    "stringValue": "calculate"
+                  }
+                },
+                {
+                  "key": "input.value",
+                  "value": {
+                    "stringValue": "{\"expression\":\"17 * 23\"}"
+                  }
+                },
+                {
+                  "key": "input.mime_type",
+                  "value": {
+                    "stringValue": "application/json"
+                  }
+                },
+                {
+                  "key": "output.value",
+                  "value": {
+                    "stringValue": "391"
+                  }
+                },
+                {
+                  "key": "tool.description",
+                  "value": {
+                    "stringValue": "Evaluate an arithmetic expression such as (3 + 4) * 2."
+                  }
+                },
+                {
+                  "key": "tool.parameters",
+                  "value": {
+                    "stringValue": "{\"properties\": {\"expression\": {\"title\": \"Expression\", \"type\": \"string\"}}, \"required\": [\"expression\"], \"title\": \"calculate_args\", \"type\": \"object\", \"additionalProperties\": false}"
+                  }
+                },
+                {
+                  "key": "openinference.span.kind",
+                  "value": {
+                    "stringValue": "TOOL"
+                  }
+                }
+              ],
+              "status": {
+                "code": "STATUS_CODE_OK"
+              },
+              "flags": 256
+            },
+            {
+              "traceId": "0ac702c08935f8ec3f5566b080371395",
+              "spanId": "acf90f9ce2501bc1",
+              "parentSpanId": "e68ad235706b5a5a",
+              "name": "turn",
+              "kind": "SPAN_KIND_INTERNAL",
+              "startTimeUnixNano": "1791172935311856896",
+              "endTimeUnixNano": "1791172936219023872",
+              "attributes": [
+                {
+                  "key": "session.id",
+                  "value": {
+                    "stringValue": "36800eec-2fc0-4102-9995-5c378399d90e"
+                  }
+                },
+                {
+                  "key": "openinference.span.kind",
+                  "value": {
+                    "stringValue": "CHAIN"
+                  }
+                }
+              ],
+              "status": {
+                "code": "STATUS_CODE_OK"
+              },
+              "flags": 256
+            },
+            {
+              "traceId": "0ac702c08935f8ec3f5566b080371395",
+              "spanId": "df0210425fade353",
+              "parentSpanId": "7d9934ef7b44afa7",
+              "name": "generation",
+              "kind": "SPAN_KIND_INTERNAL",
+              "startTimeUnixNano": "1791172936221029120",
+              "endTimeUnixNano": "1791172937222160128",
+              "attributes": [
+                {
+                  "key": "llm.system",
+                  "value": {
+                    "stringValue": "openai"
+                  }
+                },
+                {
+                  "key": "session.id",
+                  "value": {
+                    "stringValue": "36800eec-2fc0-4102-9995-5c378399d90e"
+                  }
+                },
+                {
+                  "key": "llm.model_name",
+                  "value": {
+                    "stringValue": "openai/gpt-4o-mini"
+                  }
+                },
+                {
+                  "key": "llm.invocation_parameters",
+                  "value": {
+                    "stringValue": "{\"base_url\": \"https://openrouter.ai/api/v1/\"}"
+                  }
+                },
+                {
+                  "key": "input.value",
+                  "value": {
+                    "stringValue": "[{\"content\": \"Compute with the calculate tool and answer briefly.\", \"role\": \"system\"}, {\"role\": \"user\", \"content\": \"What is 17 * 23, and what time is it in Tokyo?\"}, {\"role\": \"assistant\", \"content\": null, \"tool_calls\": [{\"id\": \"call_XTNogclCsl29Rz2b349y4EQ2\", \"type\": \"function\", \"function\": {\"name\": \"transfer_to_calculator\", \"arguments\": \"{}\"}}, {\"id\": \"call_0U7EWifwxSH78TkwvqEwU63p\", \"type\": \"function\", \"function\": {\"name\": \"get_time\", \"arguments\": \"{\\\"timezone\\\": \\\"Asia/Tokyo\\\"}\"}}]}, {\"role\": \"tool\", \"tool_call_id\": \"call_0U7EWifwxSH78TkwvqEwU63p\", \"content\": \"2026-10-05T13:02:15+09:00\"}, {\"role\": \"tool\", \"tool_call_id\": \"call_XTNogclCsl29Rz2b349y4EQ2\", \"content\": \"{\\\"assistant\\\": \\\"calculator\\\"}\"}, {\"role\": \"assistant\", \"content\": null, \"tool_calls\": [{\"id\": \"call_b8MwMrvxdf2G3X6ilxlrOOpS\", \"type\": \"function\", \"function\": {\"name\": \"calculate\", \"arguments\": \"{\\\"expression\\\":\\\"17 * 23\\\"}\"}}]}, {\"role\": \"tool\", \"tool_call_id\": \"call_b8MwMrvxdf2G3X6ilxlrOOpS\", \"content\": \"391\"}]"
+                  }
+                },
+                {
+                  "key": "input.mime_type",
+                  "value": {
+                    "stringValue": "application/json"
+                  }
+                },
+                {
+                  "key": "llm.input_messages.0.message.role",
+                  "value": {
+                    "stringValue": "system"
+                  }
+                },
+                {
+                  "key": "llm.input_messages.0.message.content",
+                  "value": {
+                    "stringValue": "Compute with the calculate tool and answer briefly."
+                  }
+                },
+                {
+                  "key": "llm.input_messages.1.message.role",
+                  "value": {
+                    "stringValue": "user"
+                  }
+                },
+                {
+                  "key": "llm.input_messages.1.message.content",
+                  "value": {
+                    "stringValue": "What is 17 * 23, and what time is it in Tokyo?"
+                  }
+                },
+                {
+                  "key": "llm.input_messages.2.message.role",
+                  "value": {
+                    "stringValue": "assistant"
+                  }
+                },
+                {
+                  "key": "llm.input_messages.2.message.tool_calls.0.tool_call.id",
+                  "value": {
+                    "stringValue": "call_XTNogclCsl29Rz2b349y4EQ2"
+                  }
+                },
+                {
+                  "key": "llm.input_messages.2.message.tool_calls.0.tool_call.function.name",
+                  "value": {
+                    "stringValue": "transfer_to_calculator"
+                  }
+                },
+                {
+                  "key": "llm.input_messages.2.message.tool_calls.1.tool_call.id",
+                  "value": {
+                    "stringValue": "call_0U7EWifwxSH78TkwvqEwU63p"
+                  }
+                },
+                {
+                  "key": "llm.input_messages.2.message.tool_calls.1.tool_call.function.name",
+                  "value": {
+                    "stringValue": "get_time"
+                  }
+                },
+                {
+                  "key": "llm.input_messages.2.message.tool_calls.1.tool_call.function.arguments",
+                  "value": {
+                    "stringValue": "{\"timezone\": \"Asia/Tokyo\"}"
+                  }
+                },
+                {
+                  "key": "llm.input_messages.3.message.role",
+                  "value": {
+                    "stringValue": "tool"
+                  }
+                },
+                {
+                  "key": "llm.input_messages.3.message.content",
+                  "value": {
+                    "stringValue": "2026-10-05T13:02:15+09:00"
+                  }
+                },
+                {
+                  "key": "llm.input_messages.3.message.tool_call_id",
+                  "value": {
+                    "stringValue": "call_0U7EWifwxSH78TkwvqEwU63p"
+                  }
+                },
+                {
+                  "key": "llm.input_messages.4.message.role",
+                  "value": {
+                    "stringValue": "tool"
+                  }
+                },
+                {
+                  "key": "llm.input_messages.4.message.content",
+                  "value": {
+                    "stringValue": "{\"assistant\": \"calculator\"}"
+                  }
+                },
+                {
+                  "key": "llm.input_messages.4.message.tool_call_id",
+                  "value": {
+                    "stringValue": "call_XTNogclCsl29Rz2b349y4EQ2"
+                  }
+                },
+                {
+                  "key": "llm.input_messages.5.message.role",
+                  "value": {
+                    "stringValue": "assistant"
+                  }
+                },
+                {
+                  "key": "llm.input_messages.5.message.tool_calls.2.tool_call.id",
+                  "value": {
+                    "stringValue": "call_b8MwMrvxdf2G3X6ilxlrOOpS"
+                  }
+                },
+                {
+                  "key": "llm.input_messages.5.message.tool_calls.2.tool_call.function.name",
+                  "value": {
+                    "stringValue": "calculate"
+                  }
+                },
+                {
+                  "key": "llm.input_messages.5.message.tool_calls.2.tool_call.function.arguments",
+                  "value": {
+                    "stringValue": "{\"expression\":\"17 * 23\"}"
+                  }
+                },
+                {
+                  "key": "llm.input_messages.6.message.role",
+                  "value": {
+                    "stringValue": "tool"
+                  }
+                },
+                {
+                  "key": "llm.input_messages.6.message.content",
+                  "value": {
+                    "stringValue": "391"
+                  }
+                },
+                {
+                  "key": "llm.input_messages.6.message.tool_call_id",
+                  "value": {
+                    "stringValue": "call_b8MwMrvxdf2G3X6ilxlrOOpS"
+                  }
+                },
+                {
+                  "key": "output.value",
+                  "value": {
+                    "stringValue": "[{\"content\": \"The result of 17 * 23 is 391. The current time in Tokyo is 1:02 PM (13:02).\", \"refusal\": null, \"role\": \"assistant\", \"annotations\": null, \"audio\": null, \"function_call\": null, \"tool_calls\": null, \"reasoning\": null}]"
+                  }
+                },
+                {
+                  "key": "output.mime_type",
+                  "value": {
+                    "stringValue": "application/json"
+                  }
+                },
+                {
+                  "key": "llm.output_messages.0.message.role",
+                  "value": {
+                    "stringValue": "assistant"
+                  }
+                },
+                {
+                  "key": "llm.output_messages.0.message.content",
+                  "value": {
+                    "stringValue": "The result of 17 * 23 is 391. The current time in Tokyo is 1:02 PM (13:02)."
+                  }
+                },
+                {
+                  "key": "llm.token_count.prompt",
+                  "value": {
+                    "intValue": "189"
+                  }
+                },
+                {
+                  "key": "llm.token_count.completion",
+                  "value": {
+                    "intValue": "29"
+                  }
+                },
+                {
+                  "key": "openinference.span.kind",
+                  "value": {
+                    "stringValue": "LLM"
+                  }
+                }
+              ],
+              "status": {
+                "code": "STATUS_CODE_OK"
+              },
+              "flags": 256
+            },
+            {
+              "traceId": "0ac702c08935f8ec3f5566b080371395",
+              "spanId": "7d9934ef7b44afa7",
+              "parentSpanId": "e68ad235706b5a5a",
+              "name": "turn",
+              "kind": "SPAN_KIND_INTERNAL",
+              "startTimeUnixNano": "1791172936219968000",
+              "endTimeUnixNano": "1791172937224217856",
+              "attributes": [
+                {
+                  "key": "session.id",
+                  "value": {
+                    "stringValue": "36800eec-2fc0-4102-9995-5c378399d90e"
+                  }
+                },
+                {
+                  "key": "openinference.span.kind",
+                  "value": {
+                    "stringValue": "CHAIN"
+                  }
+                }
+              ],
+              "status": {
+                "code": "STATUS_CODE_OK"
+              },
+              "flags": 256
+            },
+            {
+              "traceId": "0ac702c08935f8ec3f5566b080371395",
+              "spanId": "e68ad235706b5a5a",
+              "parentSpanId": "22680516719791c0",
+              "name": "calculator",
+              "kind": "SPAN_KIND_INTERNAL",
+              "startTimeUnixNano": "1791172935311793920",
+              "endTimeUnixNano": "1791172937225709824",
+              "attributes": [
+                {
+                  "key": "session.id",
+                  "value": {
+                    "stringValue": "36800eec-2fc0-4102-9995-5c378399d90e"
+                  }
+                },
+                {
+                  "key": "graph.node.id",
+                  "value": {
+                    "stringValue": "calculator"
+                  }
+                },
+                {
+                  "key": "agent.name",
+                  "value": {
+                    "stringValue": "calculator"
+                  }
+                },
+                {
+                  "key": "graph.node.parent_id",
+                  "value": {
+                    "stringValue": "assistant"
+                  }
+                },
+                {
+                  "key": "openinference.span.kind",
+                  "value": {
+                    "stringValue": "AGENT"
+                  }
+                }
+              ],
+              "status": {
+                "code": "STATUS_CODE_OK"
+              },
+              "flags": 256
+            },
+            {
+              "traceId": "0ac702c08935f8ec3f5566b080371395",
+              "spanId": "22680516719791c0",
+              "parentSpanId": "efac7ff5cef787c9",
+              "name": "Agent workflow",
+              "kind": "SPAN_KIND_INTERNAL",
+              "startTimeUnixNano": "1791172933881741056",
+              "endTimeUnixNano": "1791172937225837824",
+              "attributes": [
+                {
+                  "key": "session.id",
+                  "value": {
+                    "stringValue": "36800eec-2fc0-4102-9995-5c378399d90e"
+                  }
+                },
+                {
+                  "key": "openinference.span.kind",
+                  "value": {
+                    "stringValue": "CHAIN"
+                  }
+                }
+              ],
+              "status": {
+                "code": "STATUS_CODE_OK"
+              },
+              "flags": 256
+            },
+            {
+              "traceId": "0ac702c08935f8ec3f5566b080371395",
+              "spanId": "efac7ff5cef787c9",
+              "name": "Agent workflow",
+              "kind": "SPAN_KIND_INTERNAL",
+              "startTimeUnixNano": "1791172933881688000",
+              "endTimeUnixNano": "1791172937225898000",
+              "attributes": [
+                {
+                  "key": "session.id",
+                  "value": {
+                    "stringValue": "36800eec-2fc0-4102-9995-5c378399d90e"
+                  }
+                },
+                {
+                  "key": "openinference.span.kind",
+                  "value": {
+                    "stringValue": "AGENT"
+                  }
+                }
+              ],
+              "status": {
+                "code": "STATUS_CODE_OK"
+              },
+              "flags": 256
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

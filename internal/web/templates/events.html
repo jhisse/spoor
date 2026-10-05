@@ -1,0 +1,26 @@
+{{/* span_error: why the span failed, as the sender said it. Given a spanEventsView. */}}
+{{define "span_error"}}
+{{if or .StatusMessage .Exceptions}}
+<div class="callout err mt">
+<h3><svg class="st err" aria-hidden="true"><use href="#i-err"/></svg> Error</h3>
+{{if .StatusMessage}}<p class="prose">{{.StatusMessage}}</p>{{end}}
+{{range .Exceptions}}
+<p class="mt"><b class="mono">{{or .Exception.Type "exception"}}</b>{{if .Offset}} <span class="cap">{{.Offset}}</span>{{end}}</p>
+{{if .Exception.Message}}<p class="prose">{{.Exception.Message}}</p>{{end}}
+{{if .Exception.Stacktrace}}<details class="disc mt"><summary class="cap">Stack trace · {{.StackLines}} line{{if gt .StackLines 1}}s{{end}}</summary><div class="code mt">{{.Exception.Stacktrace}}</div></details>{{end}}
+{{end}}
+</div>
+{{end}}
+{{end}}
+{{/* span_events: the other events in the order sent, and the link count. */}}
+{{define "span_events"}}
+{{if or .Events .Links}}
+<div class="sec">
+{{if .Events}}<h3>Events · {{len .Events}}</h3>
+<dl class="kv">
+{{range .Events}}<dt>{{or .Offset "–"}}</dt><dd>{{$tree := metadataTree .Attributes}}{{if $tree}}<details><summary><i class="tw"></i>{{.Name}}</summary>{{template "metadata_tree" $tree}}</details>{{else}}{{.Name}}{{end}}</dd>
+{{end}}</dl>{{end}}
+{{if .Links}}<p class="cap{{if .Events}} mt{{end}}">{{.Links}} span link{{if gt .Links 1}}s{{end}} to other spans — in the <code>links</code> column (<code>spoor export</code>, <code>spoor query</code>)</p>{{end}}
+</div>
+{{end}}
+{{end}}

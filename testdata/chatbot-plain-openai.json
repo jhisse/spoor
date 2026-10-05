@@ -1,0 +1,362 @@
+{
+  "resourceSpans": [
+    {
+      "resource": {
+        "attributes": [
+          {
+            "key": "telemetry.sdk.language",
+            "value": {
+              "stringValue": "python"
+            }
+          },
+          {
+            "key": "telemetry.sdk.name",
+            "value": {
+              "stringValue": "opentelemetry"
+            }
+          },
+          {
+            "key": "telemetry.sdk.version",
+            "value": {
+              "stringValue": "1.45.0"
+            }
+          },
+          {
+            "key": "service.instance.id",
+            "value": {
+              "stringValue": "cd4d9f8b-3136-4bb4-bc70-47f6bc433015"
+            }
+          },
+          {
+            "key": "service.name",
+            "value": {
+              "stringValue": "bot-plain-openai"
+            }
+          }
+        ]
+      },
+      "scopeSpans": [
+        {
+          "scope": {
+            "name": "opentelemetry.util.genai.handler",
+            "version": "1.1b0"
+          },
+          "spans": [
+            {
+              "traceId": "f0ff4355551b7689f32ecd32dc6126a9",
+              "spanId": "0190b654ed98f393",
+              "parentSpanId": "9ee826a8e305733b",
+              "name": "chat openai/gpt-4o-mini",
+              "kind": "SPAN_KIND_CLIENT",
+              "startTimeUnixNano": "1791172912633673000",
+              "endTimeUnixNano": "1791172914367147000",
+              "attributes": [
+                {
+                  "key": "gen_ai.operation.name",
+                  "value": {
+                    "stringValue": "chat"
+                  }
+                },
+                {
+                  "key": "gen_ai.request.model",
+                  "value": {
+                    "stringValue": "openai/gpt-4o-mini"
+                  }
+                },
+                {
+                  "key": "gen_ai.provider.name",
+                  "value": {
+                    "stringValue": "openai"
+                  }
+                },
+                {
+                  "key": "gen_ai.response.finish_reasons",
+                  "value": {
+                    "arrayValue": {
+                      "values": [
+                        {
+                          "stringValue": "tool_calls"
+                        }
+                      ]
+                    }
+                  }
+                },
+                {
+                  "key": "gen_ai.response.model",
+                  "value": {
+                    "stringValue": "openai/gpt-4o-mini"
+                  }
+                },
+                {
+                  "key": "gen_ai.response.id",
+                  "value": {
+                    "stringValue": "gen-1791172912-Pm7uxbHKtS6Np40hwmu4"
+                  }
+                },
+                {
+                  "key": "gen_ai.usage.input_tokens",
+                  "value": {
+                    "intValue": "171"
+                  }
+                },
+                {
+                  "key": "gen_ai.usage.output_tokens",
+                  "value": {
+                    "intValue": "49"
+                  }
+                },
+                {
+                  "key": "gen_ai.input.messages",
+                  "value": {
+                    "stringValue": "[{\"role\":\"system\",\"parts\":[{\"content\":\"You are a concise assistant. Use a tool when it helps, then answer in one or two sentences. Skills you can load: unit-converter.\",\"type\":\"text\"}]},{\"role\":\"user\",\"parts\":[{\"content\":\"What is 17 * 23, and what time is it in Tokyo?\",\"type\":\"text\"}]}]"
+                  }
+                },
+                {
+                  "key": "gen_ai.output.messages",
+                  "value": {
+                    "stringValue": "[{\"role\":\"assistant\",\"parts\":[{\"arguments\":{\"expression\":\"17 * 23\"},\"name\":\"calculate\",\"id\":\"call_md5bJV6Umzk5H88fZf3OwKPL\",\"type\":\"tool_call\"},{\"arguments\":{\"timezone\":\"Asia/Tokyo\"},\"name\":\"get_time\",\"id\":\"call_by3FDWrHjsIzcth7oFfgEhdi\",\"type\":\"tool_call\"}],\"finish_reason\":\"tool_calls\"}]"
+                  }
+                },
+                {
+                  "key": "openai.response.service_tier",
+                  "value": {
+                    "stringValue": "default"
+                  }
+                },
+                {
+                  "key": "openai.response.system_fingerprint",
+                  "value": {
+                    "stringValue": "fp_f5dd669434"
+                  }
+                }
+              ],
+              "status": {},
+              "flags": 256
+            },
+            {
+              "traceId": "f0ff4355551b7689f32ecd32dc6126a9",
+              "spanId": "93c555146d2636cc",
+              "parentSpanId": "9ee826a8e305733b",
+              "name": "chat openai/gpt-4o-mini",
+              "kind": "SPAN_KIND_CLIENT",
+              "startTimeUnixNano": "1791172914367817000",
+              "endTimeUnixNano": "1791172915534712000",
+              "attributes": [
+                {
+                  "key": "gen_ai.operation.name",
+                  "value": {
+                    "stringValue": "chat"
+                  }
+                },
+                {
+                  "key": "gen_ai.request.model",
+                  "value": {
+                    "stringValue": "openai/gpt-4o-mini"
+                  }
+                },
+                {
+                  "key": "gen_ai.provider.name",
+                  "value": {
+                    "stringValue": "openai"
+                  }
+                },
+                {
+                  "key": "gen_ai.response.finish_reasons",
+                  "value": {
+                    "arrayValue": {
+                      "values": [
+                        {
+                          "stringValue": "stop"
+                        }
+                      ]
+                    }
+                  }
+                },
+                {
+                  "key": "gen_ai.response.model",
+                  "value": {
+                    "stringValue": "openai/gpt-4o-mini"
+                  }
+                },
+                {
+                  "key": "gen_ai.response.id",
+                  "value": {
+                    "stringValue": "gen-1791172914-1QGNc4rp80YP1yV5aaTH"
+                  }
+                },
+                {
+                  "key": "gen_ai.usage.input_tokens",
+                  "value": {
+                    "intValue": "251"
+                  }
+                },
+                {
+                  "key": "gen_ai.usage.output_tokens",
+                  "value": {
+                    "intValue": "26"
+                  }
+                },
+                {
+                  "key": "gen_ai.input.messages",
+                  "value": {
+                    "stringValue": "[{\"role\":\"system\",\"parts\":[{\"content\":\"You are a concise assistant. Use a tool when it helps, then answer in one or two sentences. Skills you can load: unit-converter.\",\"type\":\"text\"}]},{\"role\":\"user\",\"parts\":[{\"content\":\"What is 17 * 23, and what time is it in Tokyo?\",\"type\":\"text\"}]},{\"role\":\"assistant\",\"parts\":[{\"arguments\":{\"expression\":\"17 * 23\"},\"name\":\"calculate\",\"id\":\"call_md5bJV6Umzk5H88fZf3OwKPL\",\"type\":\"tool_call\"},{\"arguments\":{\"timezone\":\"Asia/Tokyo\"},\"name\":\"get_time\",\"id\":\"call_by3FDWrHjsIzcth7oFfgEhdi\",\"type\":\"tool_call\"}]},{\"role\":\"tool\",\"parts\":[{\"response\":\"391\",\"id\":\"call_md5bJV6Umzk5H88fZf3OwKPL\",\"type\":\"tool_call_response\"}]},{\"role\":\"tool\",\"parts\":[{\"response\":\"2026-10-05T13:01:54+09:00\",\"id\":\"call_by3FDWrHjsIzcth7oFfgEhdi\",\"type\":\"tool_call_response\"}]}]"
+                  }
+                },
+                {
+                  "key": "gen_ai.output.messages",
+                  "value": {
+                    "stringValue": "[{\"role\":\"assistant\",\"parts\":[{\"content\":\"The result of 17 * 23 is 391, and the current time in Tokyo is 1:01 PM.\",\"type\":\"text\"}],\"finish_reason\":\"stop\"}]"
+                  }
+                },
+                {
+                  "key": "openai.response.service_tier",
+                  "value": {
+                    "stringValue": "default"
+                  }
+                },
+                {
+                  "key": "openai.response.system_fingerprint",
+                  "value": {
+                    "stringValue": "fp_f5dd669434"
+                  }
+                }
+              ],
+              "status": {},
+              "flags": 256
+            }
+          ],
+          "schemaUrl": "https://opentelemetry.io/schemas/1.37.0"
+        },
+        {
+          "scope": {
+            "name": "bot-plain-openai"
+          },
+          "spans": [
+            {
+              "traceId": "f0ff4355551b7689f32ecd32dc6126a9",
+              "spanId": "457eb434e8f002f0",
+              "parentSpanId": "9ee826a8e305733b",
+              "name": "execute_tool calculate",
+              "kind": "SPAN_KIND_INTERNAL",
+              "startTimeUnixNano": "1791172914367303000",
+              "endTimeUnixNano": "1791172914367346000",
+              "attributes": [
+                {
+                  "key": "gen_ai.operation.name",
+                  "value": {
+                    "stringValue": "execute_tool"
+                  }
+                },
+                {
+                  "key": "gen_ai.tool.name",
+                  "value": {
+                    "stringValue": "calculate"
+                  }
+                },
+                {
+                  "key": "gen_ai.tool.call.id",
+                  "value": {
+                    "stringValue": "call_md5bJV6Umzk5H88fZf3OwKPL"
+                  }
+                },
+                {
+                  "key": "gen_ai.tool.call.arguments",
+                  "value": {
+                    "stringValue": "{\"expression\": \"17 * 23\"}"
+                  }
+                },
+                {
+                  "key": "gen_ai.tool.call.result",
+                  "value": {
+                    "stringValue": "391"
+                  }
+                }
+              ],
+              "status": {},
+              "flags": 256
+            },
+            {
+              "traceId": "f0ff4355551b7689f32ecd32dc6126a9",
+              "spanId": "9a6a11e33274f01a",
+              "parentSpanId": "9ee826a8e305733b",
+              "name": "execute_tool get_time",
+              "kind": "SPAN_KIND_INTERNAL",
+              "startTimeUnixNano": "1791172914367375000",
+              "endTimeUnixNano": "1791172914367772000",
+              "attributes": [
+                {
+                  "key": "gen_ai.operation.name",
+                  "value": {
+                    "stringValue": "execute_tool"
+                  }
+                },
+                {
+                  "key": "gen_ai.tool.name",
+                  "value": {
+                    "stringValue": "get_time"
+                  }
+                },
+                {
+                  "key": "gen_ai.tool.call.id",
+                  "value": {
+                    "stringValue": "call_by3FDWrHjsIzcth7oFfgEhdi"
+                  }
+                },
+                {
+                  "key": "gen_ai.tool.call.arguments",
+                  "value": {
+                    "stringValue": "{\"timezone\": \"Asia/Tokyo\"}"
+                  }
+                },
+                {
+                  "key": "gen_ai.tool.call.result",
+                  "value": {
+                    "stringValue": "2026-10-05T13:01:54+09:00"
+                  }
+                }
+              ],
+              "status": {},
+              "flags": 256
+            },
+            {
+              "traceId": "f0ff4355551b7689f32ecd32dc6126a9",
+              "spanId": "9ee826a8e305733b",
+              "name": "invoke_agent plain-openai",
+              "kind": "SPAN_KIND_INTERNAL",
+              "startTimeUnixNano": "1791172912633129000",
+              "endTimeUnixNano": "1791172915534874000",
+              "attributes": [
+                {
+                  "key": "gen_ai.operation.name",
+                  "value": {
+                    "stringValue": "invoke_agent"
+                  }
+                },
+                {
+                  "key": "gen_ai.agent.name",
+                  "value": {
+                    "stringValue": "plain-openai"
+                  }
+                },
+                {
+                  "key": "gen_ai.conversation.id",
+                  "value": {
+                    "stringValue": "42887cc5-c09b-4c35-b58d-6145dae3e0aa"
+                  }
+                },
+                {
+                  "key": "session.id",
+                  "value": {
+                    "stringValue": "42887cc5-c09b-4c35-b58d-6145dae3e0aa"
+                  }
+                }
+              ],
+              "status": {},
+              "flags": 256
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,46 @@
+{{define "title"}}spoor — Blind spots{{end}}
+{{define "width"}} narrow{{end}}
+
+{{define "content"}}
+<div id="blindspots">
+<div class="head"><h1>Blind spots</h1><span class="cap">What is stored but cannot be read, and what never reached storage. Counted, never guessed.</span></div>
+<div class="stack">
+<section class="panel" aria-labelledby="unread-h">
+<div class="panel-h"><h2 id="unread-h">Stored, not read</h2><span class="cap">{{commas .Traces}} traces · {{commas .Spans}} spans · {{commas .Generations}} model calls</span></div>
+<div class="panel-b">
+<dl class="spots">
+<div><dt>Traces without a root</dt><dd class="n">{{commas .Rootless}}</dd><dd class="why">every span names a parent that never arrived; a coding agent exports its root last, so a running turn looks like this. The list marks them.</dd></div>
+<div><dt>Spans without their parent</dt><dd class="n">{{commas .Orphans}}</dd><dd class="why">shown as roots, marked “no parent”.</dd></div>
+<div><dt>Model calls without a token count</dt><dd class="n">{{commas .NoInputTokens}}</dd><dd class="why">the SDK sent none; tokens show as “?” and the cost is unknown. Failed calls are not counted: they have none to send.</dd></div>
+<div><dt>Model calls without a model</dt><dd class="n">{{commas .NoModel}}</dd><dd class="why">no price can match; the cost is unknown.</dd></div>
+<div><dt>Model calls without a price</dt><dd class="n">{{commas .UnpricedSpans}}</dd><dd class="why">the model matches no row of the <code>model_prices</code> table; the cost is unknown (–), never a default.</dd></div>
+<div><dt>Costs priced without cache counts</dt><dd class="n">{{commas .CacheUnknown}}</dd><dd class="why">the SDK sent no cache read or write count, so the whole prompt was priced as fresh input; marked “~”.</dd></div>
+<div><dt>Prompts not readable as messages</dt><dd class="n">{{commas .NoMessages}}</dd><dd class="why">stored and shown as sent; no comparison with the previous call.</dd></div>
+</dl>
+{{if .Unpriced}}
+<div class="row mt">{{range .Unpriced}}<span class="chip look mono" title="{{commas .Spans}} model calls">{{.Model}} · {{commas .Spans}}</span>{{end}}</div>
+<p class="cap mt measure">A new <code>model_prices</code> row applies to spans ingested after it; <code>spoor reprice</code> applies it to stored ones.</p>
+{{else}}
+<p class="mt muted">Every model seen has a price.</p>
+{{end}}
+<p class="cap mt measure"><b>Where prices come from.</b> The table is seeded from Langfuse's public price list; a cost the sender reports itself is used as is.</p>
+<p class="cap mt measure"><b>Estimated cache cost.</b> When the table has no cache price for a model, cache read is charged at 0.1× and cache write at 1.25× the input price, and the figure is labelled “estimated”.</p>
+</div>
+</section>
+
+<section class="panel" aria-labelledby="unstored-h">
+<div class="panel-h"><h2 id="unstored-h">Never stored</h2>{{if .HasIngest}}<span class="cap">since this process started</span>{{end}}</div>
+<div class="panel-b">
+{{if .HasIngest}}
+<dl class="spots">
+<div><dt>Spans refused</dt><dd class="n">{{commas .Rejected}}</dd><dd class="why">a trace or span id of the wrong length; reported to the sender in <code>partial_success</code>. Everything else is stored as sent.</dd></div>
+<div><dt>Log and metric requests dropped</dt><dd class="n">{{commas .Discarded}}</dd><dd class="why">answered with success and not stored: spoor keeps traces only. Content an SDK sends as log records is lost.</dd></div>
+</dl>
+{{else}}<p class="muted">This process runs no ingest server.</p>{{end}}
+<p class="measure mt">{{if .RetentionDays}}Traces older than <b>{{.RetentionDays}} days</b>, with all their spans, are permanently deleted by the periodic sweep.{{else}}Traces are <b>kept forever</b>; nothing is deleted.{{end}}</p>
+<p class="cap mt measure">Set <code>SPOOR_RETENTION_DAYS</code> (a whole number of days, 1 or more) and restart to change it; leave it unset to keep everything. It applies to every trace.</p>
+</div>
+</section>
+</div>
+</div>
+{{end}}

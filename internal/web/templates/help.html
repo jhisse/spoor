@@ -1,0 +1,87 @@
+{{define "title"}}spoor — Help{{end}}
+{{define "width"}} narrow{{end}}
+
+{{define "content"}}
+<div class="head"><h1>Help</h1><span class="cap">The addresses below are the ones this page was reached at.</span></div>
+<div class="stack">
+
+<section class="panel" aria-labelledby="send-h">
+<div class="panel-h"><h2 id="send-h">Send traces</h2><span class="cap">OTLP over HTTP, protobuf or JSON, no key</span></div>
+<div class="panel-b measure">
+<p>Point any OpenTelemetry exporter at the ingest address. Traces are grouped by <code>service.name</code>. Only traces are stored: logs and metrics are accepted and dropped, and there is no gRPC receiver.</p>
+<pre class="code cmd">OTEL_EXPORTER_OTLP_ENDPOINT={{.IngestBase}}
+OTEL_EXPORTER_OTLP_PROTOCOL=http/protobuf
+OTEL_SERVICE_NAME=my-app</pre>
+<p class="cap mt">Exporters add <code>/v1/traces</code> to that address themselves. A setting for traces alone, <code>OTEL_EXPORTER_OTLP_TRACES_ENDPOINT</code>, takes the full address: <code>{{.IngestURL}}</code>.</p>
+<p class="cap mt">Claude Code: set <code>CLAUDE_CODE_ENABLE_TELEMETRY=1</code>, <code>CLAUDE_CODE_ENHANCED_TELEMETRY_BETA=1</code>, <code>OTEL_TRACES_EXPORTER=otlp</code>, <code>OTEL_EXPORTER_OTLP_TRACES_PROTOCOL=http/protobuf</code> and <code>OTEL_EXPORTER_OTLP_TRACES_ENDPOINT</code> to the full address. <code>OTEL_LOG_USER_PROMPTS=1</code> adds what you typed to each trace.</p>
+</div></section>
+
+<section class="panel" aria-labelledby="marks-h">
+<div class="panel-h"><h2 id="marks-h">What the marks mean</h2><span class="cap">unknown is shown as unknown, never as zero</span></div>
+<div class="panel-b">
+<dl class="spots">
+<div><dt><b>–</b> no cost</dt><dd class="why">No price row matches the model, so the cost is unknown. The row would have to be in the price table; it is never a neighbour's price.</dd></div>
+<div><dt><b>?</b> tokens</dt><dd class="why">The SDK did not send that count. A span with no token count has no cost either.</dd></div>
+<div><dt><b>~</b> before a cost</dt><dd class="why">The sender reported no cache read or write count, so the whole prompt was priced as fresh input: the real cost may be lower.</dd></div>
+<div><dt>estimated</dt><dd class="why">The table has no cache price for that model: cache read is charged at 0.1× and cache write at 1.25× the input price. The label stays.</dd></div>
+<div><dt><b class="warn-t">C</b> <b class="warn-t">B</b> <b class="warn-t">E</b> on a context bar</dt><dd class="why">The context got smaller (a compaction or a sub-agent's first call); the cache was lost; the cache was lost after five minutes or more without a call. <code>+$ est.</code> is what that cost extra.</dd></div>
+<div><dt>unset</dt><dd class="why">The sender set no status on the span: neither ok nor error.</dd></div>
+</dl>
+<p class="cap mt measure">Everything stored but not readable is counted on <a class="link" href="/blind-spots">Blind spots</a>.</p>
+</div></section>
+
+<section class="panel" aria-labelledby="search-h">
+<div class="panel-h"><h2 id="search-h">Search</h2><span class="cap">every word, inside the spans</span></div>
+<div class="panel-b measure">
+<p>The search box on the trace list finds the traces with one span that holds every word: prompts, outputs, tool arguments and results, errors and names. A word matches from its start (<code>err</code> finds <code>error</code>); <code>"exact phrase"</code> and <code>-excluded</code> work; case and accents are ignored. Each hit shows a snippet, and the trace page then walks the matching spans with <kbd>p</kbd> and <kbd>n</kbd>.</p>
+<p class="cap mt">The other filters describe the same span: <em>tool Bash, failed, holding “permission”</em> is one failed Bash call with that word.</p>
+</div></section>
+
+<section class="panel" aria-labelledby="keys-h">
+<div class="panel-h"><h2 id="keys-h">Keyboard</h2><span class="cap">on a trace page; one key on the trace list</span></div>
+<div class="panel-b">
+<dl class="spots">
+<div><dt><kbd>←</kbd> <kbd>→</kbd></dt><dd class="why">The previous and the next trace.</dd></div>
+<div><dt><kbd>↑</kbd> <kbd>↓</kbd></dt><dd class="why">The previous and the next span of the tree.</dd></div>
+<div><dt><kbd>p</kbd> <kbd>n</kbd></dt><dd class="why">The previous and the next span that matches a search, when you came from one.</dd></div>
+</dl>
+<p class="cap mt measure">A shortcut does nothing with Ctrl, Alt or Cmd held, or while a field, button or disclosure has focus. The charts' bars and cells are links outside the tab order: “As a list” under them has the same links.</p>
+</div></section>
+
+<section class="panel" aria-labelledby="mcp-h">
+<div class="panel-h"><h2 id="mcp-h">Connect an agent</h2><span class="cap">Model Context Protocol, read-only</span></div>
+<div class="panel-b measure">
+<p>This server answers MCP at <code>{{.UIURL}}/mcp</code>. With Claude Code:</p>
+<pre class="code cmd">claude mcp add --transport http spoor {{.UIURL}}/mcp</pre>
+<dl class="spots">
+<div><dt><code>list_traces</code></dt><dd class="why">Traces, newest first, with filters for service, status and age.</dd></div>
+<div><dt><code>get_trace</code></dt><dd class="why">One trace and its spans, with input and output. Long values are cut and the cut is reported.</dd></div>
+<div><dt><code>search_spans</code></dt><dd class="why">Spans whose text holds every word of a query, with a snippet.</dd></div>
+</dl>
+<p class="cap mt">spoor hands over the record and does not summarise it. Ask your agent what you would ask a colleague: which trace cost the most yesterday, which tool failed most, why a prompt got expensive.</p>
+</div></section>
+
+<section class="panel" aria-labelledby="cli-h">
+<div class="panel-h"><h2 id="cli-h">Command line</h2><span class="cap"><code>spoor &lt;command&gt; -h</code> lists the flags</span></div>
+<div class="panel-b">
+<dl class="spots">
+<div><dt><code>spoor serve</code></dt><dd class="why">This server: the UI and the OTLP receiver. No configuration needed.</dd></div>
+<div><dt><code>spoor demo</code></dt><dd class="why">Starts with real sample traces loaded, in a temporary database.</dd></div>
+<div><dt><code>spoor export --trace &lt;id&gt;</code></dt><dd class="why">A trace as JSONL, one span per line. <code>--session &lt;id&gt;</code> exports a session; <code>--html</code> writes one page you can share as a file.</dd></div>
+<div><dt><code>spoor reprice --dry-run</code></dt><dd class="why">Recalculates stored costs from the current price table. Without <code>--dry-run</code> it writes them.</dd></div>
+<div><dt><code>spoor migrate</code></dt><dd class="why">Applies pending schema migrations. <code>serve</code> does it on start.</dd></div>
+</dl>
+</div></section>
+
+<section class="panel" aria-labelledby="about-h">
+<div class="panel-h"><h2 id="about-h">This spoor</h2><span class="cap">version {{.Version}}</span></div>
+<div class="panel-b">
+<dl class="spots">
+<div><dt>Version</dt><dd class="n">{{.Version}}</dd></div>
+<div><dt>Price table</dt><dd class="n">{{.Prices}} models</dd><dd class="why">Ships in the binary, from Langfuse's public price list, and is reloaded at every start. A newer binary brings newer prices; <code>spoor reprice</code> applies them to stored spans.</dd></div>
+<div><dt>Retention</dt><dd class="n">{{if .RetentionDays}}{{.RetentionDays}} days{{else}}forever{{end}}</dd><dd class="why">{{if .RetentionDays}}Traces older than that are deleted by the retention sweep (every <code>SPOOR_SWEEP_INTERVAL</code>, default 1h).{{else}}Nothing is deleted; set <code>SPOOR_RETENTION_DAYS</code> to change that.{{end}}</dd></div>
+</dl>
+</div></section>
+
+</div>
+{{end}}

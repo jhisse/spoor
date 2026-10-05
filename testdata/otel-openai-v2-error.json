@@ -1,0 +1,96 @@
+{
+  "resourceSpans": [
+    {
+      "resource": {
+        "attributes": [
+          {
+            "key": "telemetry.sdk.language",
+            "value": {
+              "stringValue": "python"
+            }
+          },
+          {
+            "key": "telemetry.sdk.name",
+            "value": {
+              "stringValue": "opentelemetry"
+            }
+          },
+          {
+            "key": "telemetry.sdk.version",
+            "value": {
+              "stringValue": "1.45.0"
+            }
+          },
+          {
+            "key": "service.instance.id",
+            "value": {
+              "stringValue": "d48468ce-9b0d-41d2-bd88-b00fd5da8b2b"
+            }
+          },
+          {
+            "key": "service.name",
+            "value": {
+              "stringValue": "capture"
+            }
+          }
+        ]
+      },
+      "scopeSpans": [
+        {
+          "scope": {
+            "name": "opentelemetry.util.genai.handler",
+            "version": "1.1b0"
+          },
+          "spans": [
+            {
+              "traceId": "c46774d013107b3feb9b03f7499100e1",
+              "spanId": "ba3cf0211393bed6",
+              "name": "chat no-such-model",
+              "kind": "SPAN_KIND_CLIENT",
+              "startTimeUnixNano": "1791060031884891000",
+              "endTimeUnixNano": "1791060031896129000",
+              "attributes": [
+                {
+                  "key": "gen_ai.operation.name",
+                  "value": {
+                    "stringValue": "chat"
+                  }
+                },
+                {
+                  "key": "gen_ai.request.model",
+                  "value": {
+                    "stringValue": "no-such-model"
+                  }
+                },
+                {
+                  "key": "gen_ai.provider.name",
+                  "value": {
+                    "stringValue": "openai"
+                  }
+                },
+                {
+                  "key": "gen_ai.input.messages",
+                  "value": {
+                    "stringValue": "[{\"role\":\"system\",\"parts\":[{\"content\":\"Answer in one word.\",\"type\":\"text\"}]},{\"role\":\"user\",\"parts\":[{\"content\":\"Capital of France?\",\"type\":\"text\"}]}]"
+                  }
+                },
+                {
+                  "key": "error.type",
+                  "value": {
+                    "stringValue": "<class 'openai.NotFoundError'>"
+                  }
+                }
+              ],
+              "status": {
+                "message": "Error code: 404 - {'type': 'error', 'error': {'type': 'not_found_error', 'message': 'model: no-such-model'}}",
+                "code": "STATUS_CODE_ERROR"
+              },
+              "flags": 256
+            }
+          ],
+          "schemaUrl": "https://opentelemetry.io/schemas/1.37.0"
+        }
+      ]
+    }
+  ]
+}

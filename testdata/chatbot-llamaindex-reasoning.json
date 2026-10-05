@@ -1,0 +1,467 @@
+{
+  "resourceSpans": [
+    {
+      "resource": {
+        "attributes": [
+          {
+            "key": "telemetry.sdk.language",
+            "value": {
+              "stringValue": "python"
+            }
+          },
+          {
+            "key": "telemetry.sdk.name",
+            "value": {
+              "stringValue": "opentelemetry"
+            }
+          },
+          {
+            "key": "telemetry.sdk.version",
+            "value": {
+              "stringValue": "1.45.0"
+            }
+          },
+          {
+            "key": "service.instance.id",
+            "value": {
+              "stringValue": "4bd7d807-338c-4870-afc7-5a2d2b3579b6"
+            }
+          },
+          {
+            "key": "service.name",
+            "value": {
+              "stringValue": "bot-llamaindex-compatible"
+            }
+          }
+        ]
+      },
+      "scopeSpans": [
+        {
+          "scope": {
+            "name": "opentelemetry.instrumentation.openai.v1",
+            "version": "0.62.4"
+          },
+          "spans": [
+            {
+              "traceId": "de82135137501400a26412b5981f1821",
+              "spanId": "50df1ed22e33ce28",
+              "parentSpanId": "1ac2a249896fb532",
+              "name": "openai.chat",
+              "kind": "SPAN_KIND_CLIENT",
+              "startTimeUnixNano": "1791172947640237000",
+              "endTimeUnixNano": "1791172950667274000",
+              "attributes": [
+                {
+                  "key": "gen_ai.operation.name",
+                  "value": {
+                    "stringValue": "chat"
+                  }
+                },
+                {
+                  "key": "traceloop.workflow.name",
+                  "value": {
+                    "stringValue": "chat_turn"
+                  }
+                },
+                {
+                  "key": "traceloop.association.properties.session_id",
+                  "value": {
+                    "stringValue": "10e62961-828a-410c-88ab-cba10eeef739"
+                  }
+                },
+                {
+                  "key": "gen_ai.provider.name",
+                  "value": {
+                    "stringValue": "openrouter"
+                  }
+                },
+                {
+                  "key": "gen_ai.request.model",
+                  "value": {
+                    "stringValue": "gpt-5-mini"
+                  }
+                },
+                {
+                  "key": "gen_ai.request.temperature",
+                  "value": {
+                    "doubleValue": 0.1
+                  }
+                },
+                {
+                  "key": "gen_ai.is_streaming",
+                  "value": {
+                    "boolValue": false
+                  }
+                },
+                {
+                  "key": "gen_ai.openai.api_base",
+                  "value": {
+                    "stringValue": "https://openrouter.ai/api/v1/"
+                  }
+                },
+                {
+                  "key": "gen_ai.input.messages",
+                  "value": {
+                    "stringValue": "[{\"role\": \"system\", \"parts\": [{\"content\": \"You are a concise assistant. Use a tool when it helps, then answer in one or two sentences. Skills you can load: unit-converter.\", \"type\": \"text\"}]}, {\"role\": \"user\", \"parts\": [{\"content\": \"What is 17 * 23, and what time is it in Tokyo?\", \"type\": \"text\"}]}]"
+                  }
+                },
+                {
+                  "key": "gen_ai.tool.definitions",
+                  "value": {
+                    "stringValue": "[{\"type\": \"function\", \"name\": \"city_info\", \"description\": \"city_info(city: str) -> str\\nA short fact sheet about a city.\", \"parameters\": {\"properties\": {\"city\": {\"title\": \"City\", \"type\": \"string\"}}, \"required\": [\"city\"], \"type\": \"object\", \"additionalProperties\": false}}, {\"type\": \"function\", \"name\": \"get_time\", \"description\": \"get_time(timezone: str = 'UTC') -> str\\nCurrent date and time in an IANA timezone, such as Asia/Tokyo.\", \"parameters\": {\"properties\": {\"timezone\": {\"default\": \"UTC\", \"title\": \"Timezone\", \"type\": \"string\"}}, \"type\": \"object\", \"additionalProperties\": false}}, {\"type\": \"function\", \"name\": \"load_skill\", \"description\": \"load_skill(name: str) -> str\", \"parameters\": {\"properties\": {\"name\": {\"title\": \"Name\", \"type\": \"string\"}}, \"required\": [\"name\"], \"type\": \"object\", \"additionalProperties\": false}}, {\"type\": \"function\", \"name\": \"travel_notes\", \"description\": \"Search short travel notes about cities.\", \"parameters\": {\"properties\": {\"input\": {\"title\": \"Input\", \"type\": \"string\"}}, \"required\": [\"input\"], \"type\": \"object\", \"additionalProperties\": false}}, {\"type\": \"function\", \"name\": \"handoff\", \"description\": \"Useful for handing off to another agent.\\nIf you are currently not equipped to handle the user's request, or another agent is better suited to handle the request, please hand off to the appropriate agent.\\n\\nCurrently available agents:\\n{'calculator': 'Does arithmetic.'}\\n\", \"parameters\": {\"properties\": {\"to_agent\": {\"title\": \"To Agent\", \"type\": \"string\"}, \"reason\": {\"title\": \"Reason\", \"type\": \"string\"}}, \"required\": [\"to_agent\", \"reason\"], \"type\": \"object\", \"additionalProperties\": false}}]"
+                  }
+                },
+                {
+                  "key": "gen_ai.response.model",
+                  "value": {
+                    "stringValue": "gpt-5-mini"
+                  }
+                },
+                {
+                  "key": "gen_ai.response.id",
+                  "value": {
+                    "stringValue": "gen-1791172947-yyM5rlUhvFI9yJelL2og"
+                  }
+                },
+                {
+                  "key": "gen_ai.response.finish_reasons",
+                  "value": {
+                    "arrayValue": {
+                      "values": [
+                        {
+                          "stringValue": "tool_call"
+                        }
+                      ]
+                    }
+                  }
+                },
+                {
+                  "key": "openai.response.service_tier",
+                  "value": {
+                    "stringValue": "default"
+                  }
+                },
+                {
+                  "key": "gen_ai.usage.total_tokens",
+                  "value": {
+                    "intValue": "392"
+                  }
+                },
+                {
+                  "key": "gen_ai.usage.output_tokens",
+                  "value": {
+                    "intValue": "104"
+                  }
+                },
+                {
+                  "key": "gen_ai.usage.input_tokens",
+                  "value": {
+                    "intValue": "288"
+                  }
+                },
+                {
+                  "key": "gen_ai.usage.cache_read.input_tokens",
+                  "value": {
+                    "intValue": "0"
+                  }
+                },
+                {
+                  "key": "gen_ai.usage.reasoning_tokens",
+                  "value": {
+                    "intValue": "64"
+                  }
+                },
+                {
+                  "key": "gen_ai.output.messages",
+                  "value": {
+                    "stringValue": "[{\"role\": \"assistant\", \"parts\": [{\"type\": \"tool_call\", \"name\": \"get_time\", \"id\": \"call_XSVhprSPyQEdlPEzDNsPM1bz\", \"arguments\": {\"timezone\": \"Asia/Tokyo\"}}], \"finish_reason\": \"tool_call\"}]"
+                  }
+                }
+              ],
+              "status": {},
+              "flags": 256
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "resource": {
+        "attributes": [
+          {
+            "key": "telemetry.sdk.language",
+            "value": {
+              "stringValue": "python"
+            }
+          },
+          {
+            "key": "telemetry.sdk.name",
+            "value": {
+              "stringValue": "opentelemetry"
+            }
+          },
+          {
+            "key": "telemetry.sdk.version",
+            "value": {
+              "stringValue": "1.45.0"
+            }
+          },
+          {
+            "key": "service.instance.id",
+            "value": {
+              "stringValue": "4bd7d807-338c-4870-afc7-5a2d2b3579b6"
+            }
+          },
+          {
+            "key": "service.name",
+            "value": {
+              "stringValue": "bot-llamaindex-compatible"
+            }
+          }
+        ]
+      },
+      "scopeSpans": [
+        {
+          "scope": {
+            "name": "opentelemetry.instrumentation.openai.v1",
+            "version": "0.62.4"
+          },
+          "spans": [
+            {
+              "traceId": "de82135137501400a26412b5981f1821",
+              "spanId": "aa1033273c0cd81c",
+              "parentSpanId": "1ac2a249896fb532",
+              "name": "openai.chat",
+              "kind": "SPAN_KIND_CLIENT",
+              "startTimeUnixNano": "1791172950680787000",
+              "endTimeUnixNano": "1791172954366189000",
+              "attributes": [
+                {
+                  "key": "gen_ai.operation.name",
+                  "value": {
+                    "stringValue": "chat"
+                  }
+                },
+                {
+                  "key": "traceloop.workflow.name",
+                  "value": {
+                    "stringValue": "chat_turn"
+                  }
+                },
+                {
+                  "key": "traceloop.association.properties.session_id",
+                  "value": {
+                    "stringValue": "10e62961-828a-410c-88ab-cba10eeef739"
+                  }
+                },
+                {
+                  "key": "gen_ai.provider.name",
+                  "value": {
+                    "stringValue": "openrouter"
+                  }
+                },
+                {
+                  "key": "gen_ai.request.model",
+                  "value": {
+                    "stringValue": "gpt-5-mini"
+                  }
+                },
+                {
+                  "key": "gen_ai.request.temperature",
+                  "value": {
+                    "doubleValue": 0.1
+                  }
+                },
+                {
+                  "key": "gen_ai.is_streaming",
+                  "value": {
+                    "boolValue": false
+                  }
+                },
+                {
+                  "key": "gen_ai.openai.api_base",
+                  "value": {
+                    "stringValue": "https://openrouter.ai/api/v1/"
+                  }
+                },
+                {
+                  "key": "gen_ai.input.messages",
+                  "value": {
+                    "stringValue": "[{\"role\": \"system\", \"parts\": [{\"content\": \"You are a concise assistant. Use a tool when it helps, then answer in one or two sentences. Skills you can load: unit-converter.\", \"type\": \"text\"}]}, {\"role\": \"user\", \"parts\": [{\"content\": \"What is 17 * 23, and what time is it in Tokyo?\", \"type\": \"text\"}]}, {\"role\": \"assistant\", \"parts\": [{\"type\": \"tool_call\", \"name\": \"get_time\", \"id\": \"call_XSVhprSPyQEdlPEzDNsPM1bz\", \"arguments\": {\"timezone\": \"Asia/Tokyo\"}}]}, {\"role\": \"tool\", \"parts\": [{\"type\": \"tool_call_response\", \"id\": \"call_XSVhprSPyQEdlPEzDNsPM1bz\", \"response\": \"2026-10-05T13:02:30+09:00\"}]}]"
+                  }
+                },
+                {
+                  "key": "gen_ai.tool.definitions",
+                  "value": {
+                    "stringValue": "[{\"type\": \"function\", \"name\": \"city_info\", \"description\": \"city_info(city: str) -> str\\nA short fact sheet about a city.\", \"parameters\": {\"properties\": {\"city\": {\"title\": \"City\", \"type\": \"string\"}}, \"required\": [\"city\"], \"type\": \"object\", \"additionalProperties\": false}}, {\"type\": \"function\", \"name\": \"get_time\", \"description\": \"get_time(timezone: str = 'UTC') -> str\\nCurrent date and time in an IANA timezone, such as Asia/Tokyo.\", \"parameters\": {\"properties\": {\"timezone\": {\"default\": \"UTC\", \"title\": \"Timezone\", \"type\": \"string\"}}, \"type\": \"object\", \"additionalProperties\": false}}, {\"type\": \"function\", \"name\": \"load_skill\", \"description\": \"load_skill(name: str) -> str\", \"parameters\": {\"properties\": {\"name\": {\"title\": \"Name\", \"type\": \"string\"}}, \"required\": [\"name\"], \"type\": \"object\", \"additionalProperties\": false}}, {\"type\": \"function\", \"name\": \"travel_notes\", \"description\": \"Search short travel notes about cities.\", \"parameters\": {\"properties\": {\"input\": {\"title\": \"Input\", \"type\": \"string\"}}, \"required\": [\"input\"], \"type\": \"object\", \"additionalProperties\": false}}, {\"type\": \"function\", \"name\": \"handoff\", \"description\": \"Useful for handing off to another agent.\\nIf you are currently not equipped to handle the user's request, or another agent is better suited to handle the request, please hand off to the appropriate agent.\\n\\nCurrently available agents:\\n{'calculator': 'Does arithmetic.'}\\n\", \"parameters\": {\"properties\": {\"to_agent\": {\"title\": \"To Agent\", \"type\": \"string\"}, \"reason\": {\"title\": \"Reason\", \"type\": \"string\"}}, \"required\": [\"to_agent\", \"reason\"], \"type\": \"object\", \"additionalProperties\": false}}]"
+                  }
+                },
+                {
+                  "key": "gen_ai.response.model",
+                  "value": {
+                    "stringValue": "gpt-5-mini"
+                  }
+                },
+                {
+                  "key": "gen_ai.response.id",
+                  "value": {
+                    "stringValue": "gen-1791172950-pehyk4t9LWMC0GuODdZz"
+                  }
+                },
+                {
+                  "key": "gen_ai.response.finish_reasons",
+                  "value": {
+                    "arrayValue": {
+                      "values": [
+                        {
+                          "stringValue": "stop"
+                        }
+                      ]
+                    }
+                  }
+                },
+                {
+                  "key": "openai.response.service_tier",
+                  "value": {
+                    "stringValue": "default"
+                  }
+                },
+                {
+                  "key": "gen_ai.usage.total_tokens",
+                  "value": {
+                    "intValue": "564"
+                  }
+                },
+                {
+                  "key": "gen_ai.usage.output_tokens",
+                  "value": {
+                    "intValue": "231"
+                  }
+                },
+                {
+                  "key": "gen_ai.usage.input_tokens",
+                  "value": {
+                    "intValue": "333"
+                  }
+                },
+                {
+                  "key": "gen_ai.usage.cache_read.input_tokens",
+                  "value": {
+                    "intValue": "0"
+                  }
+                },
+                {
+                  "key": "gen_ai.usage.reasoning_tokens",
+                  "value": {
+                    "intValue": "192"
+                  }
+                },
+                {
+                  "key": "gen_ai.output.messages",
+                  "value": {
+                    "stringValue": "[{\"role\": \"assistant\", \"parts\": [{\"content\": \"17 \\u00d7 23 = 391. Current time in Tokyo is 2026-10-05 13:02:30 (JST).\", \"type\": \"text\"}], \"finish_reason\": \"stop\"}]"
+                  }
+                }
+              ],
+              "status": {},
+              "flags": 256
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "resource": {
+        "attributes": [
+          {
+            "key": "telemetry.sdk.language",
+            "value": {
+              "stringValue": "python"
+            }
+          },
+          {
+            "key": "telemetry.sdk.name",
+            "value": {
+              "stringValue": "opentelemetry"
+            }
+          },
+          {
+            "key": "telemetry.sdk.version",
+            "value": {
+              "stringValue": "1.45.0"
+            }
+          },
+          {
+            "key": "service.instance.id",
+            "value": {
+              "stringValue": "4bd7d807-338c-4870-afc7-5a2d2b3579b6"
+            }
+          },
+          {
+            "key": "service.name",
+            "value": {
+              "stringValue": "bot-llamaindex-compatible"
+            }
+          }
+        ]
+      },
+      "scopeSpans": [
+        {
+          "scope": {
+            "name": "traceloop.tracer"
+          },
+          "spans": [
+            {
+              "traceId": "de82135137501400a26412b5981f1821",
+              "spanId": "1ac2a249896fb532",
+              "name": "chat_turn.workflow",
+              "kind": "SPAN_KIND_INTERNAL",
+              "startTimeUnixNano": "1791172947592593000",
+              "endTimeUnixNano": "1791172954375979000",
+              "attributes": [
+                {
+                  "key": "traceloop.workflow.name",
+                  "value": {
+                    "stringValue": "chat_turn"
+                  }
+                },
+                {
+                  "key": "traceloop.span.kind",
+                  "value": {
+                    "stringValue": "workflow"
+                  }
+                },
+                {
+                  "key": "traceloop.entity.name",
+                  "value": {
+                    "stringValue": "chat_turn"
+                  }
+                },
+                {
+                  "key": "traceloop.entity.input",
+                  "value": {
+                    "stringValue": "{\"args\": [\"What is 17 * 23, and what time is it in Tokyo?\"], \"kwargs\": {}}"
+                  }
+                },
+                {
+                  "key": "traceloop.association.properties.session_id",
+                  "value": {
+                    "stringValue": "10e62961-828a-410c-88ab-cba10eeef739"
+                  }
+                },
+                {
+                  "key": "traceloop.entity.output",
+                  "value": {
+                    "stringValue": "\"17 \\u00d7 23 = 391. Current time in Tokyo is 2026-10-05 13:02:30 (JST).\""
+                  }
+                }
+              ],
+              "status": {},
+              "flags": 256
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

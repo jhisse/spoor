@@ -1,0 +1,103 @@
+{{/* pick: the attributes of a link that selects a span. It swaps the span pane and, out of
+     band, the tree pane's content (so the pane keeps its scroll position), the step strip and
+     the chart's drawing; the context disclosure itself is never swapped, so it stays open or
+     closed as the reader left it. The chart's bars get the same attributes from #ctx-body. Given the URL; the caller adds hx-swap. */}}
+{{define "pick"}}href="{{.}}" hx-get="{{.}}" hx-target="#span-detail" hx-select="#span-detail" hx-select-oob="#span-tree:innerHTML,#ctx-body,#find" hx-push-url="true"{{end}}
+
+{{/* look_chips: the "worth a look" pointers, on the line of the view switch. */}}
+{{define "look_chips"}}{{if .Look}}
+<div class="row grow"><span class="cap">Worth a look</span>
+{{range .Look}}{{$first := eq .Label "first failure"}}<a class="chip{{if $first}} look{{end}}" {{if $.Read}}href="{{spanHref $.Trace.ID .SpanID $.Keep}}"{{else}}{{template "pick" (spanHref $.Trace.ID .SpanID $.Keep)}} hx-swap="outerHTML show:#span-top:top"{{end}} title="{{.Name}}{{if $first}}{{with .Value}}: {{.}}{{end}}{{end}}">{{if $first}}<svg class="st look" aria-hidden="true"><use href="#i-look"/></svg>{{end}}{{.Label}} <b class="ellip">{{.Name}}</b>{{if not $first}} {{.Value}}{{end}}</a>{{end}}
+<span class="cap end">pointers, not verdicts</span></div>
+{{end}}{{end}}
+
+{{/* context_band: the context per model call, open: it is what spoor shows that a bill cannot. It sits
+     above the selected span (or above the transcript), outside the swapped panes, so it stays as the
+     reader left it while its bars and selection follow the selected span. */}}
+{{define "context_band"}}{{with .Chart}}
+<details class="disc ctxband panel" open>
+<summary><h3>Context per step</h3><span class="cap">{{.Spark.Summary}}</span></summary>
+<div id="ctx-body"{{if not $.Read}} hx-target="#span-detail" hx-select="#span-detail" hx-select-oob="#span-tree:innerHTML,#ctx-body,#find" hx-push-url="true" hx-swap="outerHTML show:#span-top:top"{{end}}>
+<div class="chart mt">{{.Tokens}}</div>
+<div class="legend mt">{{.Legend}}</div>
+{{range .Breaks}}<p class="cap warn-t mt">{{.}}</p>{{end}}
+{{range .Notes}}<p class="cap">{{.}}</p>{{end}}
+{{if .Dollars}}<details class="disc mt"><summary class="cap">The same steps in dollars</summary><p class="cap mt">{{.DollarsNote}}</p><div class="chart">{{.Dollars}}</div></details>{{end}}
+</div>
+</details>
+{{end}}{{end}}
+
+{{/* view_switch: Tree | Read, under the header; the address carries the rest of the state. */}}
+{{define "view_switch"}}{{if .ReadURL}}<div class="seg" role="group" aria-label="View"><a href="{{.TreeURL}}"{{if not .Read}} aria-current="true"{{end}}>Tree</a><a href="{{.ReadURL}}"{{if .Read}} aria-current="true"{{end}} title="The model calls as a transcript: what each added to its context, its answer, the tools that ran next">Read</a></div>{{end}}{{end}}
+
+{{/* tree_tools: what folding hides, or what the Read view shows. */}}
+{{define "tree_tools"}}
+<span class="cap grow">{{if .Read}}{{len .Read}} model calls in start order: what each added to its context, its answer, and the tool spans started before the next. A call opens in the tree.
+{{- else if .Unfolded}}All {{.Fold.Total}} spans shown. <a class="link" href="{{.FoldURL}}">Fold again</a>
+{{- else if lt .Fold.Shown .Fold.Total}}<span title="Collapsed rows have no error below them and are not on the way to the selected span. A ×n row stands for consecutive siblings of the same kind and name.">Showing {{.Fold.Shown}} of {{.Fold.Total}} spans.{{if .Fold.Collapsed}} {{.Fold.Collapsed}} are below collapsed rows{{if .Fold.Folded}},{{else}}.{{end}}{{end}}{{if .Fold.Folded}} {{.Fold.Folded}} are in {{.Fold.Runs}} ×n rows.{{end}}</span> <a class="link" href="{{.FoldURL}}">Show everything</a>{{end}}</span>
+{{end}}
+
+{{/* tree_pane: what the tree pane holds. Selecting a span replaces it as a whole. */}}
+{{define "tree_pane"}}
+{{if .PrevSpanID}}<a hidden {{template "pick" (spanHref .Trace.ID .PrevSpanID .Keep)}} hx-swap="outerHTML show:#sel:bottom" hx-trigger="keyup[key=='ArrowUp' && {{template "kbd_ok"}}] from:body"></a>{{end}}
+{{if .NextSpanID}}<a hidden {{template "pick" (spanHref .Trace.ID .NextSpanID .Keep)}} hx-swap="outerHTML show:#sel:bottom" hx-trigger="keyup[key=='ArrowDown' && {{template "kbd_ok"}}] from:body"></a>{{end}}
+<div class="pane-h">
+<div class="pane-tools">{{template "tree_tools" .}}<span class="cap only-wide"><kbd>↑</kbd> <kbd>↓</kbd> move</span></div>
+<div class="tcols"><span>Span</span><span>Time</span><span class="t-pos" title="where the span sits in the trace's duration">Position</span><span class="t-tok" title="bar: 0 to {{fmtCount .TokenScale}} tokens">Tokens</span><span>Cost</span></div>
+</div>
+<ul class="tree">{{template "span_items" .Tree}}{{if not .Tree}}<li class="cap">No spans.</li>{{end}}</ul>
+{{end}}
+
+{{/* span_items renders one sibling list: spans, and ×n rows that open into their members. */}}
+{{define "span_items"}}{{range .}}{{if .Run}}
+<li><details><summary class="trow" title="{{len .Run}} consecutive spans of the same kind and name, folded: open to see each">
+<span class="t-name"><i class="tw"></i>{{template "kind_tag" .Node.Span.Kind}}<span class="nm">{{.Node.Span.Name}}</span><b>×{{len .Run}}</b></span>
+{{template "row_cols" .}}
+</summary><ul>{{template "span_items" .Run}}</ul></details></li>
+{{else}}{{template "span_row" .}}{{end}}{{end}}{{end}}
+
+{{define "kind_tag"}}<span class="kind {{kindClass .}}" title="{{.}}">{{kindLetter .}}</span>{{end}}
+
+{{/* span_row: one line. Only an error is marked: a cross on the span that failed, with its
+     reason on the line below, and "!" on the way down to it. */}}
+{{define "span_row"}}{{$sp := .Node.Span}}
+<li><a class="trow{{if index .Hits $sp.ID}} match{{end}}"{{if eq $sp.ID .SelectedID}} id="sel" aria-current="true"{{end}} {{template "pick" (spanHref .TraceID $sp.ID .Keep)}} hx-swap="outerHTML show:#span-top:top">
+<span class="t-name">{{if eq $sp.Status "error"}}<svg class="st err" role="img" aria-label="error"><use href="#i-err"/></svg>{{else if .Node.HasError}}<b class="err-t" title="error in a descendant">!<span class="sr"> error below</span></b>{{end}}{{template "kind_tag" $sp.Kind}}<span class="nm" title="{{$sp.Name}}">{{$sp.Name}}</span>{{if index .Hits $sp.ID}}<span class="sr"> matches the search</span>{{end}}
+{{- if eq $sp.Kind "generation"}}{{with purpose $sp}}<span class="t-note" title="what the sender says this model call was for">{{.}}</span>{{end}}{{end}}
+{{- if .Node.Wait}}<span class="t-note" title="of this call's time, spent waiting for permission to run (a person, or an automatic check); the phase spans are below this row">waited {{fmtDuration .Node.Wait}}</span>{{end}}
+{{- if .Node.Denied}}<span class="chip look" title="permission to run was refused, so the tool did not run; the sender does not mark this as an error">not allowed</span>{{end}}
+{{- with healthGlyph $sp}}<span class="chip look" title="worth a look, not a verdict"><svg class="st look" aria-hidden="true"><use href="#i-look"/></svg>{{.}}</span>{{end}}
+{{- if and .Node.Orphan (not .Rootless)}}<span class="chip look" title="parent span {{strVal $sp.ParentSpanID}} never arrived; shown as a root">no parent</span>{{end}}</span>
+{{template "row_cols" .}}
+{{with errorReason $sp}}<span class="t-why" title="{{.}}">{{.}}</span>{{end}}
+</a>{{template "span_children" .}}</li>
+{{end}}
+
+{{/* row_cols: the fixed columns that line up at every depth — duration, position in
+     time, token bar, cost. A parent whose descendants carry usage shows their Σ, dimmed. */}}
+{{define "row_cols"}}
+<span class="t-num">{{rowDuration (.Node.Span.EndedAt.Sub .Node.Span.StartedAt)}}</span>
+{{timeBar .Node}}
+<span class="t-tok{{if .Node.TokensSum}} t-sum{{end}}"{{if .Node.TokensSum}} title="Σ of descendants: {{.Node.Tokens.Total}} tokens"{{end}}>{{tokenBar .Node.Tokens .Scale 56 6}}</span>
+<span class="t-num{{if .Node.CostSum}} t-sum{{end}}"{{if .Node.Cost}} title="{{if .Node.CostSum}}Σ of descendants: {{end}}{{costVal .Node.Cost}}"{{end}}>{{if .Node.Cost}}{{if .Node.CostSum}}Σ {{end}}{{rowCost .Node.Cost}}{{end}}</span>
+{{end}}
+
+{{define "span_children"}}{{if .Items}}{{if .Open}}<ul>{{template "span_items" .Items}}</ul>
+{{else}}<details class="t-below"><summary><i class="tw"></i>{{.Below}} spans below, collapsed</summary><ul>{{template "span_items" .Items}}</ul></details>
+{{end}}{{end}}{{end}}
+
+{{/* read_view: the model calls as a transcript, in start order. Each call is what it added
+     to its context (the shared prefix collapsed), its answer, and the tool spans started
+     before the next call; its numbers sit in the heading's margin. */}}
+{{define "read_view"}}
+<div class="panel mt">
+<div class="pane-tools">{{template "tree_tools" .}}</div>
+{{range .Read}}
+<div class="sec"><div class="chart-h"><h3><span class="turn-n">{{.N}}</span> <a class="link" href="{{.URL}}">{{.Span.Name}}</a>{{if .Span.Model}} <span class="chip mono" title="model">{{strVal .Span.Model}}</span>{{end}}{{with purpose .Span}} <span class="chip" title="what the sender says this model call was for">{{.}}</span>{{end}}{{if eq .Span.Status "error"}} <span class="badge err"><svg class="st err" aria-hidden="true"><use href="#i-err"/></svg> error</span>{{end}}{{if .Mark}} <b class="warn-t" title="{{if .Break}}{{.Break}}{{else}}C: a smaller context than the previous call of this model{{end}}">{{.Mark}}</b>{{end}}</h3>
+<span class="cap">+{{fmtDuration (.Span.StartedAt.Sub $.Trace.StartedAt)}} · {{fmtDuration .Duration}} · {{tokenPair (int64Val .Span.InputTokens) .Span.OutputTokens}} · {{if .Span.CacheUnknown}}{{template "cache_unknown" 1}}{{end}}{{costVal .Span.CostUSD}}</span></div></div>
+{{template "context_delta" .}}
+{{if or .OutputMessages .OutputRaw}}<div class="sec"><h3>Output</h3>{{range .OutputMessages}}{{template "chat_message" .}}{{end}}{{template "gen_raw" .OutputRaw}}</div>{{else}}<div class="sec"><p class="cap">This call recorded no output.</p></div>{{end}}
+{{if .Tools}}<div class="sec"><div class="row"><span class="cap">then</span>{{range .Tools}}<a class="chip{{if eq .Status "error"}} look{{end}}" href="{{spanHref $.Trace.ID .ID $.Keep}}" title="{{.Name}}: a tool span started before the next model call; opens in the tree">{{if eq .Status "error"}}<svg class="st err" aria-hidden="true"><use href="#i-err"/></svg> {{end}}<span class="kind k-tool">T</span> {{.Name}} · {{fmtDuration (.EndedAt.Sub .StartedAt)}}</a>{{end}}</div></div>{{end}}
+{{end}}
+</div>
+{{end}}

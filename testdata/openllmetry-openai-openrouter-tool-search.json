@@ -1,0 +1,170 @@
+{
+  "resourceSpans": [
+    {
+      "resource": {
+        "attributes": [
+          {
+            "key": "service.name",
+            "value": {
+              "stringValue": "spoor-testdata-capture"
+            }
+          }
+        ]
+      },
+      "scopeSpans": [
+        {
+          "scope": {
+            "name": "opentelemetry.instrumentation.openai.v1",
+            "version": "0.36.1"
+          },
+          "spans": [
+            {
+              "traceId": "8f3c74005dd86ec8ecbb2f56e6f20732",
+              "spanId": "d7da910289d581c3",
+              "name": "openai.chat",
+              "kind": "SPAN_KIND_CLIENT",
+              "startTimeUnixNano": "1786391167747019000",
+              "endTimeUnixNano": "1786391168784852000",
+              "attributes": [
+                {
+                  "key": "llm.request.type",
+                  "value": {
+                    "stringValue": "chat"
+                  }
+                },
+                {
+                  "key": "gen_ai.system",
+                  "value": {
+                    "stringValue": "OpenAI"
+                  }
+                },
+                {
+                  "key": "gen_ai.request.model",
+                  "value": {
+                    "stringValue": "openai/gpt-4o-mini"
+                  }
+                },
+                {
+                  "key": "gen_ai.request.max_tokens",
+                  "value": {
+                    "intValue": "200"
+                  }
+                },
+                {
+                  "key": "llm.headers",
+                  "value": {
+                    "stringValue": "None"
+                  }
+                },
+                {
+                  "key": "llm.is_streaming",
+                  "value": {
+                    "boolValue": false
+                  }
+                },
+                {
+                  "key": "gen_ai.openai.api_base",
+                  "value": {
+                    "stringValue": "https://openrouter.ai/api/v1/"
+                  }
+                },
+                {
+                  "key": "gen_ai.prompt.0.role",
+                  "value": {
+                    "stringValue": "user"
+                  }
+                },
+                {
+                  "key": "gen_ai.prompt.0.content",
+                  "value": {
+                    "stringValue": "Search the web for the latest Go release version."
+                  }
+                },
+                {
+                  "key": "llm.request.functions.0.name",
+                  "value": {
+                    "stringValue": "search_web"
+                  }
+                },
+                {
+                  "key": "llm.request.functions.0.description",
+                  "value": {
+                    "stringValue": "Search the web for a query and return top results."
+                  }
+                },
+                {
+                  "key": "llm.request.functions.0.parameters",
+                  "value": {
+                    "stringValue": "{\"type\": \"object\", \"properties\": {\"query\": {\"type\": \"string\"}}, \"required\": [\"query\"]}"
+                  }
+                },
+                {
+                  "key": "gen_ai.response.model",
+                  "value": {
+                    "stringValue": "openai/gpt-4o-mini"
+                  }
+                },
+                {
+                  "key": "gen_ai.openai.system_fingerprint",
+                  "value": {
+                    "stringValue": "fp_c73dd82b09"
+                  }
+                },
+                {
+                  "key": "llm.usage.total_tokens",
+                  "value": {
+                    "intValue": "77"
+                  }
+                },
+                {
+                  "key": "gen_ai.usage.completion_tokens",
+                  "value": {
+                    "intValue": "19"
+                  }
+                },
+                {
+                  "key": "gen_ai.usage.prompt_tokens",
+                  "value": {
+                    "intValue": "58"
+                  }
+                },
+                {
+                  "key": "gen_ai.completion.0.finish_reason",
+                  "value": {
+                    "stringValue": "tool_calls"
+                  }
+                },
+                {
+                  "key": "gen_ai.completion.0.role",
+                  "value": {
+                    "stringValue": "assistant"
+                  }
+                },
+                {
+                  "key": "gen_ai.completion.0.tool_calls.0.id",
+                  "value": {
+                    "stringValue": "call_HAhaFTxaz802kqu4tAYDgVdg"
+                  }
+                },
+                {
+                  "key": "gen_ai.completion.0.tool_calls.0.name",
+                  "value": {
+                    "stringValue": "search_web"
+                  }
+                },
+                {
+                  "key": "gen_ai.completion.0.tool_calls.0.arguments",
+                  "value": {
+                    "stringValue": "{\"query\":\"latest Go programming language release version\"}"
+                  }
+                }
+              ],
+              "status": {},
+              "flags": 256
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

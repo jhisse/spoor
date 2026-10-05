@@ -1,0 +1,636 @@
+{
+  "resourceSpans": [
+    {
+      "resource": {
+        "attributes": [
+          {
+            "key": "telemetry.sdk.language",
+            "value": {
+              "stringValue": "python"
+            }
+          },
+          {
+            "key": "telemetry.sdk.name",
+            "value": {
+              "stringValue": "opentelemetry"
+            }
+          },
+          {
+            "key": "telemetry.sdk.version",
+            "value": {
+              "stringValue": "1.45.0"
+            }
+          },
+          {
+            "key": "service.instance.id",
+            "value": {
+              "stringValue": "52a5ea62-0e15-4eb3-ab42-6ab9a1078388"
+            }
+          },
+          {
+            "key": "service.name",
+            "value": {
+              "stringValue": "bot-pydanticai-gemini"
+            }
+          }
+        ]
+      },
+      "scopeSpans": [
+        {
+          "scope": {
+            "name": "pydantic-ai",
+            "version": "2.54.0"
+          },
+          "spans": [
+            {
+              "traceId": "1f2c62d3b4b63097a73f4116bc5d4bc9",
+              "spanId": "fc7fbffa77eda04e",
+              "parentSpanId": "88857e388d777440",
+              "name": "chat openai/gpt-4o-mini",
+              "kind": "SPAN_KIND_CLIENT",
+              "startTimeUnixNano": "1791172956614728000",
+              "endTimeUnixNano": "1791172958046992000",
+              "attributes": [
+                {
+                  "key": "gen_ai.provider.name",
+                  "value": {
+                    "stringValue": "openai"
+                  }
+                },
+                {
+                  "key": "gen_ai.system",
+                  "value": {
+                    "stringValue": "openai"
+                  }
+                },
+                {
+                  "key": "server.address",
+                  "value": {
+                    "stringValue": "openrouter.ai"
+                  }
+                },
+                {
+                  "key": "gen_ai.request.model",
+                  "value": {
+                    "stringValue": "openai/gpt-4o-mini"
+                  }
+                },
+                {
+                  "key": "model_request_parameters",
+                  "value": {
+                    "stringValue": "{\"function_tools\":[{\"name\":\"city_info\",\"parameters_json_schema\":{\"additionalProperties\":false,\"properties\":{\"city\":{\"type\":\"string\"}},\"required\":[\"city\"],\"type\":\"object\"},\"description\":\"A short fact sheet about a city.\",\"outer_typed_dict_key\":null,\"strict\":true,\"sequential\":false,\"kind\":\"function\",\"metadata\":null,\"timeout\":null,\"defer_loading\":false,\"unless_native\":null,\"with_native\":null,\"tool_kind\":null,\"return_schema\":null,\"include_return_schema\":null,\"toolset_id\":null,\"capability_id\":null},{\"name\":\"get_time\",\"parameters_json_schema\":{\"additionalProperties\":false,\"properties\":{\"timezone\":{\"default\":\"UTC\",\"type\":\"string\"}},\"type\":\"object\"},\"description\":\"Current date and time in an IANA timezone, such as Asia/Tokyo.\",\"outer_typed_dict_key\":null,\"strict\":false,\"sequential\":false,\"kind\":\"function\",\"metadata\":null,\"timeout\":null,\"defer_loading\":false,\"unless_native\":null,\"with_native\":null,\"tool_kind\":null,\"return_schema\":null,\"include_return_schema\":null,\"toolset_id\":null,\"capability_id\":null},{\"name\":\"calculate\",\"parameters_json_schema\":{\"additionalProperties\":false,\"properties\":{\"expression\":{\"type\":\"string\"}},\"required\":[\"expression\"],\"type\":\"object\"},\"description\":\"Evaluate an arithmetic expression such as (3 + 4) * 2.\",\"outer_typed_dict_key\":null,\"strict\":true,\"sequential\":false,\"kind\":\"function\",\"metadata\":null,\"timeout\":null,\"defer_loading\":false,\"unless_native\":null,\"with_native\":null,\"tool_kind\":null,\"return_schema\":null,\"include_return_schema\":null,\"toolset_id\":null,\"capability_id\":null},{\"name\":\"load_skill\",\"parameters_json_schema\":{\"additionalProperties\":false,\"properties\":{\"name\":{\"type\":\"string\"}},\"required\":[\"name\"],\"type\":\"object\"},\"description\":\"Load the instructions of a skill by name. Skills: unit-converter.\",\"outer_typed_dict_key\":null,\"strict\":true,\"sequential\":false,\"kind\":\"function\",\"metadata\":null,\"timeout\":null,\"defer_loading\":false,\"unless_native\":null,\"with_native\":null,\"tool_kind\":null,\"return_schema\":null,\"include_return_schema\":null,\"toolset_id\":null,\"capability_id\":null}],\"native_tools\":[],\"tool_visibility\":{\"city_info\":\"visible\",\"get_time\":\"visible\",\"calculate\":\"visible\",\"load_skill\":\"visible\"},\"revealed_tool_names\":[],\"deferred_capability_ids\":[],\"output_mode\":\"text\",\"output_object\":null,\"output_tools\":[],\"prompted_output_template\":null,\"allow_text_output\":true,\"allow_image_output\":false,\"instruction_parts\":[{\"content\":\"You are a concise assistant. Use a tool when it helps, then answer in one or two sentences. Skills you can load: unit-converter.\",\"dynamic\":false,\"name\":null,\"id\":\"agent\",\"part_kind\":\"instruction\"},{\"content\":\"The user is a tester.\",\"dynamic\":true,\"name\":null,\"id\":null,\"part_kind\":\"instruction\"}],\"thinking\":null}"
+                  }
+                },
+                {
+                  "key": "gen_ai.tool.definitions",
+                  "value": {
+                    "stringValue": "[{\"type\":\"function\",\"name\":\"city_info\",\"description\":\"A short fact sheet about a city.\",\"parameters\":{\"additionalProperties\":false,\"properties\":{\"city\":{\"type\":\"string\"}},\"required\":[\"city\"],\"type\":\"object\"}},{\"type\":\"function\",\"name\":\"get_time\",\"description\":\"Current date and time in an IANA timezone, such as Asia/Tokyo.\",\"parameters\":{\"additionalProperties\":false,\"properties\":{\"timezone\":{\"default\":\"UTC\",\"type\":\"string\"}},\"type\":\"object\"}},{\"type\":\"function\",\"name\":\"calculate\",\"description\":\"Evaluate an arithmetic expression such as (3 + 4) * 2.\",\"parameters\":{\"additionalProperties\":false,\"properties\":{\"expression\":{\"type\":\"string\"}},\"required\":[\"expression\"],\"type\":\"object\"}},{\"type\":\"function\",\"name\":\"load_skill\",\"description\":\"Load the instructions of a skill by name. Skills: unit-converter.\",\"parameters\":{\"additionalProperties\":false,\"properties\":{\"name\":{\"type\":\"string\"}},\"required\":[\"name\"],\"type\":\"object\"}}]"
+                  }
+                },
+                {
+                  "key": "gen_ai.operation.name",
+                  "value": {
+                    "stringValue": "chat"
+                  }
+                },
+                {
+                  "key": "gen_ai.agent.name",
+                  "value": {
+                    "stringValue": "pydanticai-bot"
+                  }
+                },
+                {
+                  "key": "gen_ai.agent.call.id",
+                  "value": {
+                    "stringValue": "01a10a3a-51c4-7684-8de4-c585b9804f89"
+                  }
+                },
+                {
+                  "key": "gen_ai.conversation.id",
+                  "value": {
+                    "stringValue": "b6af9d49-c40d-48a7-9bef-d928ed79be14"
+                  }
+                },
+                {
+                  "key": "gen_ai.input.messages",
+                  "value": {
+                    "stringValue": "[{\"role\":\"user\",\"parts\":[{\"type\":\"text\",\"content\":\"What is 17 * 23, and what time is it in Tokyo?\"}]}]"
+                  }
+                },
+                {
+                  "key": "gen_ai.output.messages",
+                  "value": {
+                    "stringValue": "[{\"role\":\"assistant\",\"parts\":[{\"type\":\"tool_call\",\"id\":\"call_2UN4ZqDb07e6Fu6JtznjyqHb\",\"name\":\"calculate\",\"arguments\":\"{\\\"expression\\\": \\\"17 * 23\\\"}\"},{\"type\":\"tool_call\",\"id\":\"call_e6BavzZM7vhuiaHGllrXOYck\",\"name\":\"get_time\",\"arguments\":\"{\\\"timezone\\\": \\\"Asia/Tokyo\\\"}\"}],\"finish_reason\":\"tool_call\"}]"
+                  }
+                },
+                {
+                  "key": "gen_ai.system_instructions",
+                  "value": {
+                    "stringValue": "[{\"type\":\"text\",\"content\":\"You are a concise assistant. Use a tool when it helps, then answer in one or two sentences. Skills you can load: unit-converter.\\n\\nThe user is a tester.\"}]"
+                  }
+                },
+                {
+                  "key": "logfire.json_schema",
+                  "value": {
+                    "stringValue": "{\"type\":\"object\",\"properties\":{\"gen_ai.input.messages\":{\"type\":\"array\"},\"gen_ai.output.messages\":{\"type\":\"array\"},\"gen_ai.system_instructions\":{\"type\":\"array\"},\"model_request_parameters\":{\"type\":\"object\"}}}"
+                  }
+                },
+                {
+                  "key": "gen_ai.usage.input_tokens",
+                  "value": {
+                    "intValue": "197"
+                  }
+                },
+                {
+                  "key": "gen_ai.usage.output_tokens",
+                  "value": {
+                    "intValue": "49"
+                  }
+                },
+                {
+                  "key": "gen_ai.usage.details.is_byok",
+                  "value": {
+                    "intValue": "0"
+                  }
+                },
+                {
+                  "key": "gen_ai.usage.details.audio_tokens",
+                  "value": {
+                    "intValue": "0"
+                  }
+                },
+                {
+                  "key": "gen_ai.usage.details.reasoning_tokens",
+                  "value": {
+                    "intValue": "0"
+                  }
+                },
+                {
+                  "key": "gen_ai.usage.details.image_tokens",
+                  "value": {
+                    "intValue": "0"
+                  }
+                },
+                {
+                  "key": "gen_ai.response.model",
+                  "value": {
+                    "stringValue": "openai/gpt-4o-mini"
+                  }
+                },
+                {
+                  "key": "operation.cost",
+                  "value": {
+                    "doubleValue": 5.895e-05
+                  }
+                },
+                {
+                  "key": "gen_ai.response.id",
+                  "value": {
+                    "stringValue": "gen-1791172956-3n225GcekyBIOrgUW2he"
+                  }
+                },
+                {
+                  "key": "gen_ai.response.finish_reasons",
+                  "value": {
+                    "arrayValue": {
+                      "values": [
+                        {
+                          "stringValue": "tool_call"
+                        }
+                      ]
+                    }
+                  }
+                }
+              ],
+              "status": {},
+              "flags": 256
+            },
+            {
+              "traceId": "1f2c62d3b4b63097a73f4116bc5d4bc9",
+              "spanId": "7ed5582042f4f1d9",
+              "parentSpanId": "88857e388d777440",
+              "name": "execute_tool calculate",
+              "kind": "SPAN_KIND_INTERNAL",
+              "startTimeUnixNano": "1791172958049257000",
+              "endTimeUnixNano": "1791172958049962000",
+              "attributes": [
+                {
+                  "key": "gen_ai.operation.name",
+                  "value": {
+                    "stringValue": "execute_tool"
+                  }
+                },
+                {
+                  "key": "gen_ai.tool.name",
+                  "value": {
+                    "stringValue": "calculate"
+                  }
+                },
+                {
+                  "key": "gen_ai.tool.call.id",
+                  "value": {
+                    "stringValue": "call_2UN4ZqDb07e6Fu6JtznjyqHb"
+                  }
+                },
+                {
+                  "key": "gen_ai.tool.call.arguments",
+                  "value": {
+                    "stringValue": "{\"expression\": \"17 * 23\"}"
+                  }
+                },
+                {
+                  "key": "gen_ai.agent.name",
+                  "value": {
+                    "stringValue": "pydanticai-bot"
+                  }
+                },
+                {
+                  "key": "gen_ai.agent.call.id",
+                  "value": {
+                    "stringValue": "01a10a3a-51c4-7684-8de4-c585b9804f89"
+                  }
+                },
+                {
+                  "key": "gen_ai.conversation.id",
+                  "value": {
+                    "stringValue": "b6af9d49-c40d-48a7-9bef-d928ed79be14"
+                  }
+                },
+                {
+                  "key": "logfire.msg",
+                  "value": {
+                    "stringValue": "running tool: calculate"
+                  }
+                },
+                {
+                  "key": "logfire.json_schema",
+                  "value": {
+                    "stringValue": "{\"type\":\"object\",\"properties\":{\"gen_ai.tool.call.arguments\":{\"type\":\"object\"},\"gen_ai.tool.call.result\":{\"type\":\"object\"},\"gen_ai.tool.name\":{},\"gen_ai.tool.call.id\":{}}}"
+                  }
+                },
+                {
+                  "key": "gen_ai.tool.call.result",
+                  "value": {
+                    "stringValue": "391"
+                  }
+                }
+              ],
+              "status": {},
+              "flags": 256
+            },
+            {
+              "traceId": "1f2c62d3b4b63097a73f4116bc5d4bc9",
+              "spanId": "09bfdb1769f59150",
+              "parentSpanId": "88857e388d777440",
+              "name": "execute_tool get_time",
+              "kind": "SPAN_KIND_INTERNAL",
+              "startTimeUnixNano": "1791172958049410000",
+              "endTimeUnixNano": "1791172958050325000",
+              "attributes": [
+                {
+                  "key": "gen_ai.operation.name",
+                  "value": {
+                    "stringValue": "execute_tool"
+                  }
+                },
+                {
+                  "key": "gen_ai.tool.name",
+                  "value": {
+                    "stringValue": "get_time"
+                  }
+                },
+                {
+                  "key": "gen_ai.tool.call.id",
+                  "value": {
+                    "stringValue": "call_e6BavzZM7vhuiaHGllrXOYck"
+                  }
+                },
+                {
+                  "key": "gen_ai.tool.call.arguments",
+                  "value": {
+                    "stringValue": "{\"timezone\": \"Asia/Tokyo\"}"
+                  }
+                },
+                {
+                  "key": "gen_ai.agent.name",
+                  "value": {
+                    "stringValue": "pydanticai-bot"
+                  }
+                },
+                {
+                  "key": "gen_ai.agent.call.id",
+                  "value": {
+                    "stringValue": "01a10a3a-51c4-7684-8de4-c585b9804f89"
+                  }
+                },
+                {
+                  "key": "gen_ai.conversation.id",
+                  "value": {
+                    "stringValue": "b6af9d49-c40d-48a7-9bef-d928ed79be14"
+                  }
+                },
+                {
+                  "key": "logfire.msg",
+                  "value": {
+                    "stringValue": "running tool: get_time"
+                  }
+                },
+                {
+                  "key": "logfire.json_schema",
+                  "value": {
+                    "stringValue": "{\"type\":\"object\",\"properties\":{\"gen_ai.tool.call.arguments\":{\"type\":\"object\"},\"gen_ai.tool.call.result\":{\"type\":\"object\"},\"gen_ai.tool.name\":{},\"gen_ai.tool.call.id\":{}}}"
+                  }
+                },
+                {
+                  "key": "gen_ai.tool.call.result",
+                  "value": {
+                    "stringValue": "2026-10-05T13:02:38+09:00"
+                  }
+                }
+              ],
+              "status": {},
+              "flags": 256
+            },
+            {
+              "traceId": "1f2c62d3b4b63097a73f4116bc5d4bc9",
+              "spanId": "e4b2fa763aedce48",
+              "parentSpanId": "88857e388d777440",
+              "name": "chat openai/gpt-4o-mini",
+              "kind": "SPAN_KIND_CLIENT",
+              "startTimeUnixNano": "1791172958051718000",
+              "endTimeUnixNano": "1791172959158080000",
+              "attributes": [
+                {
+                  "key": "gen_ai.provider.name",
+                  "value": {
+                    "stringValue": "openai"
+                  }
+                },
+                {
+                  "key": "gen_ai.system",
+                  "value": {
+                    "stringValue": "openai"
+                  }
+                },
+                {
+                  "key": "server.address",
+                  "value": {
+                    "stringValue": "openrouter.ai"
+                  }
+                },
+                {
+                  "key": "gen_ai.request.model",
+                  "value": {
+                    "stringValue": "openai/gpt-4o-mini"
+                  }
+                },
+                {
+                  "key": "model_request_parameters",
+                  "value": {
+                    "stringValue": "{\"function_tools\":[{\"name\":\"city_info\",\"parameters_json_schema\":{\"additionalProperties\":false,\"properties\":{\"city\":{\"type\":\"string\"}},\"required\":[\"city\"],\"type\":\"object\"},\"description\":\"A short fact sheet about a city.\",\"outer_typed_dict_key\":null,\"strict\":true,\"sequential\":false,\"kind\":\"function\",\"metadata\":null,\"timeout\":null,\"defer_loading\":false,\"unless_native\":null,\"with_native\":null,\"tool_kind\":null,\"return_schema\":null,\"include_return_schema\":null,\"toolset_id\":null,\"capability_id\":null},{\"name\":\"get_time\",\"parameters_json_schema\":{\"additionalProperties\":false,\"properties\":{\"timezone\":{\"default\":\"UTC\",\"type\":\"string\"}},\"type\":\"object\"},\"description\":\"Current date and time in an IANA timezone, such as Asia/Tokyo.\",\"outer_typed_dict_key\":null,\"strict\":false,\"sequential\":false,\"kind\":\"function\",\"metadata\":null,\"timeout\":null,\"defer_loading\":false,\"unless_native\":null,\"with_native\":null,\"tool_kind\":null,\"return_schema\":null,\"include_return_schema\":null,\"toolset_id\":null,\"capability_id\":null},{\"name\":\"calculate\",\"parameters_json_schema\":{\"additionalProperties\":false,\"properties\":{\"expression\":{\"type\":\"string\"}},\"required\":[\"expression\"],\"type\":\"object\"},\"description\":\"Evaluate an arithmetic expression such as (3 + 4) * 2.\",\"outer_typed_dict_key\":null,\"strict\":true,\"sequential\":false,\"kind\":\"function\",\"metadata\":null,\"timeout\":null,\"defer_loading\":false,\"unless_native\":null,\"with_native\":null,\"tool_kind\":null,\"return_schema\":null,\"include_return_schema\":null,\"toolset_id\":null,\"capability_id\":null},{\"name\":\"load_skill\",\"parameters_json_schema\":{\"additionalProperties\":false,\"properties\":{\"name\":{\"type\":\"string\"}},\"required\":[\"name\"],\"type\":\"object\"},\"description\":\"Load the instructions of a skill by name. Skills: unit-converter.\",\"outer_typed_dict_key\":null,\"strict\":true,\"sequential\":false,\"kind\":\"function\",\"metadata\":null,\"timeout\":null,\"defer_loading\":false,\"unless_native\":null,\"with_native\":null,\"tool_kind\":null,\"return_schema\":null,\"include_return_schema\":null,\"toolset_id\":null,\"capability_id\":null}],\"native_tools\":[],\"tool_visibility\":{\"city_info\":\"visible\",\"get_time\":\"visible\",\"calculate\":\"visible\",\"load_skill\":\"visible\"},\"revealed_tool_names\":[],\"deferred_capability_ids\":[],\"output_mode\":\"text\",\"output_object\":null,\"output_tools\":[],\"prompted_output_template\":null,\"allow_text_output\":true,\"allow_image_output\":false,\"instruction_parts\":[{\"content\":\"You are a concise assistant. Use a tool when it helps, then answer in one or two sentences. Skills you can load: unit-converter.\",\"dynamic\":false,\"name\":null,\"id\":\"agent\",\"part_kind\":\"instruction\"},{\"content\":\"The user is a tester.\",\"dynamic\":true,\"name\":null,\"id\":null,\"part_kind\":\"instruction\"}],\"thinking\":null}"
+                  }
+                },
+                {
+                  "key": "gen_ai.tool.definitions",
+                  "value": {
+                    "stringValue": "[{\"type\":\"function\",\"name\":\"city_info\",\"description\":\"A short fact sheet about a city.\",\"parameters\":{\"additionalProperties\":false,\"properties\":{\"city\":{\"type\":\"string\"}},\"required\":[\"city\"],\"type\":\"object\"}},{\"type\":\"function\",\"name\":\"get_time\",\"description\":\"Current date and time in an IANA timezone, such as Asia/Tokyo.\",\"parameters\":{\"additionalProperties\":false,\"properties\":{\"timezone\":{\"default\":\"UTC\",\"type\":\"string\"}},\"type\":\"object\"}},{\"type\":\"function\",\"name\":\"calculate\",\"description\":\"Evaluate an arithmetic expression such as (3 + 4) * 2.\",\"parameters\":{\"additionalProperties\":false,\"properties\":{\"expression\":{\"type\":\"string\"}},\"required\":[\"expression\"],\"type\":\"object\"}},{\"type\":\"function\",\"name\":\"load_skill\",\"description\":\"Load the instructions of a skill by name. Skills: unit-converter.\",\"parameters\":{\"additionalProperties\":false,\"properties\":{\"name\":{\"type\":\"string\"}},\"required\":[\"name\"],\"type\":\"object\"}}]"
+                  }
+                },
+                {
+                  "key": "gen_ai.operation.name",
+                  "value": {
+                    "stringValue": "chat"
+                  }
+                },
+                {
+                  "key": "gen_ai.agent.name",
+                  "value": {
+                    "stringValue": "pydanticai-bot"
+                  }
+                },
+                {
+                  "key": "gen_ai.agent.call.id",
+                  "value": {
+                    "stringValue": "01a10a3a-51c4-7684-8de4-c585b9804f89"
+                  }
+                },
+                {
+                  "key": "gen_ai.conversation.id",
+                  "value": {
+                    "stringValue": "b6af9d49-c40d-48a7-9bef-d928ed79be14"
+                  }
+                },
+                {
+                  "key": "gen_ai.input.messages",
+                  "value": {
+                    "stringValue": "[{\"role\":\"user\",\"parts\":[{\"type\":\"text\",\"content\":\"What is 17 * 23, and what time is it in Tokyo?\"}]},{\"role\":\"assistant\",\"parts\":[{\"type\":\"tool_call\",\"id\":\"call_2UN4ZqDb07e6Fu6JtznjyqHb\",\"name\":\"calculate\",\"arguments\":\"{\\\"expression\\\": \\\"17 * 23\\\"}\"},{\"type\":\"tool_call\",\"id\":\"call_e6BavzZM7vhuiaHGllrXOYck\",\"name\":\"get_time\",\"arguments\":\"{\\\"timezone\\\": \\\"Asia/Tokyo\\\"}\"}],\"finish_reason\":\"tool_call\"},{\"role\":\"user\",\"parts\":[{\"type\":\"tool_call_response\",\"id\":\"call_2UN4ZqDb07e6Fu6JtznjyqHb\",\"name\":\"calculate\",\"result\":\"391\"},{\"type\":\"tool_call_response\",\"id\":\"call_e6BavzZM7vhuiaHGllrXOYck\",\"name\":\"get_time\",\"result\":\"2026-10-05T13:02:38+09:00\"}]}]"
+                  }
+                },
+                {
+                  "key": "gen_ai.output.messages",
+                  "value": {
+                    "stringValue": "[{\"role\":\"assistant\",\"parts\":[{\"type\":\"text\",\"content\":\"17 * 23 equals 391, and the current time in Tokyo is 13:02:38.\"}],\"finish_reason\":\"stop\"}]"
+                  }
+                },
+                {
+                  "key": "gen_ai.system_instructions",
+                  "value": {
+                    "stringValue": "[{\"type\":\"text\",\"content\":\"You are a concise assistant. Use a tool when it helps, then answer in one or two sentences. Skills you can load: unit-converter.\\n\\nThe user is a tester.\"}]"
+                  }
+                },
+                {
+                  "key": "logfire.json_schema",
+                  "value": {
+                    "stringValue": "{\"type\":\"object\",\"properties\":{\"gen_ai.input.messages\":{\"type\":\"array\"},\"gen_ai.output.messages\":{\"type\":\"array\"},\"gen_ai.system_instructions\":{\"type\":\"array\"},\"model_request_parameters\":{\"type\":\"object\"}}}"
+                  }
+                },
+                {
+                  "key": "gen_ai.usage.input_tokens",
+                  "value": {
+                    "intValue": "277"
+                  }
+                },
+                {
+                  "key": "gen_ai.usage.output_tokens",
+                  "value": {
+                    "intValue": "23"
+                  }
+                },
+                {
+                  "key": "gen_ai.usage.details.is_byok",
+                  "value": {
+                    "intValue": "0"
+                  }
+                },
+                {
+                  "key": "gen_ai.usage.details.audio_tokens",
+                  "value": {
+                    "intValue": "0"
+                  }
+                },
+                {
+                  "key": "gen_ai.usage.details.reasoning_tokens",
+                  "value": {
+                    "intValue": "0"
+                  }
+                },
+                {
+                  "key": "gen_ai.usage.details.image_tokens",
+                  "value": {
+                    "intValue": "0"
+                  }
+                },
+                {
+                  "key": "gen_ai.response.model",
+                  "value": {
+                    "stringValue": "openai/gpt-4o-mini"
+                  }
+                },
+                {
+                  "key": "operation.cost",
+                  "value": {
+                    "doubleValue": 5.535e-05
+                  }
+                },
+                {
+                  "key": "gen_ai.response.id",
+                  "value": {
+                    "stringValue": "gen-1791172958-0PTCMbZlXEtqq9uVCtLy"
+                  }
+                },
+                {
+                  "key": "gen_ai.response.finish_reasons",
+                  "value": {
+                    "arrayValue": {
+                      "values": [
+                        {
+                          "stringValue": "stop"
+                        }
+                      ]
+                    }
+                  }
+                }
+              ],
+              "status": {},
+              "flags": 256
+            },
+            {
+              "traceId": "1f2c62d3b4b63097a73f4116bc5d4bc9",
+              "spanId": "88857e388d777440",
+              "name": "invoke_agent pydanticai-bot",
+              "kind": "SPAN_KIND_INTERNAL",
+              "startTimeUnixNano": "1791172956613362000",
+              "endTimeUnixNano": "1791172959161047000",
+              "attributes": [
+                {
+                  "key": "model_name",
+                  "value": {
+                    "stringValue": "openai/gpt-4o-mini"
+                  }
+                },
+                {
+                  "key": "agent_name",
+                  "value": {
+                    "stringValue": "pydanticai-bot"
+                  }
+                },
+                {
+                  "key": "gen_ai.agent.name",
+                  "value": {
+                    "stringValue": "pydanticai-bot"
+                  }
+                },
+                {
+                  "key": "gen_ai.agent.call.id",
+                  "value": {
+                    "stringValue": "01a10a3a-51c4-7684-8de4-c585b9804f89"
+                  }
+                },
+                {
+                  "key": "gen_ai.conversation.id",
+                  "value": {
+                    "stringValue": "b6af9d49-c40d-48a7-9bef-d928ed79be14"
+                  }
+                },
+                {
+                  "key": "gen_ai.operation.name",
+                  "value": {
+                    "stringValue": "invoke_agent"
+                  }
+                },
+                {
+                  "key": "logfire.msg",
+                  "value": {
+                    "stringValue": "pydanticai-bot run"
+                  }
+                },
+                {
+                  "key": "final_result",
+                  "value": {
+                    "stringValue": "17 * 23 equals 391, and the current time in Tokyo is 13:02:38."
+                  }
+                },
+                {
+                  "key": "gen_ai.aggregated_usage.input_tokens",
+                  "value": {
+                    "intValue": "474"
+                  }
+                },
+                {
+                  "key": "gen_ai.aggregated_usage.output_tokens",
+                  "value": {
+                    "intValue": "72"
+                  }
+                },
+                {
+                  "key": "gen_ai.aggregated_usage.details.is_byok",
+                  "value": {
+                    "intValue": "0"
+                  }
+                },
+                {
+                  "key": "gen_ai.aggregated_usage.details.audio_tokens",
+                  "value": {
+                    "intValue": "0"
+                  }
+                },
+                {
+                  "key": "gen_ai.aggregated_usage.details.reasoning_tokens",
+                  "value": {
+                    "intValue": "0"
+                  }
+                },
+                {
+                  "key": "gen_ai.aggregated_usage.details.image_tokens",
+                  "value": {
+                    "intValue": "0"
+                  }
+                },
+                {
+                  "key": "pydantic_ai.all_messages",
+                  "value": {
+                    "stringValue": "[{\"role\":\"user\",\"parts\":[{\"type\":\"text\",\"content\":\"What is 17 * 23, and what time is it in Tokyo?\"}]},{\"role\":\"assistant\",\"parts\":[{\"type\":\"tool_call\",\"id\":\"call_2UN4ZqDb07e6Fu6JtznjyqHb\",\"name\":\"calculate\",\"arguments\":\"{\\\"expression\\\": \\\"17 * 23\\\"}\"},{\"type\":\"tool_call\",\"id\":\"call_e6BavzZM7vhuiaHGllrXOYck\",\"name\":\"get_time\",\"arguments\":\"{\\\"timezone\\\": \\\"Asia/Tokyo\\\"}\"}],\"finish_reason\":\"tool_call\"},{\"role\":\"user\",\"parts\":[{\"type\":\"tool_call_response\",\"id\":\"call_2UN4ZqDb07e6Fu6JtznjyqHb\",\"name\":\"calculate\",\"result\":\"391\"},{\"type\":\"tool_call_response\",\"id\":\"call_e6BavzZM7vhuiaHGllrXOYck\",\"name\":\"get_time\",\"result\":\"2026-10-05T13:02:38+09:00\"}]},{\"role\":\"assistant\",\"parts\":[{\"type\":\"text\",\"content\":\"17 * 23 equals 391, and the current time in Tokyo is 13:02:38.\"}],\"finish_reason\":\"stop\"}]"
+                  }
+                },
+                {
+                  "key": "gen_ai.system_instructions",
+                  "value": {
+                    "stringValue": "[{\"type\":\"text\",\"content\":\"You are a concise assistant. Use a tool when it helps, then answer in one or two sentences. Skills you can load: unit-converter.\\n\\nThe user is a tester.\"}]"
+                  }
+                },
+                {
+                  "key": "logfire.json_schema",
+                  "value": {
+                    "stringValue": "{\"type\":\"object\",\"properties\":{\"pydantic_ai.all_messages\":{\"type\":\"array\"},\"gen_ai.system_instructions\":{\"type\":\"array\"},\"final_result\":{\"type\":\"object\"}}}"
+                  }
+                }
+              ],
+              "status": {},
+              "flags": 256
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

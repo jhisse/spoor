@@ -1,0 +1,145 @@
+{
+  "resourceSpans": [
+    {
+      "resource": {
+        "attributes": [
+          {
+            "key": "telemetry.sdk.language",
+            "value": {
+              "stringValue": "python"
+            }
+          },
+          {
+            "key": "telemetry.sdk.name",
+            "value": {
+              "stringValue": "opentelemetry"
+            }
+          },
+          {
+            "key": "telemetry.sdk.version",
+            "value": {
+              "stringValue": "1.45.0"
+            }
+          },
+          {
+            "key": "service.instance.id",
+            "value": {
+              "stringValue": "f935f4c0-a126-4947-a15b-5a9460fc5d8a"
+            }
+          },
+          {
+            "key": "service.name",
+            "value": {
+              "stringValue": "capture"
+            }
+          }
+        ]
+      },
+      "scopeSpans": [
+        {
+          "scope": {
+            "name": "opentelemetry.instrumentation.openai.v1",
+            "version": "0.62.4"
+          },
+          "spans": [
+            {
+              "traceId": "cbb960c082156fcad2664e05f9d80b2c",
+              "spanId": "e0c251f6d4d744e8",
+              "name": "openai.chat",
+              "kind": "SPAN_KIND_CLIENT",
+              "startTimeUnixNano": "1791060026986314000",
+              "endTimeUnixNano": "1791060027001416000",
+              "attributes": [
+                {
+                  "key": "gen_ai.operation.name",
+                  "value": {
+                    "stringValue": "chat"
+                  }
+                },
+                {
+                  "key": "traceloop.association.properties.session_id",
+                  "value": {
+                    "stringValue": "capture-session"
+                  }
+                },
+                {
+                  "key": "gen_ai.provider.name",
+                  "value": {
+                    "stringValue": "openai"
+                  }
+                },
+                {
+                  "key": "gen_ai.request.model",
+                  "value": {
+                    "stringValue": "no-such-model"
+                  }
+                },
+                {
+                  "key": "gen_ai.is_streaming",
+                  "value": {
+                    "boolValue": false
+                  }
+                },
+                {
+                  "key": "gen_ai.openai.api_base",
+                  "value": {
+                    "stringValue": "http://127.0.0.1:14331/v1/"
+                  }
+                },
+                {
+                  "key": "gen_ai.input.messages",
+                  "value": {
+                    "stringValue": "[{\"role\": \"system\", \"parts\": [{\"content\": \"Answer in one word.\", \"type\": \"text\"}]}, {\"role\": \"user\", \"parts\": [{\"content\": \"Capital of France?\", \"type\": \"text\"}]}]"
+                  }
+                },
+                {
+                  "key": "error.type",
+                  "value": {
+                    "stringValue": "NotFoundError"
+                  }
+                }
+              ],
+              "events": [
+                {
+                  "timeUnixNano": "1791060027001404000",
+                  "name": "exception",
+                  "attributes": [
+                    {
+                      "key": "exception.type",
+                      "value": {
+                        "stringValue": "openai.NotFoundError"
+                      }
+                    },
+                    {
+                      "key": "exception.message",
+                      "value": {
+                        "stringValue": "Error code: 404 - {'type': 'error', 'error': {'type': 'not_found_error', 'message': 'model: no-such-model'}}"
+                      }
+                    },
+                    {
+                      "key": "exception.stacktrace",
+                      "value": {
+                        "stringValue": "Traceback (most recent call last):\n  File \"~/.cache/uv/environments-v2/traceloop-openai-9f8c5f78daf703e1/lib/python3.13/site-packages/opentelemetry/instrumentation/openai/shared/chat_wrappers.py\", line 102, in chat_wrapper\n    response = wrapped(*args, **kwargs)\n  File \"~/.cache/uv/environments-v2/traceloop-openai-9f8c5f78daf703e1/lib/python3.13/site-packages/openai/_utils/_utils.py\", line 298, in wrapper\n    return func(*args, **kwargs)\n  File \"~/.cache/uv/environments-v2/traceloop-openai-9f8c5f78daf703e1/lib/python3.13/site-packages/openai/resources/chat/completions/completions.py\", line 1318, in create\n    return self._post(\n           ~~~~~~~~~~^\n        \"/chat/completions\",\n        ^^^^^^^^^^^^^^^^^^^^\n    ...<53 lines>...\n        stream_cls=Stream[ChatCompletionChunk],\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n    )\n    ^\n  File \"~/.cache/uv/environments-v2/traceloop-openai-9f8c5f78daf703e1/lib/python3.13/site-packages/openai/_base_client.py\", line 1440, in post\n    return cast(ResponseT, self.request(cast_to, opts, stream=stream, stream_cls=stream_cls))\n                           ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"~/.cache/uv/environments-v2/traceloop-openai-9f8c5f78daf703e1/lib/python3.13/site-packages/openai/_base_client.py\", line 1213, in request\n    raise self._make_status_error_from_response(err.response) from None\nopenai.NotFoundError: Error code: 404 - {'type': 'error', 'error': {'type': 'not_found_error', 'message': 'model: no-such-model'}}\n"
+                      }
+                    },
+                    {
+                      "key": "exception.escaped",
+                      "value": {
+                        "stringValue": "False"
+                      }
+                    }
+                  ]
+                }
+              ],
+              "status": {
+                "message": "Error code: 404 - {'type': 'error', 'error': {'type': 'not_found_error', 'message': 'model: no-such-model'}}",
+                "code": "STATUS_CODE_ERROR"
+              },
+              "flags": 256
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
