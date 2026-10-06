@@ -46,7 +46,7 @@ spoor receives OpenTelemetry traces from LLM applications and coding agents, sto
 - **Zero configuration.** `spoor serve` starts with nothing set: no key, no account, no project.
 - **Reads what senders already emit.** Claude Code's trace export, OpenLLMetry, OpenInference, the OpenTelemetry GenAI conventions, Pydantic AI, the Vercel AI SDK, LiteLLM, Gemini CLI and GitHub Copilot Chat, each tested against real payloads.
 - **Honest numbers.** Cost is priced per token type (input, cache read, cache write, output). A model with no known price shows no cost, not zero; an estimate is labelled "estimated".
-- **No outbound call, no telemetry.** The price table ships in the binary; spoor never calls out. It runs on a laptop with the Wi-Fi off.
+- **No outbound call, no telemetry.** The price table ships in the binary; spoor never calls out.
 - **Your agent reads it too.** A read-only MCP endpoint and a one-file HTML export, with nothing to install.
 - **Small enough to read.** Under 10,000 lines, server-rendered pages, no JavaScript of its own: one person can read the whole thing in an afternoon.
 
