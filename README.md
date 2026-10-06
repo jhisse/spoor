@@ -16,7 +16,10 @@ One binary, one SQLite file, OpenTelemetry in. No account, no key, no cloud.
 
 <br>
 
-![A walk through spoor on its demo data: the trace list with what was asked, traces over time, a search with its hits, one Claude Code trace with the context of every model call, the arithmetic behind a cost, a session turn by turn, a transcript of a tool loop, and the blind spots page](assets/demo-light.gif)
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="assets/demo-dark.gif">
+  <img src="assets/demo-light.gif" alt="A walk through spoor on its demo data: the trace list with what was asked, traces over time, the heat map by cost, the traces worth a look, a search with its hits, one Claude Code trace with the context of every model call, the arithmetic behind a cost, a session turn by turn, a transcript of a tool loop, the blind spots page and the help page">
+</picture>
 
 </div>
 
