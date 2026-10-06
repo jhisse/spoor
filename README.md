@@ -46,7 +46,7 @@ spoor receives OpenTelemetry traces from LLM applications and coding agents, sto
 - **Zero configuration.** `spoor serve` starts with nothing set: no key, no account, no project.
 - **Reads what senders already emit.** Claude Code's trace export, OpenLLMetry, OpenInference, the OpenTelemetry GenAI conventions, Pydantic AI, the Vercel AI SDK, LiteLLM, Gemini CLI and GitHub Copilot Chat, each tested against real payloads.
 - **Honest numbers.** Cost is priced per token type (input, cache read, cache write, output). A model with no known price shows no cost, not zero; an estimate is labelled "estimated".
-- **No network, no telemetry.** The price table ships in the binary; spoor makes no outbound call, ever. It runs on a laptop with the Wi-Fi off.
+- **No outbound call, no telemetry.** The price table ships in the binary; spoor never calls out. It runs on a laptop with the Wi-Fi off.
 - **Your agent reads it too.** A read-only MCP endpoint and a one-file HTML export, with nothing to install.
 - **Small enough to read.** Under 10,000 lines, server-rendered pages, no JavaScript of its own: one person can read the whole thing in an afternoon.
 
@@ -68,7 +68,7 @@ On macOS a binary downloaded with a browser is quarantined: `xattr -d com.apple.
 ./spoor serve
 ```
 
-This creates `./spoor.db`, serves the UI on <http://127.0.0.1:8080> and accepts traces on `http://127.0.0.1:4318/v1/traces`; Ctrl+C stops it. Point any OTLP/HTTP exporter at it:
+This creates `./spoor.db`, serves the UI on http://127.0.0.1:8080 and accepts traces on `http://127.0.0.1:4318/v1/traces`; Ctrl+C stops it. Point any OTLP/HTTP exporter at it:
 
 ```sh
 OTEL_EXPORTER_OTLP_ENDPOINT=http://127.0.0.1:4318
@@ -117,7 +117,7 @@ The image is built for `linux/amd64` and `linux/arm64`; `docker build -t spoor .
 **The trace page**
 
 - **Header.** The name, with what the person asked under it; the figures; a Tree | Read switch with pointers worth a look beside it (the first failure, the slowest step, the most expensive one, the one with most tokens; a step that is several of these is one pointer with each reason).
-- **Context per step.** Open above the selected span: one stacked bar per model call (cache read, fresh input, cache write, output) with cumulative cost. A model call shows only the messages that are new since the previous one; when an earlier message was rewritten, the panel points at the character where it changed and shows the old and new text, which is where the prompt cache stopped applying.
+- **Context per step.** Open above the selected span: one stacked bar per model call (cache read, fresh input, cache write, output) with cumulative cost. A model call shows only the messages that are new since the previous one; when an earlier message was rewritten, the panel points at the character where it changed and shows the old and new text: a prompt cache can only be reused up to that character. This needs the sender to export the messages; Claude Code does not.
 - **The span tree and the selected span.** Duration, position in time, tokens and cost on every row. The selected span shows its path from the root and its place ("Span 4 of 65"), its prompt and completion as chat messages, tool calls and results as cards, events, metadata as a tree, the arithmetic behind its cost, and how its duration compares with similar spans.
 - **Keyboard.** On a wide screen the page fits the window, so the arrow keys move the selection and the page stays still.
 
