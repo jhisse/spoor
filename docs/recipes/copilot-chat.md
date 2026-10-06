@@ -1,4 +1,4 @@
-# GitHub Copilot Chat (VS Code)
+# GitHub Copilot Chat in VS Code
 
 ## What you get
 
@@ -10,7 +10,7 @@
 
 ## Configuration
 
-In `settings.json` (user settings), then reload the window:
+In VS Code's user `settings.json`, then reload the window. These settings belong to the VS Code extension; Copilot Chat in JetBrains, Visual Studio or Xcode has no OTel export.
 
 ```json
 {
