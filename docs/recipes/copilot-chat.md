@@ -10,7 +10,7 @@
 
 ## Configuration
 
-In VS Code's user `settings.json`, then reload the window. These settings belong to the VS Code extension; Copilot Chat in JetBrains, Visual Studio or Xcode has no OTel export.
+In VS Code's user `settings.json`, then reload the window. These settings belong to the VS Code extension; the other editors' Copilot Chat was not tested.
 
 ```json
 {
