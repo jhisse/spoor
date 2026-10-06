@@ -4,7 +4,7 @@ One page per sender: what you get, the configuration, what was tested, the known
 
 ## Tested with
 
-Every row was run on 2026-10-05, except Claude Code (2026-10-03), and has a capture in `testdata/`. The model was the fake provider in `testdata/capture/`, which is also how to add a row, except for Claude Code and the `openllmetry-*` captures (real models). The eleven `chatbot-*` captures (real models through OpenRouter, `testdata/capture/chatbots.sh`) are not rows here: they are runs of `testdata/chatbots/`.
+Every row was run on 2026-10-05, except Claude Code (2026-10-03), and has a capture in `testdata/`, except Copilot Chat (read from stored rows of a real session). The model was the fake provider in `testdata/capture/`, which is also how to add a row, except for Claude Code and the `openllmetry-*` captures (real models). The eleven `chatbot-*` captures (real models through OpenRouter, `testdata/capture/chatbots.sh`) are not rows here: they are runs of `testdata/chatbots/`.
 
 | Sender | spoor shows | Missing |
 |---|---|---|
@@ -22,6 +22,7 @@ Every row was run on 2026-10-05, except Claude Code (2026-10-03), and has a capt
 | [Pydantic AI](pydantic-ai.md) | agent tree, model, tokens with cache read and reasoning, cost, messages, tool spans, session | |
 | [LiteLLM](litellm.md) | model, tokens, LiteLLM's own cost, messages, tool call | cache read and reasoning tokens (not sent) |
 | [Gemini CLI](gemini-cli.md) | model, tokens, cost, messages, session | cached and thinking tokens (not sent) |
+| [GitHub Copilot Chat](copilot-chat.md) | agent tree per turn, model, tokens with cache read and reasoning, cost, messages, tool spans, session, errors | the whole prompt on each call (only what was added is sent); reasoning text (encrypted) |
 
 Codex CLI is not here because its documentation describes log export only, and spoor stores traces.
 

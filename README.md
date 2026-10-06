@@ -44,7 +44,7 @@ spoor receives OpenTelemetry traces from LLM applications and coding agents, sto
 - **One binary.** Go, no cgo, no runtime dependency. Ingestion and UI run in the same process.
 - **One SQLite file.** It is the storage, the backup unit and the read API: open it with `sqlite3`, the [schema](docs/schema.md) is documented and stable.
 - **Zero configuration.** `spoor serve` starts with nothing set: no key, no account, no project.
-- **Reads what senders already emit.** Claude Code's trace export, OpenLLMetry, OpenInference, the OpenTelemetry GenAI conventions, Pydantic AI, the Vercel AI SDK, LiteLLM and Gemini CLI, each tested against a payload captured from the real SDK.
+- **Reads what senders already emit.** Claude Code's trace export, OpenLLMetry, OpenInference, the OpenTelemetry GenAI conventions, Pydantic AI, the Vercel AI SDK, LiteLLM, Gemini CLI and GitHub Copilot Chat, each tested against real payloads.
 - **Honest numbers.** Cost is priced per token type (input, cache read, cache write, output). A model with no known price shows no cost, not zero; an estimate is labelled "estimated".
 - **No network, no telemetry.** The price table ships in the binary; spoor makes no outbound call, ever. It runs on a laptop with the Wi-Fi off.
 - **Your agent reads it too.** A read-only MCP endpoint and a one-file HTML export, with nothing to install.
@@ -88,7 +88,7 @@ curl -s http://127.0.0.1:8080/sample.pb | curl -X POST http://127.0.0.1:4318/v1/
   -H "Content-Type: application/x-protobuf" --data-binary @-
 ```
 
-**Per-sender setup:** [Claude Code](docs/recipes/claude-code.md) · [OpenLLMetry](docs/recipes/openllmetry.md) · [OpenInference](docs/recipes/openinference.md) (OpenAI, Anthropic, LangChain, LlamaIndex, OpenAI Agents SDK, CrewAI) · [OpenTelemetry's OpenAI instrumentation](docs/recipes/opentelemetry-openai.md) · [Vercel AI SDK](docs/recipes/vercel-ai-sdk.md) · [Pydantic AI](docs/recipes/pydantic-ai.md) · [LiteLLM](docs/recipes/litellm.md) · [Gemini CLI](docs/recipes/gemini-cli.md) · [behind an OpenTelemetry Collector](docs/recipes/otel-collector.md). [What was tested, with versions](docs/recipes/README.md).
+**Per-sender setup:** [Claude Code](docs/recipes/claude-code.md) · [OpenLLMetry](docs/recipes/openllmetry.md) · [OpenInference](docs/recipes/openinference.md) (OpenAI, Anthropic, LangChain, LlamaIndex, OpenAI Agents SDK, CrewAI) · [OpenTelemetry's OpenAI instrumentation](docs/recipes/opentelemetry-openai.md) · [Vercel AI SDK](docs/recipes/vercel-ai-sdk.md) · [Pydantic AI](docs/recipes/pydantic-ai.md) · [LiteLLM](docs/recipes/litellm.md) · [Gemini CLI](docs/recipes/gemini-cli.md) · [GitHub Copilot Chat](docs/recipes/copilot-chat.md) · [behind an OpenTelemetry Collector](docs/recipes/otel-collector.md). [What was tested, with versions](docs/recipes/README.md).
 
 ### Docker
 
