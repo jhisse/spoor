@@ -20,7 +20,7 @@
 <dl class="kv">
 {{range .Events}}<dt>{{or .Offset "–"}}</dt><dd>{{$tree := metadataTree .Attributes}}{{if $tree}}<details><summary><i class="tw"></i>{{.Name}}</summary>{{template "metadata_tree" $tree}}</details>{{else}}{{.Name}}{{end}}</dd>
 {{end}}</dl>{{end}}
-{{if .Links}}<p class="cap{{if .Events}} mt{{end}}">{{.Links}} span link{{if gt .Links 1}}s{{end}} to other spans — in the <code>links</code> column (<code>spoor export</code>, <code>spoor query</code>)</p>{{end}}
+{{if .Links}}<p class="cap{{if .Events}} mt{{end}}">{{.Links}} span link{{if gt .Links 1}}s{{end}} to other spans — in the <code>links</code> column (<code>spoor export</code>)</p>{{end}}
 </div>
 {{end}}
 {{end}}
