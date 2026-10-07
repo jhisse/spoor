@@ -2,6 +2,7 @@ package web
 
 import (
 	"net/http/httptest"
+	"regexp"
 	"strings"
 	"testing"
 )
@@ -34,5 +35,20 @@ func TestHelpPage(t *testing.T) {
 	}
 	if strings.Contains(body, "OTEL_EXPORTER_OTLP_ENDPOINT=http://spoor.local:4318/v1/traces") {
 		t.Error("the generic endpoint variable takes no path")
+	}
+
+	// every jump link at the top lands on a heading of the page
+	nav := regexp.MustCompile(`(?s)<nav [^>]*aria-label="On this page">(.*?)</nav>`).FindStringSubmatch(body)
+	if nav == nil {
+		t.Fatal("help page has no jump links")
+	}
+	links := regexp.MustCompile(`href="#([a-z-]+)"`).FindAllStringSubmatch(nav[1], -1)
+	if len(links) != 7 {
+		t.Errorf("jump links = %d, want 7 (one per section)", len(links))
+	}
+	for _, l := range links {
+		if !strings.Contains(body, `id="`+l[1]+`"`) {
+			t.Errorf("jump link #%s has no target", l[1])
+		}
 	}
 }
