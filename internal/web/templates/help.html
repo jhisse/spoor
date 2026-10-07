@@ -1,9 +1,18 @@
 {{define "title"}}spoor — Help{{end}}
-{{define "width"}} narrow{{end}}
+{{define "width"}} read{{end}}
 
 {{define "content"}}
-<div class="head"><h1>Help</h1><span class="cap">The addresses below are the ones this page was reached at.</span></div>
+<div class="head"><h1>Help</h1><span class="cap">The host in the addresses below is the one this page was reached at.</span></div>
 <div class="stack">
+<nav class="row" aria-label="On this page">
+<a class="link" href="#send-h">Send traces</a>
+<a class="link" href="#marks-h">Marks</a>
+<a class="link" href="#search-h">Search</a>
+<a class="link" href="#keys-h">Keyboard</a>
+<a class="link" href="#mcp-h">Connect an agent</a>
+<a class="link" href="#cli-h">Command line</a>
+<a class="link" href="#about-h">This spoor</a>
+</nav>
 
 <section class="panel" aria-labelledby="send-h">
 <div class="panel-h"><h2 id="send-h">Send traces</h2><span class="cap">OTLP over HTTP, protobuf or JSON, no key</span></div>
@@ -12,6 +21,7 @@
 <pre class="code cmd">OTEL_EXPORTER_OTLP_ENDPOINT={{.IngestBase}}
 OTEL_EXPORTER_OTLP_PROTOCOL=http/protobuf
 OTEL_SERVICE_NAME=my-app</pre>
+<p class="cap mt">The port is the one the ingest server listens on (<code>SPOOR_INGEST_ADDR</code>); behind Docker or a proxy the published port may differ.</p>
 <p class="cap mt">Exporters add <code>/v1/traces</code> to that address themselves. A setting for traces alone, <code>OTEL_EXPORTER_OTLP_TRACES_ENDPOINT</code>, takes the full address: <code>{{.IngestURL}}</code>.</p>
 <p class="cap mt">Claude Code: set <code>CLAUDE_CODE_ENABLE_TELEMETRY=1</code>, <code>CLAUDE_CODE_ENHANCED_TELEMETRY_BETA=1</code>, <code>OTEL_TRACES_EXPORTER=otlp</code>, <code>OTEL_EXPORTER_OTLP_TRACES_PROTOCOL=http/protobuf</code> and <code>OTEL_EXPORTER_OTLP_TRACES_ENDPOINT</code> to the full address. <code>OTEL_LOG_USER_PROMPTS=1</code> adds what you typed to each trace.</p>
 </div></section>
@@ -24,7 +34,10 @@ OTEL_SERVICE_NAME=my-app</pre>
 <div><dt><b>?</b> tokens</dt><dd class="why">The SDK did not send that count. A span with no token count has no cost either.</dd></div>
 <div><dt><b>~</b> before a cost</dt><dd class="why">The sender reported no cache read or write count, so the whole prompt was priced as fresh input: the real cost may be lower.</dd></div>
 <div><dt>estimated</dt><dd class="why">The table has no cache price for that model: cache read is charged at 0.1× and cache write at 1.25× the input price. The label stays.</dd></div>
-<div><dt><b class="warn-t">C</b> <b class="warn-t">B</b> <b class="warn-t">E</b> on a context bar</dt><dd class="why">The context got smaller (a compaction or a sub-agent's first call); the cache was lost; the cache was lost after five minutes or more without a call. <code>+$ est.</code> is what that cost extra.</dd></div>
+<div><dt><b class="warn-t">C</b> on a context bar</dt><dd class="why">The context got smaller: a compaction or a sub-agent's first call.</dd></div>
+<div><dt><b class="warn-t">B</b> on a context bar</dt><dd class="why">The cache was lost.</dd></div>
+<div><dt><b class="warn-t">E</b> on a context bar</dt><dd class="why">The cache was lost after five minutes or more without a call.</dd></div>
+<div><dt><code>+$ est.</code></dt><dd class="why">What a C, B or E cost extra, estimated.</dd></div>
 <div><dt>unset</dt><dd class="why">The sender set no status on the span: neither ok nor error.</dd></div>
 </dl>
 <p class="cap mt measure">Everything stored but not readable is counted on <a class="link" href="/blind-spots">Blind spots</a>.</p>
