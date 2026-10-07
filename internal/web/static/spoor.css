@@ -516,6 +516,7 @@ kbd { display: inline-block; min-width: 18px; padding: 0 4px; border: 1px solid 
 .calc td:first-child { color: var(--ink-3); }
 /* The blind-spots page: a count per line, what it means underneath. */
 .spots > div { display: grid; grid-template-columns: 1fr auto; gap: 2px 16px; padding: 8px 0; border-top: 1px solid var(--line); }
+.panel-b > .spots:first-child > div:first-child { border-top: 0; padding-top: 0; }   /* the panel's own rule is already above it */
 .spots dt { font-size: 13px; line-height: 20px; }
 .spots dd.n { font-size: 14px; line-height: 20px; font-weight: 600; font-variant-numeric: tabular-nums; }
 .spots dd.why { grid-column: 1 / -1; font-size: 12px; line-height: 16px; color: var(--ink-3); }
