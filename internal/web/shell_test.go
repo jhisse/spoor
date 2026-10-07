@@ -120,6 +120,7 @@ func TestShellOnEveryPage(t *testing.T) {
 		want := []string{
 			`<span class="ellip" title="acme">acme</span></summary>`, `aria-current="true">acme</a>`, `>other</a>`, `>All services</a>`,
 			`href="#main"`, `<main id="main"`, `id="hatch"`,
+			`<link rel="icon" type="image/svg+xml" href="/static/favicon.svg">`,
 		}
 		for name, href := range tabs {
 			current := ""
