@@ -2,7 +2,7 @@
 {{define "width"}} narrow{{end}}
 
 {{define "content"}}
-<div class="head"><h1>Help</h1><span class="cap">The addresses below are the ones this page was reached at.</span></div>
+<div class="head"><h1>Help</h1><span class="cap">The host in the addresses below is the one this page was reached at.</span></div>
 <div class="stack">
 
 <section class="panel" aria-labelledby="send-h">
@@ -12,6 +12,7 @@
 <pre class="code cmd">OTEL_EXPORTER_OTLP_ENDPOINT={{.IngestBase}}
 OTEL_EXPORTER_OTLP_PROTOCOL=http/protobuf
 OTEL_SERVICE_NAME=my-app</pre>
+<p class="cap mt">The port is the one the ingest server listens on (<code>SPOOR_INGEST_ADDR</code>); behind Docker or a proxy the published port may differ.</p>
 <p class="cap mt">Exporters add <code>/v1/traces</code> to that address themselves. A setting for traces alone, <code>OTEL_EXPORTER_OTLP_TRACES_ENDPOINT</code>, takes the full address: <code>{{.IngestURL}}</code>.</p>
 <p class="cap mt">Claude Code: set <code>CLAUDE_CODE_ENABLE_TELEMETRY=1</code>, <code>CLAUDE_CODE_ENHANCED_TELEMETRY_BETA=1</code>, <code>OTEL_TRACES_EXPORTER=otlp</code>, <code>OTEL_EXPORTER_OTLP_TRACES_PROTOCOL=http/protobuf</code> and <code>OTEL_EXPORTER_OTLP_TRACES_ENDPOINT</code> to the full address. <code>OTEL_LOG_USER_PROMPTS=1</code> adds what you typed to each trace.</p>
 </div></section>
