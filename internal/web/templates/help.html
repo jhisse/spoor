@@ -34,7 +34,10 @@ OTEL_SERVICE_NAME=my-app</pre>
 <div><dt><b>?</b> tokens</dt><dd class="why">The SDK did not send that count. A span with no token count has no cost either.</dd></div>
 <div><dt><b>~</b> before a cost</dt><dd class="why">The sender reported no cache read or write count, so the whole prompt was priced as fresh input: the real cost may be lower.</dd></div>
 <div><dt>estimated</dt><dd class="why">The table has no cache price for that model: cache read is charged at 0.1× and cache write at 1.25× the input price. The label stays.</dd></div>
-<div><dt><b class="warn-t">C</b> <b class="warn-t">B</b> <b class="warn-t">E</b> on a context bar</dt><dd class="why">The context got smaller (a compaction or a sub-agent's first call); the cache was lost; the cache was lost after five minutes or more without a call. <code>+$ est.</code> is what that cost extra.</dd></div>
+<div><dt><b class="warn-t">C</b> on a context bar</dt><dd class="why">The context got smaller: a compaction or a sub-agent's first call.</dd></div>
+<div><dt><b class="warn-t">B</b> on a context bar</dt><dd class="why">The cache was lost.</dd></div>
+<div><dt><b class="warn-t">E</b> on a context bar</dt><dd class="why">The cache was lost after five minutes or more without a call.</dd></div>
+<div><dt><code>+$ est.</code></dt><dd class="why">What a C, B or E cost extra, estimated.</dd></div>
 <div><dt>unset</dt><dd class="why">The sender set no status on the span: neither ok nor error.</dd></div>
 </dl>
 <p class="cap mt measure">Everything stored but not readable is counted on <a class="link" href="/blind-spots">Blind spots</a>.</p>
