@@ -7,7 +7,7 @@
 <div id="sessions">
 {{with .Replay}}
 <nav class="crumbs" aria-label="Breadcrumb"><a href="/sessions">Sessions</a><span class="mono">{{.Summary.ID}}</span></nav>
-<div class="head"><h1>{{template "status_shape" .Summary.Status}}<span class="sr">{{.Summary.Status}}</span> Session <span class="mono">{{.Summary.ID}}</span></h1><a class="btn sm" href="/sessions">All sessions</a></div>
+<div class="head"><h1>{{template "status_shape" .Summary.Status}}<span class="sr">{{.Summary.Status}}</span> Session <span class="mono">{{.Summary.ID}}</span></h1><div class="row"><a class="btn sm" href="/sessions">All sessions</a><a class="btn sm" href="/sessions/export?session={{.Summary.ID}}" title="Download this session as one self-contained HTML page">Export</a></div></div>
 <div class="stack">
 <div class="panel">
 <div class="band"><dl class="stats grow">

@@ -87,8 +87,8 @@ func TestDetailAtBoundaryShowsReadOnlyButton(t *testing.T) {
 	if !strings.Contains(body, `aria-disabled="true"`) {
 		t.Errorf("Next must be read-only (aria-disabled) at the oldest trace, got: %s", body)
 	}
-	if got, want := strings.Count(body, `href="/traces/`), 1; got != want {
-		t.Errorf("expected exactly %d trace link (Previous only, Next is read-only), got %d: %s", want, got, body)
+	if got, want := strings.Count(body, `href="/traces/`), 2; got != want {
+		t.Errorf("expected exactly %d trace links (Previous and Export, Next is read-only), got %d: %s", want, got, body)
 	}
 	if !strings.Contains(body, "/traces/"+newest.ID) {
 		t.Errorf("body missing Previous link to %s, got: %s", newest.ID, body)
@@ -508,5 +508,16 @@ func TestTraceTotalsMatchTreeRollup(t *testing.T) {
 	}
 	if none := computeTraceTotals(nil, nil); none.CostUSD != nil {
 		t.Errorf("empty trace cost = %v, want nil", *none.CostUSD)
+	}
+}
+
+func TestDetailLinksToItsExport(t *testing.T) {
+	s := newTestStore(t)
+	h := newTestHandlers(t, s)
+	tr := seedTrace(t, s, "trace-1", time.Now())
+	seedSpan(t, s, tr.ID, "root", nil, time.Now())
+
+	if body := doDetail(t, h, tr.ID).Body.String(); !strings.Contains(body, `<a class="btn sm" href="/traces/trace-1/export"`) {
+		t.Errorf("the trace page should offer its export as a plain link, got: %s", body)
 	}
 }

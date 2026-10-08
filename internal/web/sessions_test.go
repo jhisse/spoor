@@ -158,3 +158,17 @@ func TestSessionsReplayPreviewsEveryTurnWithoutPerTurnReads(t *testing.T) {
 		t.Error("a turn previews a later generation span, want its first")
 	}
 }
+
+func TestSessionsReplayLinksToItsExport(t *testing.T) {
+	s := newTestStore(t)
+	h := newTestHandlers(t, s)
+	seedSessionTurn(t, s, "trace-1", "conv/1", time.Now().UTC())
+
+	want := `<a class="btn sm" href="/sessions/export?session=conv%2f1"`
+	if body := doSessions(t, h, "session="+url.QueryEscape("conv/1")).Body.String(); !strings.Contains(body, want) {
+		t.Errorf("the session view should offer its export as a plain link %q, got: %s", want, body)
+	}
+	if body := doSessions(t, h, "").Body.String(); strings.Contains(body, "/sessions/export") {
+		t.Errorf("the session list has no single session to export, got: %s", body)
+	}
+}

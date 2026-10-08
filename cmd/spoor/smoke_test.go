@@ -337,7 +337,7 @@ func TestServeIngestAndRenderTraceEndToEnd(t *testing.T) {
 	if list := getBody(t, client, "http://"+httpAddr+"/?service=another"); strings.Contains(list, "anthropic.chat") {
 		t.Errorf("?service=another should not list the capture, got: %s", list)
 	}
-	for path, want := range map[string]string{"/sessions": "<h1>Sessions</h1>", "/blind-spots": "SPOOR_RETENTION_DAYS", "/help": "claude mcp add"} {
+	for path, want := range map[string]string{"/sessions": "<h1>Sessions</h1>", "/blind-spots": "SPOOR_RETENTION_DAYS", "/help": "claude mcp add", "/traces/" + traceID + "/export": "spoor export · static page"} {
 		if page := getBody(t, client, "http://"+httpAddr+path); !strings.Contains(page, want) {
 			t.Errorf("GET %s should contain %q, got: %s", path, want, page)
 		}
