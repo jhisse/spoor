@@ -160,6 +160,8 @@ spoor export --session <session-id> > session.jsonl
 spoor export --html --trace <trace-id> > trace.html    # one self-contained file to share
 ```
 
+The **Export** button on a trace page and on a session downloads the same HTML page.
+
 The database is one SQLite file; [docs/schema.md](docs/schema.md) documents its tables and columns for anyone who opens it with `sqlite3`.
 
 ## Configuration

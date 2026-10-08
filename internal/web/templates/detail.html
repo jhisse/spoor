@@ -22,6 +22,7 @@
 {{else}}<span class="btn sm" aria-disabled="true">← Previous</span>{{end}}
 {{if .Next}}<a class="btn sm" href="/traces/{{.Next.ID}}" hx-get="/traces/{{.Next.ID}}" hx-target="#trace-detail" hx-swap="outerHTML" hx-push-url="true" hx-trigger="click, keyup[key=='ArrowRight' && {{template "kbd_ok"}}] from:body" title="{{.Next.Name}}">Next <kbd>→</kbd></a>
 {{else}}<span class="btn sm" aria-disabled="true">Next →</span>{{end}}
+<a class="btn sm" href="/traces/{{.Trace.ID}}/export" title="Download this trace as one self-contained HTML page">Export</a>
 </div>
 </div>
 {{with .Asked}}<p class="asked" title="{{.}}">{{.}}</p>{{end}}

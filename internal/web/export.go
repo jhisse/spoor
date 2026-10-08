@@ -1,8 +1,13 @@
 package web
 
 import (
+	"bytes"
+	"context"
+	"errors"
 	"html/template"
 	"io"
+	"net/http"
+	"strings"
 
 	"github.com/jhisse/spoor/internal/store"
 )
@@ -81,4 +86,68 @@ func appendExportSpans(out *[]exportSpan, nodes []*SpanNode, depth int) {
 		*out = append(*out, exportSpan{detailPageData: d, Depth: depth})
 		appendExportSpans(out, n.Children, depth+1)
 	}
+}
+
+// Export answers GET /traces/{trace_id}/export and GET /sessions/export
+// (?session=) with the page `spoor export --html` writes, as a download.
+// The session id stays in the query string, for the reason given on Sessions.
+func (h *Handlers) Export(w http.ResponseWriter, r *http.Request) {
+	kind, id := "trace", r.PathValue("trace_id")
+	if id == "" {
+		kind, id = "session", r.URL.Query().Get("session")
+	}
+	traces, spans, err := h.exportData(r.Context(), kind, id)
+	var page bytes.Buffer // held back, so that a failure is not half a file
+	if err == nil {
+		err = ExportHTML(&page, traces, spans)
+	}
+	if errors.Is(err, store.ErrNotFound) {
+		h.NotFound(w, r)
+		return
+	}
+	if err != nil {
+		fail(w, r, err)
+		return
+	}
+	// An id is any string the sender chose; the file name keeps what is safe in one.
+	name := strings.Map(func(c rune) rune {
+		if c >= 'a' && c <= 'z' || c >= 'A' && c <= 'Z' || c >= '0' && c <= '9' || strings.ContainsRune("._-", c) {
+			return c
+		}
+		return '_'
+	}, id)
+	w.Header().Set("Content-Type", "text/html; charset=utf-8")
+	w.Header().Set("Content-Disposition", `attachment; filename="spoor-`+kind+"-"+name+`.html"`)
+	_, _ = page.WriteTo(w)
+}
+
+// exportData reads the trace, or every turn of the session, each with its
+// spans. The reads are not one transaction: a turn the retention sweep
+// deleted since GetSession is left out, as `spoor export` does.
+func (h *Handlers) exportData(ctx context.Context, kind, id string) (traces []store.Trace, spans [][]store.Span, err error) {
+	ids := []string{id}
+	if kind == "session" {
+		_, turns, err := h.Store.GetSession(ctx, id)
+		if err != nil {
+			return nil, nil, err
+		}
+		ids = ids[:0]
+		for _, t := range turns {
+			ids = append(ids, t.ID)
+		}
+	}
+	for _, id := range ids {
+		t, sp, err := h.Store.GetTraceByID(ctx, id)
+		if errors.Is(err, store.ErrNotFound) {
+			continue
+		}
+		if err != nil {
+			return nil, nil, err
+		}
+		traces, spans = append(traces, t), append(spans, sp)
+	}
+	if len(traces) == 0 {
+		return nil, nil, store.ErrNotFound
+	}
+	return traces, spans, nil
 }

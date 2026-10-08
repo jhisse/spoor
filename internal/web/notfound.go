@@ -34,7 +34,7 @@ func (h *Handlers) NotFound(w http.ResponseWriter, r *http.Request) {
 	switch {
 	case strings.HasPrefix(r.URL.Path, "/traces/"):
 		d.Title, what = "Trace not found", "trace"
-	case r.URL.Path == "/sessions": // the route exists: only ?session= can miss
+	case r.URL.Path == "/sessions", r.URL.Path == "/sessions/export": // the routes exist: only ?session= can miss
 		d.Title, what = "Session not found", "session"
 	}
 	if what != "" {

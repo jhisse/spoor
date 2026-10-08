@@ -80,7 +80,7 @@ OTEL_SERVICE_NAME=my-app</pre>
 <dl class="spots">
 <div><dt><code>spoor serve</code></dt><dd class="why">This server: the UI and the OTLP receiver. No configuration needed.</dd></div>
 <div><dt><code>spoor demo</code></dt><dd class="why">Starts with real sample traces loaded, in a temporary database.</dd></div>
-<div><dt><code>spoor export --trace &lt;id&gt;</code></dt><dd class="why">A trace as JSONL, one span per line. <code>--session &lt;id&gt;</code> exports a session; <code>--html</code> writes one page you can share as a file.</dd></div>
+<div><dt><code>spoor export --trace &lt;id&gt;</code></dt><dd class="why">A trace as JSONL, one span per line. <code>--session &lt;id&gt;</code> exports a session; <code>--html</code> writes one page you can share as a file; the Export button on a trace or a session downloads that page.</dd></div>
 <div><dt><code>spoor reprice --dry-run</code></dt><dd class="why">Recalculates stored costs from the current price table. Without <code>--dry-run</code> it writes them.</dd></div>
 <div><dt><code>spoor migrate</code></dt><dd class="why">Applies pending schema migrations. <code>serve</code> does it on start.</dd></div>
 </dl>
