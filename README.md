@@ -11,6 +11,7 @@ One binary, one SQLite file, OpenTelemetry in. No account, no key, no cloud.
 [![Go 1.27+](https://img.shields.io/badge/go-1.27%2B-00ADD8.svg)](go.mod)
 [![No cgo](https://img.shields.io/badge/cgo-none-lightgrey.svg)](#one-small-thing)
 [![Release](https://img.shields.io/github/v/release/jhisse/spoor)](https://github.com/jhisse/spoor/releases)
+[![Docker](https://img.shields.io/badge/docker-ghcr.io-2496ED.svg)](#try-it)
 
 [Try it](#try-it) · [Send traces](#send-traces) · [What you see](#what-you-see) · [Connect an agent](#connect-an-agent) · [Operating](#operating) · [Limits](#limits)
 
@@ -52,13 +53,20 @@ spoor receives OpenTelemetry traces from LLM applications and coding agents, sto
 
 ## Try it
 
-Download the archive for your system from the [Releases page](https://github.com/jhisse/spoor/releases) (Linux, macOS and Windows, amd64 and arm64; `checksums.txt` is beside them), unpack it and run:
+With Docker, one command and nothing to install:
+
+```sh
+docker run --rm -p 127.0.0.1:8080:8080 -p 127.0.0.1:4318:4318 \
+  ghcr.io/jhisse/spoor:latest demo --http :8080 --ingest :4318
+```
+
+Open http://127.0.0.1:8080. It is the same demo as `spoor demo` below, in a container that is removed when you stop it. To keep your own traces, see [Docker](#docker).
+
+Without Docker, download the archive for your system from the [Releases page](https://github.com/jhisse/spoor/releases) (Linux, macOS and Windows, amd64 and arm64; `checksums.txt` is beside them), unpack it and run:
 
 ```sh
 ./spoor demo          # spoor.exe demo on Windows
 ```
-
-On macOS a binary downloaded with a browser is quarantined: `xattr -d com.apple.quarantine ./spoor` once. With Go 1.27 or newer, `go install github.com/jhisse/spoor/cmd/spoor@latest` or, from a clone, `go build -o spoor ./cmd/spoor`.
 
 `spoor demo` loads 21 traces from real sessions (Claude Code turns, a CrewAI crew, a LangGraph tool loop, multi-turn sessions), starts on loopback and prints the URL to open and a `curl` line that sends one more trace. The database is a temporary file removed on exit; `--db <path>` keeps it. If port 8080 or 4318 is taken, a free one is used.
 
@@ -97,7 +105,7 @@ docker run -d -v spoor-data:/data -e SPOOR_SQLITE_PATH=/data/spoor.db \
   -p 127.0.0.1:8080:8080 -p 127.0.0.1:4318:4318 ghcr.io/jhisse/spoor:latest
 ```
 
-The image is built for `linux/amd64` and `linux/arm64`; `docker build -t spoor .` makes the same one locally. Keep the volume: without it the database is lost when the container is recreated. The process runs as uid 65532, so a bind-mounted directory must be writable by that uid. Keep the `127.0.0.1:` in both `-p`: neither port has authentication. The demo in the image: `docker run --rm -p 127.0.0.1:8080:8080 ghcr.io/jhisse/spoor:latest demo --http :8080 --ingest :4318`.
+The image is built for `linux/amd64` and `linux/arm64`; `docker build -t spoor .` makes the same one locally. Keep the volume: without it the database is lost when the container is recreated. The process runs as uid 65532, so a bind-mounted directory must be writable by that uid. Keep the `127.0.0.1:` in both `-p`: neither port has authentication. The demo in the image is under [Try it](#try-it).
 
 ## What you see
 
