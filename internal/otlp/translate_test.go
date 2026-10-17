@@ -133,6 +133,30 @@ func TestDetectKindGenericWithoutGenAIAttrs(t *testing.T) {
 	}
 }
 
+// The GenAI conventions put the provider on tool and agent spans too: alone
+// it does not make a model call. A named model or reported usage does.
+func TestDetectKindNeedsAModelOrUsage(t *testing.T) {
+	cases := []struct {
+		name  string
+		attrs map[string]string
+		want  store.SpanKind
+	}{
+		{"provider alone", map[string]string{"gen_ai.provider.name": "anthropic"}, store.SpanKindGeneric},
+		{"system alone", map[string]string{"gen_ai.system": "openai"}, store.SpanKindGeneric},
+		{"request model", map[string]string{"gen_ai.system": "openai", "gen_ai.request.model": "gpt-5.4"}, store.SpanKindGeneration},
+		{"response model", map[string]string{"gen_ai.provider.name": "openai", "gen_ai.response.model": "gpt-5.4"}, store.SpanKindGeneration},
+		{"usage", map[string]string{"gen_ai.provider.name": "anthropic", "gen_ai.usage.input_tokens": "1"}, store.SpanKindGeneration},
+	}
+	for _, c := range cases {
+		// Repeated: map iteration order is randomized, and the result must not depend on it.
+		for range 20 {
+			if got := detectKind(c.attrs); got != c.want {
+				t.Fatalf("%s: detectKind = %q, want %q", c.name, got, c.want)
+			}
+		}
+	}
+}
+
 func TestReservedCostAttrOverridesCalculation(t *testing.T) {
 	span := loadCapturedSpan(t, "openllmetry-anthropic-simple")
 	span.Attributes = append(span.Attributes, spoorCostAttr(0.5))

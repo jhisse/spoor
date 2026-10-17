@@ -1,6 +1,7 @@
 package otlp
 
 import (
+	"maps"
 	"os"
 	"testing"
 
@@ -109,7 +110,7 @@ func TestClaudeCodeRealSimpleCapture(t *testing.T) {
 // The case normalizeInputTokens cannot infer: fresh input larger than the
 // cache. Claude Code's attribute name alone says it is disjoint.
 func TestBareInputTokensAreAlwaysDisjoint(t *testing.T) {
-	attrs := map[string]string{"gen_ai.system": "anthropic", "input_tokens": "5000", "cache_read_tokens": "4000", "output_tokens": "7"}
+	attrs := map[string]string{"gen_ai.system": "anthropic", "gen_ai.request.model": "claude-haiku-4-5", "input_tokens": "5000", "cache_read_tokens": "4000", "output_tokens": "7"}
 	s := translateAttrs(attrs)
 	wantTokens(t, "input", s.InputTokens, 9000)
 
@@ -117,4 +118,41 @@ func TestBareInputTokensAreAlwaysDisjoint(t *testing.T) {
 	// (9100, not the 9000 the bare count plus cache would also give).
 	attrs["gen_ai.usage.input_tokens"] = "9100"
 	wantTokens(t, "namespaced input", translateAttrs(attrs).InputTokens, 9100)
+}
+
+// From 2.1.300 Claude Code sends gen_ai.provider.name on every span, the tool
+// phases included. The phases' attributes are those of real stored spans of
+// such a release (identifiers replaced); the model call's model key is
+// assumed to be gen_ai.request.model, as in 2.1.287, since a stored span
+// keeps no consumed key in its metadata. Until a capture of such a release
+// is in testdata/: the phases stay generic and keep their phase, the model
+// call stays one.
+func TestClaudeCodeProviderOnEverySpan(t *testing.T) {
+	common := map[string]string{
+		"gen_ai.provider.name":   "anthropic",
+		"gen_ai.conversation.id": "31eeaf58-0000-4000-8000-000000000000",
+		"session.id":             "31eeaf58-0000-4000-8000-000000000000",
+	}
+	with := func(extra map[string]string) store.Span {
+		attrs := maps.Clone(common)
+		maps.Copy(attrs, extra)
+		return translateAttrs(attrs)
+	}
+	for _, c := range []struct {
+		name  string
+		span  store.Span
+		kind  store.SpanKind
+		phase Phase
+	}{
+		{"tool.blocked_on_user", with(map[string]string{"span.type": "tool.blocked_on_user", "decision": "accept", "source": "config", "duration_ms": "370"}), store.SpanKindGeneric, PhaseWaiting},
+		{"tool.execution", with(map[string]string{"span.type": "tool.execution", "gen_ai.tool.call.id": "toolu_01", "tool_use_id": "toolu_01", "success": "true", "duration_ms": "60"}), store.SpanKindGeneric, PhaseRunning},
+		{"llm_request", with(map[string]string{"span.type": "llm_request", "gen_ai.system": "anthropic", "gen_ai.request.model": "claude-sonnet-5-5", "input_tokens": "10", "output_tokens": "7"}), store.SpanKindGeneration, NotAPhase},
+	} {
+		if c.span.Kind != c.kind {
+			t.Errorf("%s: kind = %q, want %q", c.name, c.span.Kind, c.kind)
+		}
+		if got := PhaseOf(c.span); got != c.phase {
+			t.Errorf("%s: phase = %v, want %v", c.name, got, c.phase)
+		}
+	}
 }
