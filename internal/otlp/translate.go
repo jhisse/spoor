@@ -171,8 +171,14 @@ func detectKind(attrs map[string]string) store.SpanKind {
 	if kind, ok := operationKinds[attrs["gen_ai.operation.name"]]; ok {
 		return kind
 	}
+	// A model call names the model that served it or reports usage.
+	// gen_ai.provider.name and gen_ai.system alone are not one: the GenAI
+	// conventions put them on tool and agent spans too.
+	if _, ok := firstPresent(attrs, modelKeys...); ok {
+		return store.SpanKindGeneration
+	}
 	for key := range attrs {
-		if key == "gen_ai.provider.name" || key == "gen_ai.system" || strings.HasPrefix(key, "gen_ai.usage.") {
+		if strings.HasPrefix(key, "gen_ai.usage.") {
 			return store.SpanKindGeneration
 		}
 	}

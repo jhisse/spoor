@@ -33,27 +33,6 @@ const (
 	PhaseRunning       // the tool's own execution
 )
 
-// PhaseOf reads a stored span's phase from Claude Code's span.type.
-func PhaseOf(s store.Span) Phase {
-	attrs := storedAttrs(s)
-	switch t := attrs["span.type"]; {
-	case strings.HasSuffix(t, "tool.blocked_on_user") && attrs["decision"] == "reject":
-		return PhaseDenied
-	case strings.HasSuffix(t, "tool.blocked_on_user"):
-		return PhaseWaiting
-	case strings.HasSuffix(t, "tool.execution"):
-		return PhaseRunning
-	}
-	return NotAPhase
-}
-
-// Purpose is what the sender says a model call was for (the user's own
-// turn, a permission check, a title), as sent; "" when it does not say.
-func Purpose(s store.Span) string {
-	v, _ := firstPresent(storedAttrs(s), "query_source", "query_source_safe")
-	return v
-}
-
 // ToolIO reads a tool call's content from its tool.output event, for a
 // sender that puts it there and not in an attribute: the output or content
 // attribute is what came out, every other attribute is what went in.

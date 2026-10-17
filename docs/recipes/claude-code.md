@@ -32,6 +32,8 @@ Optional. Each adds content to the spans, readable by anyone who can open spoor:
 
 2026-10-03, Claude Code 2.1.287. Two exports of `claude -p` are in `testdata/` (`claude-code-simple`, `claude-code-tool-read`); translation and page tests run against them. Two more fixtures (`claude-code-interactive-tools`, `claude-code-interactive-parallel`) are interactive turns rebuilt from stored rows with every free-text value replaced; they are not wire captures.
 
+2.1.300 adds the GenAI conventions' attributes ([changelog](https://github.com/anthropics/claude-code/blob/main/CHANGELOG.md)): `gen_ai.provider.name` and `gen_ai.conversation.id` on every span, the tool phases included, and `gen_ai.operation.name` to the interaction and tool spans. spoor reads them, as seen on spans stored from such a release in October 2026; no capture of one is in `testdata/` yet.
+
 Documentation read on the same day: <https://code.claude.com/docs/en/monitoring-usage>. Trace export is a beta feature there, and attribute names may change.
 
 ## Known gaps
