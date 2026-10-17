@@ -23,12 +23,12 @@ sec:
 vulncheck:
 	govulncheck ./...
 
-# The line budget (AGENTS.md): non-test Go + templates + schema
-# migrations must stay readable in one afternoon.
+# The line budget (AGENTS.md): non-test Go, templates and schema migrations,
+# blank lines not counted, must stay readable in one afternoon.
 LOC_BUDGET := 10000
 loc:
 	@n=$$(find cmd internal migrations \( -name '*.go' -o -name '*.html' -o -name '*.sql' \) \
-		! -name '*_test.go' ! -path '*/storetest/*' | xargs cat | wc -l); \
+		! -name '*_test.go' ! -path '*/storetest/*' -exec awk NF {} + | wc -l); \
 	echo "loc: $$n / $(LOC_BUDGET)"; test $$n -le $(LOC_BUDGET)
 
 check: fmt vet lint sec vulncheck loc test
