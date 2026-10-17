@@ -4,7 +4,7 @@
 
 # spoor
 
-**See where your LLM and agent spend went.**<br>
+**See where your agent's context grew and where the prompt cache broke.**<br>
 One binary, one SQLite file, OpenTelemetry in. No account, no key, no cloud.
 
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
@@ -24,20 +24,20 @@ One binary, one SQLite file, OpenTelemetry in. No account, no key, no cloud.
 
 </div>
 
-spoor receives OpenTelemetry traces from LLM applications and coding agents, stores them, and shows where the time, the tokens and the money went. Your agent can read the traces too.
+spoor receives OpenTelemetry traces from LLM applications and coding agents, stores them, and shows what each model call added to its context, where the prompt cache broke, and where the time, the tokens and the money went. Your agent can read the traces too.
 
 ## What a bill cannot tell you
 
 | Question | Where spoor answers it |
 |---|---|
-| **Which call cost the money?** | Every model call shows the arithmetic: tokens of each type times the price per million, and the price table row used. |
-| **Why did the prompt cache stop applying?** | A call shows only the messages that are new since the previous one. When an earlier message was rewritten, spoor points at the character where it changed and shows the old and new text. |
 | **Where did the context grow, and where was the cache lost?** | One bar per model call shows the context of each step, split by cache read, fresh input, cache write and output; a compaction, a cache break and a cache expiry are marked on it, with the extra cost each one caused. |
+| **Why did the prompt cache stop applying?** | A call shows only the messages that are new since the previous one. When an earlier message was rewritten, spoor points at the character where it changed and shows the old and new text. |
 | **What did this turn really do?** | A trace reads as a transcript: each model call, what it added to its context, its answer and the tools that ran before the next. |
+| **Which call cost the money?** | Every model call shows the arithmetic: tokens of each type times the price per million, and the price table row used. |
 | **What does spoor not know?** | A page counts what it stored but could not read, so a missing number is never mistaken for zero. |
 
 <p align="center">
-<img src="assets/screenshot-context-light.png" width="49%" alt="The context of each of seven model calls of one Claude Code turn, as stacked bars of cache read, fresh input, cache write and output, with the cumulative cost drawn over them"> <img src="assets/screenshot-cost-light.png" width="49%" alt="The cost of one model call as four lines of arithmetic: cache read, fresh input, cache write at the 5-minute rate and output, each tokens times price per million, their sum, the price table row used, and a note on what the 1-hour rate would cost">
+<img src="assets/screenshot-context-light.png" width="100%" alt="The context of each of seven model calls of one Claude Code turn, as stacked bars of cache read, fresh input, cache write and output, with the cumulative cost drawn over them">
 </p>
 
 ## One small thing
