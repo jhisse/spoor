@@ -21,7 +21,7 @@ jobs:
 
       - uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
         with:
-          go-version: 1.27.1
+          go-version-file: go.mod
 
       - name: gofmt
         run: |
@@ -67,8 +67,10 @@ jobs:
         if: steps.cache-tools.outputs.cache-hit != 'true'
         run: go install github.com/securego/gosec/v2/cmd/gosec@${{ env.GOSEC_VERSION }}
 
+      # gosec v2.29.0 cannot read Go 1.27.2 export data (securego/gosec#1771):
+      # it analyses the code with Go 1.27.1 until v2.29.1 ships.
       - name: gosec
-        run: gosec ./...
+        run: GOTOOLCHAIN=go1.27.1 gosec ./...
 
       - name: install govulncheck
         if: steps.cache-tools.outputs.cache-hit != 'true'

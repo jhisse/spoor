@@ -68,6 +68,7 @@ func TestCatalogModelsResolveToTheirOwnRow(t *testing.T) {
 		{"claude-sonnet-4", "claude-sonnet-4(-20250514)?|", 3},
 		{"claude-sonnet-4-6", "claude-sonnet-4-6|", 3},
 		{"claude-haiku-4-5", "claude-haiku-4-5(", 1},
+		{"claude-haiku-5-5", "claude-haiku-5-5|", 0.10},
 		{"gpt-4o", "(gpt-4o)", 2.5},
 		{"gpt-4o-mini", "(gpt-4o-mini)", 0.15},
 		{"gpt-5", "(gpt-5)", 1.25},
@@ -96,6 +97,8 @@ func TestCatalogModelsResolveToTheirOwnRow(t *testing.T) {
 		{"anthropic/claude-opus-5.5", "claude-opus-5-5|", 4},
 		{"anthropic/claude-opus-5", "claude-opus-5|", 5},
 		{"anthropic/claude-haiku-4-5", "claude-haiku-4-5(", 1},
+		{"anthropic/claude-haiku-5.5", "claude-haiku-5-5|", 0.10},
+		{"us.anthropic.claude-haiku-5-5-v1:0", "claude-haiku-5-5|", 0.10},
 		{"us.anthropic.claude-opus-5-5-v1:0", "claude-opus-5-5|", 4},
 		{"global.anthropic.claude-opus-5-v1:0", "claude-opus-5|", 5},
 		{"us.anthropic.claude-opus-5-5-20260915-v1:0", "claude-opus-5-5|", 4},
@@ -104,6 +107,7 @@ func TestCatalogModelsResolveToTheirOwnRow(t *testing.T) {
 		{"claude-opus-4-5@20251101", "claude-opus-4-5(", 5},
 		{"openai/gpt-4o-mini", "(gpt-4o-mini)", 0.15},
 		{"google/gemini-3.6-flash", "(gemini-3.6-flash)", 0.75},
+		{"google/gemini-4-argon", "(gemini-4-argon)", 2},
 	}
 	for _, c := range cases {
 		p, ok := store.MatchModelPrice(prices, c.model)
@@ -125,7 +129,8 @@ func TestCatalogModelsResolveToTheirOwnRow(t *testing.T) {
 }
 
 // Published list prices, USD per million tokens, copied by hand from the
-// providers' own pages on 2026-10-03:
+// providers' own pages on 2026-10-03, and on 2026-10-17 for Claude Haiku 5.5,
+// Claude Sonnet 5.5's cache read and Gemini 4 Argon:
 //
 //	Anthropic https://platform.claude.com/docs/en/about-claude/pricing
 //	OpenAI    https://developers.openai.com/api/docs/pricing
@@ -135,6 +140,10 @@ func TestCatalogModelsResolveToTheirOwnRow(t *testing.T) {
 // model_prices.json change in the same commit. write and write1h are the 5-minute and 1-hour cache
 // writes: 0 for OpenAI and Google, whose pages list no such charge for these
 // models (write is then not pinned, and write1h must be absent).
+//
+// Claude Haiku 5.5 is the rate for prompts up to 100k tokens; Anthropic bills
+// longer ones at 5x. Gemini 4 Argon is Google's price until 2026-11-30; it
+// doubles on 2026-12-01.
 func TestCatalogPricesMatchPublishedPrices(t *testing.T) {
 	prices := catalogPrices(t)
 	cases := []struct {
@@ -153,11 +162,12 @@ func TestCatalogPricesMatchPublishedPrices(t *testing.T) {
 		{"claude-opus-4-5", 5, 6.25, 10, 0.50, 25},
 		{"claude-opus-4-1", 15, 18.75, 30, 1.50, 75},
 		{"claude-opus-4", 15, 18.75, 30, 1.50, 75},
-		{"claude-sonnet-5-5", 2, 2.50, 4, 0.20, 10},
+		{"claude-sonnet-5-5", 2, 2.50, 4, 0.10, 10},
 		{"claude-sonnet-5", 2, 2.50, 4, 0.20, 10},
 		{"claude-sonnet-4-6", 3, 3.75, 6, 0.30, 15},
 		{"claude-sonnet-4-5", 3, 3.75, 6, 0.30, 15},
 		{"claude-sonnet-4", 3, 3.75, 6, 0.30, 15},
+		{"claude-haiku-5-5", 0.10, 0.125, 0.20, 0.01, 0.50},
 		{"claude-haiku-4-5", 1, 1.25, 2, 0.10, 5},
 		{"claude-3-5-haiku-20241022", 0.80, 1, 1.60, 0.08, 4},
 		{"gpt-4o-mini", 0.15, 0, 0, 0.075, 0.60},
@@ -168,6 +178,7 @@ func TestCatalogPricesMatchPublishedPrices(t *testing.T) {
 		{"gpt-5.4-mini", 0.75, 0, 0, 0.075, 4.50},
 		{"o3", 2, 0, 0, 0.50, 8},
 		{"google/gemini-3.6-flash", 0.75, 0, 0, 0.075, 3.75},
+		{"google/gemini-4-argon", 2, 0, 0, 0.10, 10},
 	}
 	perM := func(v *float64) float64 {
 		if v == nil {
