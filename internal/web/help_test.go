@@ -25,7 +25,7 @@ func TestHelpPage(t *testing.T) {
 		"claude mcp add --transport http spoor http://spoor.local:8080/mcp",
 		"<kbd>←</kbd>", "<code>search_spans</code>", "<code>spoor export --trace &lt;id&gt;</code>",
 		`aria-current="page">Help</a>`,
-		"<dd class=\"n\">1.2.3</dd>", "160 models", "forever", // this build, the catalog it ships, the retention
+		"<dd class=\"n\">1.2.3</dd>", "162 models", "forever", // this build, the catalog it ships, the retention
 		"<b>~</b> before a cost", "<kbd>p</kbd> and <kbd>n</kbd>",
 		"The host in the addresses below", "<code>SPOOR_INGEST_ADDR</code>", // the port is the server's, not the request's
 	} {
