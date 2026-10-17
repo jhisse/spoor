@@ -8,6 +8,10 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
 env:
   GOLANGCI_LINT_VERSION: v2.14.0
   GOSEC_VERSION: v2.29.0
@@ -49,32 +53,36 @@ jobs:
         run: docker build -t spoor:ci .
 
       # Keyed by the pinned tool versions: a version bump invalidates the cache.
-      - name: cache lint/security tools
+      # Saved right after the install, so a later failing step does not throw
+      # the tools away (actions/cache only saves when the whole job succeeds).
+      - name: restore lint/security tools
         id: cache-tools
-        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           path: ~/go/bin
           key: tools-${{ runner.os }}-golangci-lint-${{ env.GOLANGCI_LINT_VERSION }}-gosec-${{ env.GOSEC_VERSION }}-govulncheck-${{ env.GOVULNCHECK_VERSION }}
 
-      - name: install golangci-lint
+      - name: install lint/security tools
         if: steps.cache-tools.outputs.cache-hit != 'true'
-        run: go install github.com/golangci/golangci-lint/v2/cmd/golangci-lint@${{ env.GOLANGCI_LINT_VERSION }}
+        run: |
+          go install github.com/golangci/golangci-lint/v2/cmd/golangci-lint@${{ env.GOLANGCI_LINT_VERSION }}
+          go install github.com/securego/gosec/v2/cmd/gosec@${{ env.GOSEC_VERSION }}
+          go install golang.org/x/vuln/cmd/govulncheck@${{ env.GOVULNCHECK_VERSION }}
+
+      - name: save lint/security tools
+        if: steps.cache-tools.outputs.cache-hit != 'true'
+        uses: actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: ~/go/bin
+          key: ${{ steps.cache-tools.outputs.cache-primary-key }}
 
       - name: golangci-lint
         run: golangci-lint run ./...
-
-      - name: install gosec
-        if: steps.cache-tools.outputs.cache-hit != 'true'
-        run: go install github.com/securego/gosec/v2/cmd/gosec@${{ env.GOSEC_VERSION }}
 
       # gosec v2.29.0 cannot read Go 1.27.2 export data (securego/gosec#1771):
       # it analyses the code with Go 1.27.1 until v2.29.1 ships.
       - name: gosec
         run: GOTOOLCHAIN=go1.27.1 gosec ./...
-
-      - name: install govulncheck
-        if: steps.cache-tools.outputs.cache-hit != 'true'
-        run: go install golang.org/x/vuln/cmd/govulncheck@${{ env.GOVULNCHECK_VERSION }}
 
       - name: govulncheck
         run: govulncheck ./...
