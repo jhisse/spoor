@@ -2,7 +2,7 @@
 # statically linked, with no libc dependency. The build stage always runs on
 # the builder's own architecture and cross-compiles, so a multi-arch image
 # needs no emulation.
-FROM --platform=$BUILDPLATFORM golang:1.27.1 AS builder
+FROM --platform=$BUILDPLATFORM golang:1.27.2 AS builder
 ARG TARGETOS TARGETARCH
 ARG VERSION=dev
 WORKDIR /build

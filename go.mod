@@ -2,7 +2,7 @@ module github.com/jhisse/spoor
 
 go 1.27.0
 
-toolchain go1.27.1
+toolchain go1.27.2
 
 require (
 	go.opentelemetry.io/proto/otlp v1.11.1
