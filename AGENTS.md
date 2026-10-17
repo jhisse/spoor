@@ -33,7 +33,7 @@ These are product behaviour, not style.
 
 ### The line budget
 
-At most **10,000 lines** of non-test Go, HTML templates and schema migrations (`cmd`, `internal`, `migrations`; tests and `storetest` do not count). `make loc` prints the count and fails above the limit; it is part of `make check`. A change that would exceed it removes something first.
+At most **10,000 lines** of non-test Go, HTML templates and schema migrations (`cmd`, `internal`, `migrations`; tests and `storetest` do not count), blank lines not counted. `make loc` prints the count and fails above the limit; it is part of `make check`. A change that would exceed it removes something first.
 
 ### Deciding on a feature
 
