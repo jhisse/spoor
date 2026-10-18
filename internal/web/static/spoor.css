@@ -156,6 +156,7 @@ a, button, summary, input, select { transition: background-color .1s, border-col
 .head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 16px; margin-bottom: 16px; }
 .head h1 { display: flex; align-items: center; gap: 8px; min-width: 0; overflow-wrap: anywhere; }
 #sessions .head h1 { flex-wrap: wrap; row-gap: 0; }   /* a long session id takes the next line */
+#sessions .head h1 > .ellip { max-width: min(72ch, 60vw); }   /* the first prompt, named in full up to a line */
 /* What the person asked, under the trace's name: two lines at most, whole in the title. */
 .asked { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; margin: 2px 0 8px; overflow: hidden; overflow-wrap: anywhere; font-size: 14px; line-height: 20px; color: var(--ink-2); }
 .head .sub { flex: none; font: 400 12px/16px var(--mono); color: var(--ink-3); }

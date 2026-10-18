@@ -86,6 +86,7 @@ type sessionReplay struct {
 	Strip      template.HTML // the turn strip, one column per turn
 	Legend     template.HTML
 	Chart      *contextChart // nil below two generations
+	Subject    string        // the first prompt of the first turn; "" when none was recorded
 }
 
 // Sessions renders GET /sessions: the conversation sessions, optionally
@@ -162,6 +163,11 @@ func (h *Handlers) sessionReplay(ctx context.Context, sessionID string, data *se
 		return err
 	}
 	data.Replay = buildReplay(summary, traces)
+	subjects, err := h.subjects(ctx, []string{summary.FirstTraceID}, subjectText)
+	if err != nil {
+		return err
+	}
+	data.Replay.Subject = subjects[summary.FirstTraceID]
 	data.Replay.Chart = buildSessionChart(traces, gens, prices)
 	turns := map[string]*sessionTurn{}
 	for i := range data.Replay.Turns {

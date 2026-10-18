@@ -151,8 +151,11 @@ func TestSessionsReplayPreviewsEveryTurnWithoutPerTurnReads(t *testing.T) {
 		t.Fatalf("status = %d, want 200", w.Code)
 	}
 	body := w.Body.String()
-	if n := strings.Count(body, "qual a capital?"); n != 2 {
+	if n := strings.Count(body, `<div class="prose">qual a capital?`); n != 2 {
 		t.Errorf("prompt preview appears %d times, want once per turn (2)", n)
+	}
+	if !strings.Contains(body, `<span class="ellip" title="qual a capital?">qual a capital?</span>`) {
+		t.Error("the session is named by the first prompt of its first turn")
 	}
 	if strings.Contains(body, "ignored") {
 		t.Error("a turn previews a later generation span, want its first")
