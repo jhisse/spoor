@@ -16,6 +16,7 @@ type contextSpark struct {
 	Shrank, Breaks, Expiries int           // steps marked C, B and E
 	Extra                    float64       // what the breaks and expiries with a price are estimated to have added
 	Why                      string        // their sentences
+	Read                     string        // share of the input read from cache; "" when no call reported a cache count
 	SVG                      template.HTML // empty when no call reports tokens
 }
 
@@ -54,6 +55,8 @@ func buildContextSpark(steps []genStep, pitch int, height float64) contextSpark 
 			s.Why += " " + st.Break
 		}
 	}
+	cached, reported := cacheMix(steps)
+	s.Read = readShare(cached, reported)
 	if s.Peak == 0 {
 		return s
 	}

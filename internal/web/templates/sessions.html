@@ -13,6 +13,7 @@
 <div class="band"><dl class="stats grow">
 <div><dt>Turns</dt><dd>{{.Summary.TraceCount}}</dd></div><div><dt>Work (sum of turns)</dt><dd>{{.Work}}</dd></div><div><dt>Wall clock</dt><dd>{{.Wall}}</dd></div>
 <div><dt>Tokens</dt><dd>{{tokenSum .Summary.TotalInputTokens .Summary.TotalOutputTokens}}</dd></div><div><dt>Cost</dt><dd>{{template "cache_unknown" .Summary.CacheUnknown}}{{costVal .Summary.TotalCostUSD}}</dd></div>
+{{template "cache_stats" .Chart}}
 </dl></div>
 {{if .Strip}}<figure class="sec">
 <div class="chart-h"><h3>Turns <span class="muted">· one column per turn · height = {{.StripScale}} · the split is its token mix · ⋯ = idle time</span></h3>
@@ -59,7 +60,7 @@
 <div class="legend mt">{{.Legend}}</div>
 {{if .Dollars}}<p class="cap mt measure">{{.DollarsNote}}</p>
 <div class="chart">{{.Dollars}}</div>{{end}}
-{{range .Breaks}}<p class="callout warn mt measure">{{.}}</p>{{end}}
+{{template "cache_losses" .}}
 <details class="disc mt"><summary class="cap">How spoor tells the contexts apart, and what C, B and E mean</summary>
 <p class="cap mt measure">The spans do not say which context a call belongs to, so spoor reads it from the tokens: a call continues the earlier call whose prompt it read from cache; when it read none, spoor assumes the largest earlier prompt of the same model not larger than its own, and says so. <b>C</b> smaller context: a prompt smaller than every context so far — a compaction or a sub-agent's first call; the spans do not say which. <b>B</b> cache break: the call read at most half the cache share its context had and wrote at least as much as it read. <b>E</b> cache expiry: a break after 5 minutes or more without a call in that context. A pause is labelled from 5 minutes, a common prompt-cache lifetime.</p></details>
 {{range .Notes}}<p class="cap measure">{{.}}</p>{{end}}

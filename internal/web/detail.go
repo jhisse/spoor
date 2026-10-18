@@ -133,6 +133,9 @@ func (h *Handlers) Detail(w http.ResponseWriter, r *http.Request) {
 	if err == nil {
 		data.Chart, data.Delta, err = h.contextViews(ctx, trace, spans, selectedID)
 	}
+	if l, ok := data.Chart.lossLook(); ok {
+		data.Look = withLossLook(data.Look, l)
+	}
 	if err == nil && wantRead {
 		data.Read, err = h.readView(ctx, trace, spans, data.Keep)
 	}

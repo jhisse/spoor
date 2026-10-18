@@ -57,16 +57,16 @@
 </div>{{end}}
 {{if .Traces}}
 <table class="data cards traces">
-<thead><tr><th>Trace</th><th>Model</th>{{if not (.Form.Get "service")}}<th>Service</th>{{end}}<th>Started</th><th class="num">Duration</th>{{if .Scale.Context}}<th>Context <small>· per model call</small></th>{{end}}<th class="num">Tokens{{if .Scale.Tokens}} <small>· bar 0–{{fmtCount .Scale.Tokens}}</small>{{end}}</th><th class="num">Cost</th></tr></thead>
+<thead><tr><th>Trace</th>{{if .Scale.Context}}<th>Context <small>· per model call</small></th>{{end}}<th>Model</th>{{if not (.Form.Get "service")}}<th>Service</th>{{end}}<th>Started</th><th class="num">Duration</th><th class="num">Tokens{{if .Scale.Tokens}} <small>· bar 0–{{fmtCount .Scale.Tokens}}</small>{{end}}</th><th class="num">Cost</th></tr></thead>
 <tbody>
 {{range .Traces}}{{$row := .}}
 <tr{{if .Hit}} class="has-why"{{end}}>
 <td class="main"><span class="cellmain">{{template "status_glyph" .Status}}<a class="rowlink name" href="{{.URL}}" title="{{.Name}}">{{.Name}}</a><span class="mono muted">{{printf "%.8s" .ID}}</span>{{if .Rootless}}<span class="chip look" title="root span not received yet: the name is the oldest span's and the totals cover what has arrived">◷ in progress</span>{{end}}{{if .Why}}<span class="chip look">{{.Why}}</span>{{end}}</span>{{with .Asked}}<span class="ask" title="{{.}}">{{.}}</span>{{end}}</td>
+{{if $.Scale.Context}}<td class="ctxcol">{{with .Ctx}}<span class="row" title="{{.Calls}} model calls, the largest {{fmtCount .Peak}} tokens.{{.Why}}">{{.SVG}}{{with .Read}}<span class="cap" title="share of the input read from cache">{{.}} cached</span>{{end}}{{template "ctx_marks" .}}</span>{{end}}</td>{{end}}
 <td class="dim" data-l=""><span class="ellip" title="{{range $i, $m := .Models}}{{if $i}}, {{end}}{{$m}}{{end}}">{{if .Models}}{{index .Models 0}}{{with .MoreModels}} <span class="muted">+{{.}}</span>{{end}}{{else}}–{{end}}</span></td>
 {{if not ($.Form.Get "service")}}<td class="dim" data-l=""><span class="ellip" title="{{strVal .Service}}">{{if .Service}}{{strVal .Service}}{{else}}—{{end}}</span></td>{{end}}
 <td class="dim" data-l="" title="{{.StartedAt.Format "2006-01-02 15:04:05"}} UTC">{{relTime .StartedAt}}</td>
 <td class="num">{{fmtDuration (.EndedAt.Sub .StartedAt)}}</td>
-{{if $.Scale.Context}}<td class="ctxcol">{{with .Ctx}}<span class="row" title="{{.Calls}} model calls, the largest {{fmtCount .Peak}} tokens.{{.Why}}">{{.SVG}}{{template "ctx_marks" .}}</span>{{end}}</td>{{end}}
 <td class="num wide"><span class="cellbar">{{tokenSum .TotalInputTokens .TotalOutputTokens}}<span class="tokcell">{{tokenBar .Mix $.Scale.Tokens 64 6}}</span></span></td>
 <td class="num end" data-l="cost">{{template "cache_unknown" .CacheUnknown}}{{costVal .TotalCostUSD}}</td>
 </tr>

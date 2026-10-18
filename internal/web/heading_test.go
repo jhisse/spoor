@@ -2,6 +2,9 @@ package web
 
 import (
 	"context"
+	"os"
+	"regexp"
+	"strconv"
 	"strings"
 	"testing"
 	"time"
@@ -157,10 +160,10 @@ func TestViewSwitchKeepsTheAddressAndComesFirst(t *testing.T) {
 }
 
 // The tree view fills the window (no page scroll for an arrow key to move),
-// with the context per step open beside the tree, above the selected span;
-// the pointers sit on the line of the view switch. The Read view scrolls as a
-// document, with the same chart above the transcript.
-func TestTraceLayoutPutsContextAboveTheSelectedSpan(t *testing.T) {
+// with the context per step open across it, above the tree and the selected
+// span; the pointers sit on the line of the view switch. The Read view
+// scrolls as a document, with the same chart above the transcript.
+func TestTraceLayoutPutsContextAboveTheWorkspace(t *testing.T) {
 	s := newTestStore(t)
 	h := newTestHandlers(t, s)
 	now := time.Now()
@@ -174,10 +177,10 @@ func TestTraceLayoutPutsContextAboveTheSelectedSpan(t *testing.T) {
 	if !strings.Contains(body, `<div id="trace-detail" class="fit">`) {
 		t.Error("the tree view should fit the window")
 	}
-	order := []string{`aria-label="View"`, ">Worth a look<", `id="span-tree"`, `class="col"`, `ctxband panel" open`, `id="span-detail"`}
+	order := []string{`aria-label="View"`, ">Worth a look<", `ctxband panel" open`, `id="span-tree"`, `class="col"`, `id="span-detail"`}
 	for k := 1; k < len(order); k++ {
 		if at(order[k-1]) >= at(order[k]) || at(order[k]) < 0 {
-			t.Errorf("order: %q should come before %q (switch, pointers, tree, then the open context above the selected span)", order[k-1], order[k])
+			t.Errorf("order: %q should come before %q (switch, pointers, the open context, then the tree and the selected span)", order[k-1], order[k])
 		}
 	}
 
@@ -185,4 +188,56 @@ func TestTraceLayoutPutsContextAboveTheSelectedSpan(t *testing.T) {
 	if strings.Contains(read, `class="fit"`) || !strings.Contains(read, `ctxband panel" open`) || strings.Index(read, `ctxband panel" open`) > strings.Index(read, `turn-n`) {
 		t.Error("the Read view scrolls with the page and starts with the context chart")
 	}
+}
+
+// The context band is a line of the fitting column, so it must be allowed to
+// shrink: with flex: none it keeps its height, the workspace's own min-height
+// then overflows the viewport, and an arrow key scrolls the page the fit
+// layout exists to keep still.
+func TestContextBandCanShrinkInTheFittingColumn(t *testing.T) {
+	css := readCSS(t)
+	rule := regexp.MustCompile(`#trace-detail\.fit > \.ctxband\s*\{([^}]*)\}`).FindStringSubmatch(css)
+	if rule == nil {
+		t.Fatal("spoor.css has no rule for the context band in the fitting column")
+	}
+	if !strings.Contains(rule[1], "flex: 0 1 auto") {
+		t.Errorf("#trace-detail.fit > .ctxband = %q, want flex: 0 1 auto so the band gives height back", rule[1])
+	}
+}
+
+// A wide but short window cannot hold the lines above the workspace and its
+// floor, so the fit layout is dropped there and the page scrolls: squeezing
+// the band to a few pixels to keep the page still would hide the chart.
+func TestShortWideWindowDropsTheFitLayout(t *testing.T) {
+	css := readCSS(t)
+	block := regexp.MustCompile(`(?s)@media \(min-width: 1024px\) and \(max-height: (\d+)px\)\s*\{(.*?)\n\}`).FindStringSubmatch(css)
+	if block == nil {
+		t.Fatal("spoor.css has no media query dropping the fit layout on a short window")
+	}
+	if h, _ := strconv.Atoi(block[1]); h < 700 || h > 800 {
+		t.Errorf("the fit layout is dropped under %s px of height, want a threshold in 700-800", block[1])
+	}
+	for _, want := range []string{
+		"#trace-detail.fit { display: block",
+		"#trace-detail.fit > .ws { display: flex; flex-direction: column",
+		"#trace-detail.fit > .ctxband { max-height: none",
+	} {
+		if !strings.Contains(block[2], want) {
+			t.Errorf("the short-window rule is missing %q", want)
+		}
+	}
+	// The workspace floor has to leave the band room above it.
+	ws := regexp.MustCompile(`#trace-detail\.fit > \.ws \{([^}]*)\}`).FindStringSubmatch(css)
+	if ws == nil || !strings.Contains(ws[1], "min-height: 200px") {
+		t.Errorf("#trace-detail.fit > .ws = %q, want a 200px floor so the band keeps its height", ws)
+	}
+}
+
+func readCSS(t *testing.T) string {
+	t.Helper()
+	css, err := os.ReadFile("static/spoor.css")
+	if err != nil {
+		t.Fatal(err)
+	}
+	return string(css)
 }

@@ -18,8 +18,10 @@ type contextChart struct {
 	Dollars     template.HTML // empty when some generation's model has no price
 	DollarsNote string        // what priced the dollar bars
 	Legend      template.HTML
-	Breaks      []string // one sentence per cache break
-	Notes       []string // what was left out, and why
+	Losses      []cacheLoss // the steps that lost their cache, one group per way
+	ReadShare   string      // share of the input read from cache; "" when no call reported a cache count
+	ReadCalls   int         // how many of the Steps reported a cache count
+	Notes       []string    // what was left out, and why
 	Spark       contextSpark
 }
 
@@ -58,13 +60,11 @@ func buildContextChart(steps []genStep, prices []store.ModelPrice, selectedID st
 	cum := make([]float64, len(steps))
 	var total float64
 	var unpriced, uncosted int
-	hasCache := false
 	var sum TokenMix
 	for i, st := range steps {
 		mix := st.Span.Mix()
 		sum = sum.Add(mix)
 		s := chartStep{genStep: st, Tokens: floats(mix.Parts()), Marker: st.Mark, Selected: st.Span.ID == selectedID}
-		hasCache = hasCache || st.Span.CacheReadTokens != nil || st.Span.CacheWriteTokens != nil
 		price, ok := priceFor(prices, st.Span.Model)
 		if ok {
 			s.Dollars = price.Cost(mix)
@@ -77,9 +77,6 @@ func buildContextChart(steps []genStep, prices []store.ModelPrice, selectedID st
 			uncosted++
 		}
 		cum[i] = total
-		if st.Break != "" {
-			c.Breaks = append(c.Breaks, st.Break)
-		}
 		cs[i] = s
 	}
 	if uncosted > 0 {
@@ -94,12 +91,15 @@ func buildContextChart(steps []genStep, prices []store.ModelPrice, selectedID st
 	} else {
 		c.Notes = append(c.Notes, fmt.Sprintf("%d of %d generations have no known price for the model: dollar band omitted.", unpriced, len(steps)))
 	}
-	if !hasCache {
+	cached, reported := cacheMix(steps)
+	c.ReadCalls, c.ReadShare = reported, readShare(cached, reported)
+	if c.ReadCalls == 0 {
 		c.Notes = append(c.Notes, "These spans report no cache tokens: two categories only, input and output.")
 	}
 	if crowded > 0 {
 		c.Notes = append(c.Notes, fmt.Sprintf("%d marks that would sit on top of the mark before them are not drawn; each is in its bar's tooltip.", crowded))
 	}
+	c.Losses = groupLosses(steps)
 	c.Legend = legend(sum, false) + chartKey(drawn(cs), cum != nil)
 	return c
 }
