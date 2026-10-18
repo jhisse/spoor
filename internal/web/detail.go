@@ -1,6 +1,7 @@
 package web
 
 import (
+	"context"
 	"errors"
 	"html/template"
 	"io"
@@ -129,15 +130,8 @@ func (h *Handlers) Detail(w http.ResponseWriter, r *http.Request) {
 	if filter != (store.SpanFilter{}) {
 		data.Search = buildTraceSearch(r.URL, filter, hits, selectedID)
 	}
-	wantRead := data.treeViews(r.URL, spans)
 	if err == nil {
-		data.Chart, data.Delta, err = h.contextViews(ctx, trace, spans, selectedID)
-	}
-	if err == nil && wantRead {
-		data.Read, err = h.readView(ctx, trace, spans, data.Keep)
-	}
-	if data.Chart != nil && data.Read == nil {
-		data.Chart.pick(data.Keep)
+		err = h.contextAndRead(ctx, &data, trace, spans, selectedID, r.URL)
 	}
 	if err == nil && selected != nil {
 		data.showSpan(selected)
@@ -154,6 +148,32 @@ func (h *Handlers) Detail(w http.ResponseWriter, r *http.Request) {
 	page := &pageBuffer{ResponseWriter: w}
 	h.renderPage(page, r, detailTmpl, service, &data)
 	_, _ = io.WriteString(w, markPage(page.String(), filter.Text))
+}
+
+// contextAndRead fills what the page draws from the model calls: the context
+// chart and the selected span's delta, the cache-loss pointer it adds to the
+// "worth a look" line, and the Read view when the reader asked for it. The
+// chart's bars select spans, so it is picked last, once the Read view is known
+// to be absent.
+func (h *Handlers) contextAndRead(ctx context.Context, data *detailPageData, trace store.Trace, spans []store.Span, selectedID string, u *url.URL) error {
+	wantRead := data.treeViews(u, spans)
+	chart, delta, err := h.contextViews(ctx, trace, spans, selectedID)
+	if err != nil {
+		return err
+	}
+	data.Chart, data.Delta = chart, delta
+	if l, ok := chart.lossLook(); ok {
+		data.Look = withLossLook(data.Look, l)
+	}
+	if wantRead {
+		if data.Read, err = h.readView(ctx, trace, spans, data.Keep); err != nil {
+			return err
+		}
+	}
+	if chart != nil && data.Read == nil {
+		chart.pick(data.Keep)
+	}
+	return nil
 }
 
 // pageBuffer holds a rendered page back so that markPage can mark it.

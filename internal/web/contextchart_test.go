@@ -156,8 +156,8 @@ func TestBuildContextChartWithCacheAndCost(t *testing.T) {
 	if !strings.Contains(string(c.Dollars), ">$0.1515</text>") {
 		t.Errorf("dollar band scale: %s", c.Dollars)
 	}
-	if len(c.Breaks) != 0 {
-		t.Errorf("a new, smaller context has no cache to lose: Breaks = %v", c.Breaks)
+	if len(breaks(c)) != 0 {
+		t.Errorf("a new, smaller context has no cache to lose: Breaks = %v", breaks(c))
 	}
 }
 
@@ -186,7 +186,7 @@ func TestBuildContextChartDegradesWithoutCacheCostOrPrice(t *testing.T) {
 	}
 	c := buildContextChart(genSteps(spans), sonnet, "")
 	tokens := string(c.Tokens)
-	if strings.Contains(tokens, "<polyline") || c.Dollars != "" || len(c.Breaks) != 0 {
+	if strings.Contains(tokens, "<polyline") || c.Dollars != "" || len(breaks(c)) != 0 {
 		t.Errorf("no cost, no price, no cache columns: line, dollar band and breaks must be absent")
 	}
 	if strings.Contains(tokens, "url(#hatch)") || strings.Contains(tokens, "tk-write") {

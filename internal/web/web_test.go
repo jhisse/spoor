@@ -127,3 +127,12 @@ func onlyTrace(t *testing.T, s store.Store) (store.Trace, []store.Span) {
 	}
 	return tr, spans
 }
+
+// breaks is every step-by-step sentence of c's cache losses, group by group.
+func breaks(c *contextChart) []string {
+	var out []string
+	for _, l := range c.Losses {
+		out = append(out, l.Sentences...)
+	}
+	return out
+}

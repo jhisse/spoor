@@ -20,7 +20,7 @@
 <div id="ctx-body"{{if not $.Read}} hx-target="#span-detail" hx-select="#span-detail" hx-select-oob="#span-tree:innerHTML,#ctx-body,#find" hx-push-url="true" hx-swap="outerHTML show:#span-top:top"{{end}}>
 <div class="chart mt">{{.Tokens}}</div>
 <div class="legend mt">{{.Legend}}</div>
-{{range .Breaks}}<p class="cap warn-t mt">{{.}}</p>{{end}}
+{{template "cache_losses" .}}
 {{range .Notes}}<p class="cap">{{.}}</p>{{end}}
 {{if .Dollars}}<details class="disc mt"><summary class="cap">The same steps in dollars</summary><p class="cap mt">{{.DollarsNote}}</p><div class="chart">{{.Dollars}}</div></details>{{end}}
 </div>

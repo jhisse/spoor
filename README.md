@@ -124,8 +124,9 @@ The image is built for `linux/amd64` and `linux/arm64`; `docker build -t spoor .
 
 **The trace page**
 
-- **Header.** The name, with what the person asked under it; the figures; a Tree | Read switch with pointers worth a look beside it (the first failure, the slowest step, the most expensive one, the one with most tokens; a step that is several of these is one pointer with each reason).
-- **Context per step.** Open above the selected span: one stacked bar per model call (cache read, fresh input, cache write, output) with cumulative cost. A model call shows only the messages that are new since the previous one; when an earlier message was rewritten, the panel points at the character where it changed and shows the old and new text: a prompt cache can only be reused up to that character. This needs the sender to export the messages; Claude Code does not.
+- **Header.** The name, with what the person asked under it; the figures; the share of the input read from cache and what lost the cache, with its estimated extra cost — both only when the calls reported a cache count, and the share naming how many calls it covers when not all did; a Tree | Read switch with pointers worth a look beside it (the first failure, the first step that lost its cache, the slowest step, the most expensive one, the one with most tokens; a step that is several of these is one pointer with each reason).
+- **Context per step.** Open across the page, above the tree and the selected span: one stacked bar per model call (cache read, fresh input, cache write, output) with cumulative cost. A model call shows only the messages that are new since the previous one; when an earlier message was rewritten, the panel points at the character where it changed and shows the old and new text: a prompt cache can only be reused up to that character. This needs the sender to export the messages; Claude Code does not.
+- **Where the cache was lost.** One line per way it was lost (expiries after a pause, breaks), with the steps and their estimated extra cost; the step-by-step explanation opens under it.
 - **The span tree and the selected span.** Duration, position in time, tokens and cost on every row. The selected span shows its path from the root and its place ("Span 4 of 65"), its prompt and completion as chat messages, tool calls and results as cards, events, metadata as a tree, the arithmetic behind its cost, and how its duration compares with similar spans.
 - **Keyboard.** On a wide screen the page fits the window, so the arrow keys move the selection and the page stays still.
 
@@ -134,7 +135,7 @@ The image is built for `linux/amd64` and `linux/arm64`; `docker build -t spoor .
 **Read view, sessions and blind spots**
 
 - **Read view.** Lays the model calls out as a transcript: what each added to its context, its answer and the tools that ran before the next, with the call's time, tokens and cost in the margin.
-- **Sessions.** Traces that share a session id are one session, named by the first prompt of its first turn: a column per turn, the pauses between turns, work time apart from wall-clock time, cumulative cost.
+- **Sessions.** Traces that share a session id are one session, named by the first prompt of its first turn: a column per turn, the pauses between turns, work time apart from wall-clock time, cumulative cost, the share read from cache and what lost it.
 - **Blind spots.** What spoor stores but cannot read, counted: traces without a root, spans without their parent, model calls without tokens, a model or a price, costs priced without cache counts, prompts not readable as messages. And what never reached storage: spans refused for a bad id, log and metric requests dropped, the retention in effect.
 - **Help.** The addresses to send traces to, the keyboard shortcuts, how to connect an agent over MCP and the commands, with this server's own addresses filled in.
 

@@ -96,3 +96,35 @@ func TestListMarksACacheBreakWithItsEstimatedCost(t *testing.T) {
 		}
 	}
 }
+
+// A trace whose call lost its cache gets a "cache lost" pointer on the line
+// of the view switch, after the first failure and before the slowest step,
+// landing on the step that lost it.
+func TestTracePagePointsAtTheStepThatLostTheCache(t *testing.T) {
+	s := newTestStore(t)
+	h := newTestHandlers(t, s)
+	now := time.Now().UTC()
+	tr := seedTrace(t, s, "trace-1", now)
+	var spans []store.Span
+	for i, v := range [][3]int64{{90_000, 88_000, 2_000}, {95_000, 0, 95_000}} {
+		sp := gen(tr.ID, fmt.Sprintf("g%d", i), nil, now.Add(time.Duration(i)*time.Second), nil)
+		sp.Model, sp.InputTokens, sp.CacheReadTokens, sp.CacheWriteTokens, sp.OutputTokens = ptr("claude-sonnet-5"), &v[0], &v[1], &v[2], i64Ptr(10)
+		spans = append(spans, sp)
+	}
+	insertSpans(t, s, spans...)
+
+	body := doDetail(t, h, tr.ID).Body.String()
+	if !strings.Contains(body, `>cache lost <b class="ellip">`) {
+		t.Error("the trace page should point at the step that lost the cache")
+	}
+	if !strings.Contains(body, "</b> step 2 · &#43;$") {
+		t.Errorf("the pointer should name the step and its estimated cost, got: %s", body)
+	}
+	if !strings.Contains(body, `href="/traces/`+tr.ID+`?span=g1"`) {
+		t.Error("the pointer should land on the step that lost the cache")
+	}
+	// The loss itself is one line, with the step-by-step sentence behind it.
+	if !strings.Contains(body, "1 cache break · step 2") {
+		t.Error("the band should group the loss into one line")
+	}
+}

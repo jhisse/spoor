@@ -35,6 +35,7 @@
 <div><dt>Duration</dt><dd>{{fmtDuration (.Trace.EndedAt.Sub .Trace.StartedAt)}}</dd></div>
 <div><dt>Cost</dt><dd>{{template "cache_unknown" .Totals.CacheUnknown}}{{costVal .Totals.CostUSD}}</dd></div>
 <div><dt>Tokens</dt><dd class="row">{{tokenPair .Totals.InputTokens .Totals.OutputTokens}}{{tokenBar .Totals.Tokens 0 120 8}}</dd></div>
+{{template "cache_stats" .Chart}}
 <div><dt>Spans</dt><dd>{{.Totals.SpanCount}}</dd></div>
 {{if .Totals.Models}}<div><dt>Models</dt><dd class="plain mono">{{range $i, $m := .Totals.Models}}{{if $i}}, {{end}}{{$m}}{{end}}</dd></div>{{end}}
 <div><dt>Service</dt><dd class="plain">{{if .Trace.Service}}{{strVal .Trace.Service}}{{else}}—{{end}}</dd></div>
@@ -45,10 +46,10 @@
 <div class="bar">{{template "view_switch" .}}{{template "look_chips" .}}</div>
 {{template "trace_search" .}}
 {{if .Read}}<div class="mt">{{template "context_band" .}}</div>{{template "read_view" .}}{{else}}
+{{template "context_band" .}}
 <div class="ws"><i id="span-top" class="ws-top"></i>
 <div class="pane" id="span-tree">{{template "tree_pane" .}}</div>
 <div class="col">
-{{template "context_band" .}}
 <div class="pane" id="span-detail">
 {{template "span_detail" .}}
 <i id="span-end" hidden></i></div>

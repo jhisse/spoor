@@ -319,7 +319,7 @@ kbd { display: inline-block; min-width: 18px; padding: 0 4px; border: 1px solid 
 .data td a:not(.rowlink), .data td button, .data td details { position: relative; z-index: 1; }
 /* In-row bar: number right-aligned, then a fixed-width bar anchored at a shared zero. */
 .cellbar { display: inline-flex; align-items: center; justify-content: flex-end; gap: 8px; }
-.data.traces td.main { width: 46%; }
+.data.traces td.main { width: 38%; }
 /* width 0 + min-width 100%: the line fills its column but never widens it. */
 .ask { display: block; width: 0; min-width: 100%; margin-top: 2px; font-size: 12px; line-height: 16px; color: var(--ink-3); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .cellmain { display: flex; align-items: center; gap: 8px; min-width: 0; }
@@ -399,10 +399,16 @@ kbd { display: inline-block; min-width: 18px; padding: 0 4px; border: 1px solid 
    positioned content (.sr text deep in a long tree), which would otherwise
    make the page as tall as the tree. */
 .ws { display: grid; grid-template-columns: clamp(420px, 40%, 620px) minmax(0, 1fr); gap: 12px; position: relative; height: calc(100vh - var(--top-h) - 24px); min-height: 420px; margin-top: 12px; }
-/* The right column: the context chart above the selected span. */
+/* The right column: the selected span. The context chart is above the workspace, across it. */
 .col { display: grid; gap: 12px; min-width: 0; }
-.col > .ctxband { max-height: 46vh; overflow: auto; }
-.ctxband { padding: 8px 14px 12px; }
+.ctxband { padding: 8px 14px 12px; margin-top: 12px; }
+#trace-detail > .ctxband { max-height: 42vh; overflow: auto; }
+/* Above the workspace, the band is one more line of the column: it has to give
+   height back when the window is short, or the workspace's own min-height
+   pushes the page past the viewport and an arrow key scrolls it. Below
+   fitMinHeight the fit layout is dropped altogether (see the media query
+   under the workspace rules), so this only has to hold above it. */
+#trace-detail.fit > .ctxband { flex: 0 1 auto; min-height: 0; }
 /* The view switch with the pointers on one line. */
 .bar { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 16px; margin-top: 12px; }
 .bar > .row { flex: 1 1 320px; }   /* the pointers wrap under the switch when they do not fit beside it */
@@ -411,8 +417,22 @@ kbd { display: inline-block; min-width: 18px; padding: 0 4px; border: 1px solid 
 @media (min-width: 1024px) {
   #trace-detail.fit { display: flex; flex-direction: column; height: calc(100vh - var(--top-h) - 30px); }
   #trace-detail.fit > * { flex: none; }
-  #trace-detail.fit > .ws { flex: 1 1 0; height: auto; min-height: 280px; }
-  .col { grid-template-rows: auto minmax(0, 1fr); min-height: 0; }
+  #trace-detail.fit > .ws { flex: 1 1 0; height: auto; min-height: 200px; }
+  .col { grid-template-rows: minmax(0, 1fr); min-height: 0; }
+}
+/* A wide but short window: the lines above the workspace (the header, the
+   stats, the switch, the context band) plus the workspace's own floor no
+   longer fit the viewport. Squeezing the band to a few pixels to keep the
+   page still would hide the one thing spoor shows that a bill cannot, so
+   below fitMinHeight the fit layout is dropped and the page scrolls as a
+   document, the way it already does under 1024px. */
+@media (min-width: 1024px) and (max-height: 739px) {
+  #trace-detail.fit { display: block; height: auto; }
+  #trace-detail.fit > .ws { display: flex; flex-direction: column; height: auto; min-height: 0; }
+  #trace-detail.fit > .ws > .col { order: -1; }
+  #trace-detail.fit .pane { overflow: visible; }
+  #trace-detail.fit > .ctxband { max-height: none; overflow: visible; }
+  #trace-detail.fit .jump { display: inline-flex; }
 }
 .pane { position: relative; min-width: 0; overflow: auto; overscroll-behavior: contain; background: var(--surface-1); border: 1px solid var(--line); border-radius: var(--r); }
 .pane-h { position: sticky; top: 0; z-index: 2; background: var(--surface-1); border-bottom: 1px solid var(--line); }

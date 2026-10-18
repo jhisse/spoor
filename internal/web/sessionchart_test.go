@@ -54,8 +54,8 @@ func TestSessionChartSubAgentIsNotABreak(t *testing.T) {
 	if got := marks(c); got != ">C<" {
 		t.Errorf("markers = %q, want only the smaller-context C on step 3", got)
 	}
-	if len(c.Breaks) != 0 {
-		t.Errorf("a sub-agent and a resumed context are not cache breaks: %v", c.Breaks)
+	if len(breaks(c)) != 0 {
+		t.Errorf("a sub-agent and a resumed context are not cache breaks: %v", breaks(c))
 	}
 	tokens := string(c.Tokens)
 	for _, want := range []string{">T1<", ">T2<", ">T3<", "turn 2", "$0.0600"} {
@@ -82,13 +82,13 @@ func TestSessionChartExpiryBreakAndSurvivedPause(t *testing.T) {
 	if got := marks(c); got != ">E<>B<" {
 		t.Errorf("markers = %q, want E on step 3 and B on step 5", got)
 	}
-	if len(c.Breaks) != 2 || !strings.Contains(c.Breaks[0], "Step 3") || !strings.Contains(c.Breaks[0], "1 h 12 min earlier: a cache expiry") ||
-		!strings.Contains(c.Breaks[0], "Assumed to continue step 2") || strings.Contains(c.Breaks[1], "expiry") {
-		t.Errorf("Breaks = %q", c.Breaks)
+	if len(breaks(c)) != 2 || !strings.Contains(breaks(c)[0], "Step 3") || !strings.Contains(breaks(c)[0], "1 h 12 min earlier: a cache expiry") ||
+		!strings.Contains(breaks(c)[0], "Assumed to continue step 2") || strings.Contains(breaks(c)[1], "expiry") {
+		t.Errorf("Breaks = %q", breaks(c))
 	}
 	// 94k written at 1.25× instead of read at 0.1×, at $3/M.
-	if !strings.Contains(c.Breaks[0], "$0.3525") {
-		t.Errorf("expiry sentence should carry the input cost: %s", c.Breaks[0])
+	if !strings.Contains(breaks(c)[0], "$0.3525") {
+		t.Errorf("expiry sentence should carry the input cost: %s", breaks(c)[0])
 	}
 	notes := strings.Join(c.Notes, "\n")
 	if !strings.Contains(notes, "Step 2: no model call for 48 min before it; it read 98% of its input from cache.") ||
@@ -106,8 +106,8 @@ func TestSessionChartDegrades(t *testing.T) {
 	gens := []store.Span{call("a", 1, t0, "m", 50_000, -1, 0), call("a", 2, t0.Add(time.Hour), "m", 60_000, -1, 0), call("b", 3, t0.Add(2*time.Hour), "m", 9_000, -1, 0)}
 	gens[2].CostUSD = nil
 	c := buildSessionChart(turns("a", "b"), gens, nil)
-	if got := marks(c); got != ">C<" || len(c.Breaks) != 0 || c.Dollars != "" || strings.Contains(string(c.Tokens), "<polyline") {
-		t.Errorf("markers %q breaks %v: want C only, no dollar band, no cost line", got, c.Breaks)
+	if got := marks(c); got != ">C<" || len(breaks(c)) != 0 || c.Dollars != "" || strings.Contains(string(c.Tokens), "<polyline") {
+		t.Errorf("markers %q breaks %v: want C only, no dollar band, no cost line", got, breaks(c))
 	}
 	notes := strings.Join(c.Notes, "\n")
 	for _, want := range []string{"Step 2: no model call for 1 h 00 min before it.", "no stored cost", "no known price", "no cache tokens"} {
