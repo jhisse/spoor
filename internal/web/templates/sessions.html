@@ -12,7 +12,7 @@
 <div class="panel">
 <div class="band"><dl class="stats grow">
 <div><dt>Turns</dt><dd>{{.Summary.TraceCount}}</dd></div><div><dt>Work (sum of turns)</dt><dd>{{.Work}}</dd></div><div><dt>Wall clock</dt><dd>{{.Wall}}</dd></div>
-<div><dt>Tokens</dt><dd>{{tokenSum .Summary.TotalInputTokens .Summary.TotalOutputTokens}}</dd></div><div><dt>Cost</dt><dd>{{template "cache_unknown" .Summary.CacheUnknown}}{{costVal .Summary.TotalCostUSD}}</dd></div>
+<div><dt>Tokens</dt><dd>{{tokenSum .Summary.TotalInputTokens .Summary.TotalOutputTokens}}</dd></div><div><dt>Cost</dt><dd>{{template "cache_unknown" .Summary.CacheUnknown}}{{costVal .Summary.TotalCostUSD}}{{template "cost_upper" .CostUpper}}</dd></div>
 {{template "cache_stats" .Chart}}
 </dl></div>
 {{if .Strip}}<figure class="sec">
@@ -42,7 +42,7 @@
 <tbody>{{range .Sessions}}<tr>
 <td class="main"><span class="cellmain">{{template "status_shape" .Status}}<span class="sr">{{.Status}}</span>{{if .Subject}}<a class="rowlink name ellip" href="{{sessionURL .ID}}" title="{{.Subject}}">{{.Subject}}</a><span class="mono muted" title="{{.ID}}">{{printf "%.8s" .ID}}</span>{{else}}<a class="rowlink name mono ellip" href="{{sessionURL .ID}}" title="{{.ID}}">{{.ID}}</a>{{end}}</span></td>
 <td class="dim" data-l="last turn" title="{{.EndedAt.UTC.Format "2006-01-02 15:04:05 UTC"}}">{{relTime .EndedAt}}</td><td class="num dim" data-l="over">{{.Wall}}</td><td class="num" data-l="turns">{{.TraceCount}}</td>
-<td class="num wide" data-l="tokens"><span class="cellbar">{{tokenSum .TotalInputTokens .TotalOutputTokens}}{{tokenBar .Mix $.MaxTokens 64 6}}</span></td><td class="num end" data-l="cost">{{template "cache_unknown" .CacheUnknown}}{{costVal .TotalCostUSD}}</td>
+<td class="num wide" data-l="tokens"><span class="cellbar">{{tokenSum .TotalInputTokens .TotalOutputTokens}}{{tokenBar .Mix $.MaxTokens 64 6}}</span></td><td class="num end" data-l="cost">{{template "cache_unknown" .CacheUnknown}}{{costVal .TotalCostUSD}}{{template "cost_upper" .CostUpper}}</td>
 </tr>{{end}}</tbody></table></div>
 <div class="foot"><div class="legend">{{.Legend}}<a class="link muted" href="/blind-spots" title="how many, on the Blind spots page">? = not reported by the SDK</a><a class="link muted" href="/blind-spots" title="which models, on the Blind spots page">– = no price for the model</a><a class="link muted" href="/blind-spots" title="how many, on the Blind spots page">~ = priced without cache counts from the sender</a></div>{{if .NextURL}}<a class="btn sm" href="{{.NextURL}}">Next page →</a>{{end}}</div>
 {{else}}

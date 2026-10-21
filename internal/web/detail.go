@@ -11,7 +11,6 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/jhisse/spoor/internal/otlp"
 	"github.com/jhisse/spoor/internal/store"
 )
 
@@ -103,7 +102,7 @@ func computeTraceTotals(spans []store.Span, roots []*SpanNode, prices []store.Mo
 // kept 1 hour instead of 5 minutes. No trace says which lifetime a sender
 // asked for (Claude Code keeps its main conversation 1 hour), so the header
 // states both. It counts the way rollUp counts cost: a node whose children
-// carry a cost stands for them, and a cost the sender reported is its own.
+// carry a cost stands for them.
 func writeAt1h(n *SpanNode, prices []store.ModelPrice) (extra float64) {
 	if n.CostSum {
 		for _, c := range n.Children {
@@ -111,15 +110,36 @@ func writeAt1h(n *SpanNode, prices []store.ModelPrice) (extra float64) {
 		}
 		return extra
 	}
-	sp := n.Span
-	if sp.CostUSD == nil || sp.Model == nil || otlp.CostReported(sp) {
+	return spanAt1h(n.Span, prices)
+}
+
+// spanAt1h is writeAt1h for one span. Only a cost spoor calculated has a
+// price pattern: a cost the sender reported is its own and never ranged.
+// The pattern is read, not the metadata, because a usage read has none.
+func spanAt1h(sp store.Span, prices []store.ModelPrice) float64 {
+	if sp.PricePattern == nil {
 		return 0
 	}
-	p, ok := store.MatchModelPrice(prices, *sp.Model)
-	if !ok || p.CacheWrite1hPricePerToken == nil {
+	i := slices.IndexFunc(prices, func(p store.ModelPrice) bool { return p.ModelPattern == *sp.PricePattern })
+	if i < 0 || prices[i].CacheWrite1hPricePerToken == nil {
 		return 0
 	}
-	return float64(sp.Mix().CacheWrite) * (*p.CacheWrite1hPricePerToken - p.CacheWritePrice())
+	return float64(sp.Mix().CacheWrite) * (*prices[i].CacheWrite1hPricePerToken - prices[i].CacheWritePrice())
+}
+
+// costUpper is cost had every cache write in spans been kept 1 hour, summing
+// every span as the list and the session totals do; nil when no write could
+// have been, or cost is unknown.
+func costUpper(cost *float64, spans []store.Span, prices []store.ModelPrice) *float64 {
+	var extra float64
+	for _, sp := range spans {
+		extra += spanAt1h(sp, prices)
+	}
+	if cost == nil || extra <= 0 {
+		return nil
+	}
+	upper := *cost + extra
+	return &upper
 }
 
 // Detail renders GET /traces/{trace_id}: the trace header and its span tree.

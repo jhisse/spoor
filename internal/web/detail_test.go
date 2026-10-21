@@ -518,13 +518,13 @@ func TestTraceTotalsMatchTreeRollup(t *testing.T) {
 func TestTraceTotalsRangeOverCacheWriteLifetime(t *testing.T) {
 	now := time.Now().UTC()
 	call := func(id string, parent *string, write int64, cost float64) store.Span {
-		return store.Span{TraceID: "t", ID: id, ParentSpanID: parent, Kind: store.SpanKindGeneration, Model: ptr("m"),
+		return store.Span{TraceID: "t", ID: id, ParentSpanID: parent, Kind: store.SpanKindGeneration, Model: ptr("m"), PricePattern: ptr("^m$"),
 			StartedAt: now, EndedAt: now.Add(time.Second), InputTokens: ptr(write), CacheWriteTokens: ptr(write), CostUSD: &cost}
 	}
 	prices := []store.ModelPrice{{ModelPattern: "^m$", InputPricePerToken: 1e-6, CacheWritePricePerToken: ptr(1.25e-6), CacheWrite1hPricePerToken: ptr(2e-6)}}
 	agent := "agent"
 	reported := call("reported", nil, 1000, 0.5)
-	reported.Metadata = []byte(`{"llm.cost.total":0.5}`)
+	reported.PricePattern = nil // a reported cost is never priced by spoor
 	spans := []store.Span{call("agent", nil, 1000, 0.00125), call("llm", &agent, 1000, 0.00125), reported}
 	got := computeTraceTotals(spans, BuildSpanTree(spans), prices)
 	// One write of 1,000 tokens: 0.75e-6 more per token at the 1-hour rate.

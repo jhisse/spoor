@@ -47,6 +47,7 @@
 {{define "cache_stats"}}{{with .}}{{if .ReadShare}}<div><dt>Read from cache</dt><dd>{{.ReadShare}}{{with .ReadNote}} <span class="muted" title="the share covers only the calls that reported a cache count">{{.}}</span>{{end}}</dd></div>{{end}}{{with .CacheLost}}<div><dt>Cache lost</dt><dd class="plain{{if ne . "none"}} warn-t{{end}}">{{.}}</dd></div>{{end}}{{end}}{{end}}
 {{/* cache_losses: one line per way a run lost its cache, the step-by-step sentences behind it. */}}
 {{define "cache_losses"}}{{range .Losses}}<details class="callout warn disc mt measure"><summary class="cap">{{.Summary}}</summary>{{range .Sentences}}<p class="cap mt">{{.}}</p>{{end}}</details>{{end}}{{end}}
+{{define "cost_upper"}}{{with .}}<span class="muted" title="Cache writes are priced at the 5-minute rate. No trace says how long the sender asked the cache to keep them; had every write been kept 1 hour, the cost is {{costVal .}}.">–{{costVal .}}</span>{{end}}{{end}}
 {{define "cache_unknown"}}{{if .}}<span class="muted" title="priced as fresh input: the sender reported no cache counts for {{.}} model call{{if ne . 1}}s{{end}}, so the real cost may differ">~</span>{{end}}{{end}}
 
 {{define "icons"}}<svg width="0" height="0" class="sr" aria-hidden="true"><defs>
