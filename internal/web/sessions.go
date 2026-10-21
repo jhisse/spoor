@@ -91,14 +91,12 @@ type sessionReplay struct {
 	Subject    string        // the first prompt of the first turn; "" when none was recorded
 }
 
-// Sessions renders GET /sessions: the conversation sessions, optionally
-// narrowed by ?service=, or one of them with ?session=. A session id stays
-// in the query string because OTLP permits arbitrary string values that are
-// not reliable as one URL path segment.
+// Sessions renders GET /sessions, the conversation sessions optionally
+// narrowed by ?service=, and GET /sessions/{session_id}, one of them.
 func (h *Handlers) Sessions(w http.ResponseWriter, r *http.Request) {
 	data := sessionPageData{Service: r.URL.Query().Get("service")}
 	var err error
-	if id := r.URL.Query().Get("session"); id == "" {
+	if id := r.PathValue("session_id"); id == "" {
 		err = h.sessionList(r, &data)
 	} else {
 		err = h.sessionReplay(r.Context(), id, &data)

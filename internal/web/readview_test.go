@@ -66,7 +66,7 @@ func TestSessionsAreNamedByTheirFirstPrompt(t *testing.T) {
 	seedSessionTurn(t, s, "turn-2", "sess-1", t0.Add(time.Minute))
 	insertSpans(t, s, gen("turn-1", "g1", nil, t0.Add(-time.Second), prompt(msgUser1, msgAsst1))) // before the helper's own call
 
-	for name, body := range map[string]string{"sessions": doSessions(t, h, "").Body.String(), "list": doList(t, h, "").Body.String()} {
+	for name, body := range map[string]string{"sessions": doSessions(t, h, "/sessions").Body.String(), "list": doList(t, h, "").Body.String()} {
 		if !strings.Contains(body, `title="first question">first question</a>`) && !strings.Contains(body, `title="first question">first question</span>`) {
 			t.Errorf("%s page: the session should be named by its first user message, got: %s", name, body)
 		}

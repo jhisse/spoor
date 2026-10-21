@@ -242,7 +242,9 @@ func (d *detailPageData) showSpan(sp *store.Span) {
 }
 
 func sessionURL(sessionID string) string {
-	return "/sessions?session=" + url.QueryEscape(sessionID)
+	// A session id of "." or ".." has no page: browsers and ServeMux
+	// resolve that segment, escaped or not. No sender seen sends one.
+	return "/sessions/" + url.PathEscape(sessionID)
 }
 
 // selectSpan resolves ?span= to a span of the trace. Absent, or naming no

@@ -88,13 +88,13 @@ func appendExportSpans(out *[]exportSpan, nodes []*SpanNode, depth int) {
 	}
 }
 
-// Export answers GET /traces/{trace_id}/export and GET /sessions/export
-// (?session=) with the page `spoor export --html` writes, as a download.
-// The session id stays in the query string, for the reason given on Sessions.
+// Export answers GET /traces/{trace_id}/export and
+// GET /sessions/{session_id}/export with the page `spoor export --html`
+// writes, as a download.
 func (h *Handlers) Export(w http.ResponseWriter, r *http.Request) {
 	kind, id := "trace", r.PathValue("trace_id")
 	if id == "" {
-		kind, id = "session", r.URL.Query().Get("session")
+		kind, id = "session", r.PathValue("session_id")
 	}
 	traces, spans, err := h.exportData(r.Context(), kind, id)
 	var page bytes.Buffer // held back, so that a failure is not half a file

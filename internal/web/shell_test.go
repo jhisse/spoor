@@ -107,7 +107,7 @@ func shellPages(t *testing.T) ([]shellPage, map[string]string) {
 		{"list", tabs["Traces"], "Traces", h.List, nil},
 		{"trace", "/traces/trace-1", "Traces", h.Detail, map[string]string{"trace_id": "trace-1"}},
 		{"sessions", tabs["Sessions"], "Sessions", h.Sessions, nil},
-		{"session", tabs["Sessions"] + "&session=sess-1", "Sessions", h.Sessions, nil},
+		{"session", "/sessions/sess-1?service=acme", "Sessions", h.Sessions, map[string]string{"session_id": "sess-1"}},
 	}, tabs
 }
 

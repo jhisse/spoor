@@ -2,8 +2,10 @@ package web
 
 import (
 	"context"
+	"fmt"
+	"html/template"
+	"net/http"
 	"net/http/httptest"
-	"net/url"
 	"strings"
 	"testing"
 	"time"
@@ -12,11 +14,13 @@ import (
 	"github.com/jhisse/spoor/internal/store"
 )
 
-func doSessions(t *testing.T, h *Handlers, rawQuery string) *httptest.ResponseRecorder {
+func doSessions(t *testing.T, h *Handlers, target string) *httptest.ResponseRecorder {
 	t.Helper()
-	r := httptest.NewRequest("GET", "/sessions?"+rawQuery, nil)
+	mux := http.NewServeMux() // the patterns of cmd/spoor's httpMux
+	mux.HandleFunc("GET /sessions", h.Sessions)
+	mux.HandleFunc("GET /sessions/{session_id}", h.Sessions)
 	w := httptest.NewRecorder()
-	h.Sessions(w, r)
+	mux.ServeHTTP(w, httptest.NewRequest("GET", target, nil))
 	return w
 }
 
@@ -54,22 +58,22 @@ func TestSessionsListsSessions(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	w := doSessions(t, h, "")
+	w := doSessions(t, h, "/sessions")
 	if w.Code != 200 {
 		t.Fatalf("status = %d, want 200, body: %s", w.Code, w.Body.String())
 	}
 	body := w.Body.String()
-	wantHref := "/sessions?session=" + url.QueryEscape("conv/1")
+	wantHref := `href="/sessions/conv%2F1"`
 	if !strings.Contains(body, wantHref) || !strings.Contains(body, other) {
 		t.Errorf("body missing escaped session link %q or the other session, got: %s", wantHref, body)
 	}
 
 	// ?service= keeps the sessions that service took part in, and the tabs keep the service.
-	body = doSessions(t, h, "service=billing").Body.String()
+	body = doSessions(t, h, "/sessions?service=billing").Body.String()
 	if !strings.Contains(body, other) || strings.Contains(body, wantHref) || !strings.Contains(body, `<a href="/?service=billing">Traces</a>`) {
 		t.Errorf("?service=billing: want only its session and tabs that keep it, got: %s", body)
 	}
-	if body := doSessions(t, h, "service=nobody").Body.String(); !strings.Contains(body, "No sessions from this service") {
+	if body := doSessions(t, h, "/sessions?service=nobody").Body.String(); !strings.Contains(body, "No sessions from this service") {
 		t.Errorf("a service without sessions should say so, got: %s", body)
 	}
 }
@@ -79,7 +83,7 @@ func TestSessionsReplayShowsMessageTextNotRawJSON(t *testing.T) {
 	h := newTestHandlers(t, s)
 	seedSessionTurn(t, s, "trace-1", "conv-1", time.Now().UTC())
 
-	w := doSessions(t, h, "session=conv-1")
+	w := doSessions(t, h, "/sessions/conv-1")
 	if w.Code != 200 {
 		t.Fatalf("status = %d, want 200, body: %s", w.Code, w.Body.String())
 	}
@@ -100,7 +104,7 @@ func TestSessionsNotFound(t *testing.T) {
 	s := newTestStore(t)
 	h := newTestHandlers(t, s)
 
-	if w := doSessions(t, h, "session=nope"); w.Code != 404 {
+	if w := doSessions(t, h, "/sessions/nope"); w.Code != 404 {
 		t.Errorf("unknown session: status = %d, want 404", w.Code)
 	}
 }
@@ -146,7 +150,7 @@ func TestSessionsReplayPreviewsEveryTurnWithoutPerTurnReads(t *testing.T) {
 		t.Fatalf("InsertSpan: %v", err)
 	}
 
-	w := doSessions(t, &Handlers{Store: noTraceReads{s, t}}, "session=conv")
+	w := doSessions(t, &Handlers{Store: noTraceReads{s, t}}, "/sessions/conv")
 	if w.Code != 200 {
 		t.Fatalf("status = %d, want 200", w.Code)
 	}
@@ -167,11 +171,35 @@ func TestSessionsReplayLinksToItsExport(t *testing.T) {
 	h := newTestHandlers(t, s)
 	seedSessionTurn(t, s, "trace-1", "conv/1", time.Now().UTC())
 
-	want := `<a class="btn sm" href="/sessions/export?session=conv%2f1"`
-	if body := doSessions(t, h, "session="+url.QueryEscape("conv/1")).Body.String(); !strings.Contains(body, want) {
+	want := `<a class="btn sm" href="/sessions/conv%2F1/export"`
+	if body := doSessions(t, h, sessionURL("conv/1")).Body.String(); !strings.Contains(body, want) {
 		t.Errorf("the session view should offer its export as a plain link %q, got: %s", want, body)
 	}
-	if body := doSessions(t, h, "").Body.String(); strings.Contains(body, "/sessions/export") {
+	if body := doSessions(t, h, "/sessions").Body.String(); strings.Contains(body, `/export"`) {
 		t.Errorf("the session list has no single session to export, got: %s", body)
+	}
+}
+
+// A session id is any string the sender chose, and it is one path segment:
+// sessionURL escapes it whole, so "/", "?", "#" and "%" stay in the id.
+func TestSessionURLKeepsAnyID(t *testing.T) {
+	s := newTestStore(t)
+	h := newTestHandlers(t, s)
+	ids := []string{"conv/1", "a%2Fb", "a?b", "a#b", "a b", "sessão-日本", "a/../b", "a//b", "trail/", "x/export", strings.Repeat("x", 4000)}
+	for i, id := range ids {
+		seedSessionTurn(t, s, fmt.Sprintf("trace-%d", i), id, time.Now().UTC())
+	}
+	for _, id := range ids {
+		w := doSessions(t, h, sessionURL(id))
+		if w.Code != 200 || !strings.Contains(w.Body.String(), `<span class="mono">`+template.HTMLEscapeString(id)+`</span>`) {
+			t.Errorf("%.40q: status = %d, want the session's own page", id, w.Code)
+		}
+	}
+	// The known ceiling: browsers and ServeMux resolve a "." or ".." segment,
+	// escaped or not, so those two ids have no page.
+	for _, id := range []string{".", ".."} {
+		if w := doSessions(t, h, sessionURL(id)); w.Code == 200 {
+			t.Errorf("%q: a dot segment reached a handler; the ceiling in sessionURL is gone", id)
+		}
 	}
 }
