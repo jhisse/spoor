@@ -37,10 +37,10 @@ func TestClaudeCodeCaptureRendersUsageCostAndSession(t *testing.T) {
 	if list := doList(t, h, "").Body.String(); !strings.Contains(list, "$0.0197") {
 		t.Error("trace list should show the trace's total cost")
 	}
-	if sessions := doSessions(t, h, "").Body.String(); !strings.Contains(sessions, session) {
+	if sessions := doSessions(t, h, "/sessions").Body.String(); !strings.Contains(sessions, session) {
 		t.Error("sessions page should list the Claude Code session")
 	}
-	if replay := doSessions(t, h, "session="+session).Body.String(); !strings.Contains(replay, tr.ID) {
+	if replay := doSessions(t, h, sessionURL(session)).Body.String(); !strings.Contains(replay, tr.ID) {
 		t.Error("session replay should link the interaction's trace")
 	}
 }

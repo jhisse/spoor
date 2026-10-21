@@ -62,7 +62,7 @@ func TestInteractiveCaptureToolPanelAndSession(t *testing.T) {
 		t.Error("selecting the classifier call must open its tool's phases")
 	}
 
-	if replay := doSessions(t, h, "session=00000000-0000-4000-8000-00000000c0de").Body.String(); !strings.Contains(replay, "List the files here and read the note") {
+	if replay := doSessions(t, h, "/sessions/00000000-0000-4000-8000-00000000c0de").Body.String(); !strings.Contains(replay, "List the files here and read the note") {
 		t.Error("a turn whose model calls carry no body should preview the prompt on its agent span")
 	}
 }

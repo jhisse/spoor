@@ -149,7 +149,7 @@ func TestSessionsRendersSessionChart(t *testing.T) {
 	base := time.Now().UTC().Add(-2 * time.Hour)
 	seedSessionTurn(t, s, "turn-a", "conv-1", base)
 	seedSessionTurn(t, s, "turn-b", "conv-1", base.Add(time.Hour))
-	if body := doSessions(t, h, "session=conv-1").Body.String(); strings.Contains(body, "Inside the turns") {
+	if body := doSessions(t, h, "/sessions/conv-1").Body.String(); strings.Contains(body, "Inside the turns") {
 		t.Error("generations without token counts: there is no chart to draw")
 	}
 	for i, tr := range []string{"turn-a", "turn-b"} {
@@ -159,7 +159,7 @@ func TestSessionsRendersSessionChart(t *testing.T) {
 			t.Fatal(err)
 		}
 	}
-	body := doSessions(t, h, "session=conv-1").Body.String()
+	body := doSessions(t, h, "/sessions/conv-1").Body.String()
 	for _, want := range []string{"Inside the turns", ">T2<", "⋯ 1 h 00 min ⋯", ">E<", "a cache expiry", "/traces/turn-b?span=c1", "the spans do not say which"} {
 		if !strings.Contains(body, want) {
 			t.Errorf("body missing %q", want)

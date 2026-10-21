@@ -32,7 +32,7 @@ func TestListShowsContextPerCallAndLatestSessions(t *testing.T) {
 	for _, want := range []string{
 		fmt.Sprintf(`title="%d model calls, the largest %s tokens.`, page.Calls, fmtCount(page.Peak)),
 		"Context <small>· per model call</small>", // each row draws on its own scale
-		"Latest sessions", `href="/sessions?session=` + *turn.SessionID + `"`,
+		"Latest sessions", `href="/sessions/` + *turn.SessionID + `"`,
 		fmt.Sprintf("1 turn over %s · %d model calls, the largest %s tokens", fmtCoarse(turn.EndedAt.Sub(turn.StartedAt)), page.Calls, fmtCount(page.Peak)),
 		`<details class="disc grow"><summary><h3>Traces over time`, // closed
 	} {

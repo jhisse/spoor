@@ -12,7 +12,7 @@ func doExport(t *testing.T, h *Handlers, target string) *httptest.ResponseRecord
 	t.Helper()
 	mux := http.NewServeMux() // the patterns of cmd/spoor's httpMux
 	mux.HandleFunc("GET /traces/{trace_id}/export", h.Export)
-	mux.HandleFunc("GET /sessions/export", h.Export)
+	mux.HandleFunc("GET /sessions/{session_id}/export", h.Export)
 	w := httptest.NewRecorder()
 	mux.ServeHTTP(w, httptest.NewRequest("GET", target, nil))
 	return w
@@ -27,7 +27,7 @@ func TestExportDownloadsTheStaticPage(t *testing.T) {
 
 	for _, c := range []struct{ target, file, absent string }{
 		{"/traces/trace-1/export", "spoor-trace-trace-1.html", "trace-2"},
-		{"/sessions/export?session=conv%2F1", "spoor-session-conv_1.html", ""},
+		{"/sessions/conv%2F1/export", "spoor-session-conv_1.html", ""},
 	} {
 		w := doExport(t, h, c.target)
 		if w.Code != 200 {
@@ -62,8 +62,7 @@ func TestExportNotFoundForUnknownID(t *testing.T) {
 
 	for target, title := range map[string]string{
 		"/traces/does-not-exist/export": "Trace not found",
-		"/sessions/export?session=nope": "Session not found",
-		"/sessions/export":              "Session not found",
+		"/sessions/nope/export":         "Session not found",
 	} {
 		w := doExport(t, h, target)
 		if w.Code != 404 || !strings.Contains(w.Body.String(), title) {

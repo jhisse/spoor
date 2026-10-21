@@ -237,7 +237,7 @@ func TestSessionsReplayTurnStrip(t *testing.T) {
 	seedSessionTurn(t, s, "turn-a", "conv-1", base)
 	seedSessionTurn(t, s, "turn-b", "conv-1", base.Add(10*time.Minute+time.Second)) // 10min after turn-a ended
 
-	body := doSessions(t, h, "session=conv-1").Body.String()
+	body := doSessions(t, h, "/sessions/conv-1").Body.String()
 	for _, want := range []string{
 		`href="#turn-1"`, `href="#turn-2"`, `id="turn-1"`, `id="turn-2"`,
 		"⋯ 10 min ⋯", "⋯ idle 10 min ⋯", // the pause, labelled in the strip and between the panels
@@ -260,7 +260,7 @@ func TestSessionsReplaySingleTurnHasNoStrip(t *testing.T) {
 	h := newTestHandlers(t, s)
 	seedSessionTurn(t, s, "only", "conv-1", time.Now().UTC())
 
-	body := doSessions(t, h, "session=conv-1").Body.String()
+	body := doSessions(t, h, "/sessions/conv-1").Body.String()
 	if strings.Contains(body, "one column per turn") || !strings.Contains(body, `id="turn-1"`) {
 		t.Errorf("single-turn session should render its card without a strip, got: %s", body)
 	}
@@ -285,13 +285,13 @@ func TestSessionsListShowsTokenBarAndCumulativeCost(t *testing.T) {
 		}
 	}
 
-	list := doSessions(t, h, "").Body.String()
+	list := doSessions(t, h, "/sessions").Body.String()
 	for _, want := range []string{"bar 0–200", `aria-label="200 tokens"`, `<title>output: 20</title>`} {
 		if !strings.Contains(list, want) {
 			t.Errorf("session list missing %q, got: %s", want, list)
 		}
 	}
-	replay := doSessions(t, h, "session=conv-1").Body.String()
+	replay := doSessions(t, h, "/sessions/conv-1").Body.String()
 	for _, want := range []string{"height = cost (max $0.0200)", "cumulative $0.0200", "cumulative $0.0400"} {
 		if !strings.Contains(replay, want) {
 			t.Errorf("replay missing %q, got: %s", want, replay)

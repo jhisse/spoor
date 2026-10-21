@@ -410,13 +410,13 @@ func TestCostRangeOverCacheWriteLifetimeOnListAndSessions(t *testing.T) {
 	if body := w.Body.String(); strings.Count(body, ranged) != 2 || !strings.Contains(body, upper) {
 		t.Errorf("list: want %q on the priced trace's row and session card only, got %d ranges", upper, strings.Count(body, ranged))
 	}
-	if body := doSessions(t, h, "").Body.String(); strings.Count(body, ranged) != 1 || !strings.Contains(body, upper) {
+	if body := doSessions(t, h, "/sessions").Body.String(); strings.Count(body, ranged) != 1 || !strings.Contains(body, upper) {
 		t.Errorf("sessions: want %q on the priced session only, got %d ranges", upper, strings.Count(body, ranged))
 	}
-	if body := doSessions(t, h, "session=s-priced").Body.String(); !strings.Contains(body, upper) {
+	if body := doSessions(t, h, "/sessions/s-priced").Body.String(); !strings.Contains(body, upper) {
 		t.Errorf("session page: want %q in its header", upper)
 	}
-	if body := doSessions(t, h, "session=s-reported").Body.String(); strings.Contains(body, ranged) {
+	if body := doSessions(t, h, "/sessions/s-reported").Body.String(); strings.Contains(body, ranged) {
 		t.Error("session page: a reported cost is ranged")
 	}
 }

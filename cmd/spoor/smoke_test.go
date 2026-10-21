@@ -7,6 +7,7 @@ import (
 	"io"
 	"net"
 	"net/http"
+	"net/url"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -342,7 +343,26 @@ func TestServeIngestAndRenderTraceEndToEnd(t *testing.T) {
 			t.Errorf("GET %s should contain %q, got: %s", path, want, page)
 		}
 	}
+	checkSessionPath(t, client, ingestAddr, httpAddr)
 	checkNotFound(t, client, httpAddr)
+}
+
+// checkSessionPath: a session id is any string the sender chose, and the
+// real routes take it as one escaped path segment.
+func checkSessionPath(t *testing.T, client *http.Client, ingestAddr, httpAddr string) {
+	t.Helper()
+	const id = "conv/1 ?#é"
+	payload := `{"resourceSpans":[{"scopeSpans":[{"spans":[{"traceId":"0123456789abcdef0123456789abcdef","spanId":"0123456789abcdef","name":"turn","startTimeUnixNano":"1700000000000000000","endTimeUnixNano":"1700000001000000000","attributes":[{"key":"session.id","value":{"stringValue":"` + id + `"}}]}]}]}]}`
+	resp, err := client.Post("http://"+ingestAddr+"/v1/traces", "application/json", strings.NewReader(payload))
+	if err != nil || resp.StatusCode != http.StatusOK {
+		t.Fatalf("POST a session span: %v %v", err, resp)
+	}
+	_ = resp.Body.Close()
+	for path, want := range map[string]string{"/sessions/" + url.PathEscape(id): `<span class="mono">conv/1 ?#é</span>`, "/sessions/" + url.PathEscape(id) + "/export": "spoor export · static page"} {
+		if page := getBody(t, client, "http://"+httpAddr+path); !strings.Contains(page, want) {
+			t.Errorf("GET %s should contain %q, got: %s", path, want, page)
+		}
+	}
 }
 
 // checkNotFound: an unknown address is answered with the shell around it,
