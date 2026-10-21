@@ -39,7 +39,7 @@ type chartStep struct {
 func markSteps(steps []genStep, prices []store.ModelPrice) {
 	for i := range steps {
 		st := &steps[i]
-		if st.Prev == nil {
+		if st.Prev == nil || isFork(*st.Prev, st.Span) {
 			continue
 		}
 		st.Mark = ""
