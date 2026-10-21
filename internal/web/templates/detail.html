@@ -33,7 +33,7 @@
 <div><dt>Status</dt><dd{{if eq .Trace.Status "error"}} class="err-t"{{end}}>{{.Trace.Status}}</dd></div>
 <div><dt>Started</dt><dd title="{{.Trace.StartedAt.Format "2006-01-02 15:04:05"}} UTC">{{relTime .Trace.StartedAt}}</dd></div>
 <div><dt>Duration</dt><dd>{{fmtDuration (.Trace.EndedAt.Sub .Trace.StartedAt)}}</dd></div>
-<div><dt>Cost</dt><dd>{{template "cache_unknown" .Totals.CacheUnknown}}{{costVal .Totals.CostUSD}}{{with .Totals.CostUpper}}<span class="muted" title="Cache writes are priced at the 5-minute rate. The trace does not say how long the sender asked the cache to keep them; had every write been kept 1 hour, the cost is {{costVal .}}.">–{{costVal .}}</span>{{end}}</dd></div>
+<div><dt>Cost</dt><dd>{{template "cache_unknown" .Totals.CacheUnknown}}{{costVal .Totals.CostUSD}}{{template "cost_upper" .Totals.CostUpper}}</dd></div>
 <div><dt>Tokens</dt><dd class="row">{{tokenPair .Totals.InputTokens .Totals.OutputTokens}}{{tokenBar .Totals.Tokens 0 120 8}}</dd></div>
 {{template "cache_stats" .Chart}}
 <div><dt>Spans</dt><dd>{{.Totals.SpanCount}}</dd></div>

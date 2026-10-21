@@ -369,3 +369,54 @@ func TestListShowsWhatWasAsked(t *testing.T) {
 		t.Errorf("a trace answers its newest user message, not the first")
 	}
 }
+
+// The list and the session totals sum stored costs in SQL, at the 5-minute
+// cache-write rate. A trace does not say which lifetime the sender asked for,
+// so each states the 1-hour figure too, and a cost the sender reported (no
+// price pattern; a usage read carries no metadata to tell) is never ranged.
+func TestCostRangeOverCacheWriteLifetimeOnListAndSessions(t *testing.T) {
+	s := newTestStore(t)
+	h := newTestHandlers(t, s)
+	prices, err := s.ListModelPrices(t.Context())
+	if err != nil {
+		t.Fatal(err)
+	}
+	p, ok := store.MatchModelPrice(prices, "claude-haiku-4-5")
+	if !ok || p.CacheWrite1hPricePerToken == nil {
+		t.Fatal("the price table has no 1-hour cache-write price for claude-haiku-4-5")
+	}
+	now := time.Now().UTC()
+	turn := func(id string, at time.Time, pattern *string, cost float64) {
+		session := "s-" + id
+		tr := seedTrace(t, s, id, at)
+		tr.SessionID = &session
+		if err := s.MergeTrace(t.Context(), tr, true); err != nil {
+			t.Fatal(err)
+		}
+		g := gen(id, id+"-g", nil, at, nil)
+		g.Model, g.PricePattern, g.CostUSD = ptr("claude-haiku-4-5"), pattern, &cost
+		g.InputTokens, g.CacheWriteTokens = ptr[int64](1_000_000), ptr[int64](1_000_000)
+		insertSpans(t, s, g)
+	}
+	low := 1e6 * p.CacheWritePrice()
+	turn("priced", now, &p.ModelPattern, low)
+	turn("reported", now.Add(-time.Minute), nil, 0.5)
+	upper := "–" + usd4(low+1e6*(*p.CacheWrite1hPricePerToken-p.CacheWritePrice()))
+
+	const ranged = "had every write been kept 1 hour"
+	w := httptest.NewRecorder()
+	h.List(w, httptest.NewRequest("GET", "/", nil))
+	// The priced trace's row and its session's card; not the reported one's.
+	if body := w.Body.String(); strings.Count(body, ranged) != 2 || !strings.Contains(body, upper) {
+		t.Errorf("list: want %q on the priced trace's row and session card only, got %d ranges", upper, strings.Count(body, ranged))
+	}
+	if body := doSessions(t, h, "").Body.String(); strings.Count(body, ranged) != 1 || !strings.Contains(body, upper) {
+		t.Errorf("sessions: want %q on the priced session only, got %d ranges", upper, strings.Count(body, ranged))
+	}
+	if body := doSessions(t, h, "session=s-priced").Body.String(); !strings.Contains(body, upper) {
+		t.Errorf("session page: want %q in its header", upper)
+	}
+	if body := doSessions(t, h, "session=s-reported").Body.String(); strings.Contains(body, ranged) {
+		t.Error("session page: a reported cost is ranged")
+	}
+}

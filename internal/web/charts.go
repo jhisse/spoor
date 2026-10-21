@@ -54,13 +54,14 @@ func fmtCoarse(d time.Duration) string {
 
 type listRow struct {
 	store.TraceSummary
-	Mix   TokenMix
-	Ctx   *contextSpark  // its context per model call; nil under two calls or without token counts
-	URL   string         // the trace, with the search that listed it
-	Hit   *store.SpanHit // the first span the span filters describe; nil without one
-	Hits  int            // how many they describe in this trace
-	Why   string         // under ?sort=odd, how far from the typical trace of its name
-	Asked string         // what the person asked, cut short; "" when no span recorded it or it is the name
+	Mix       TokenMix
+	Ctx       *contextSpark  // its context per model call; nil under two calls or without token counts
+	URL       string         // the trace, with the search that listed it
+	Hit       *store.SpanHit // the first span the span filters describe; nil without one
+	Hits      int            // how many they describe in this trace
+	Why       string         // under ?sort=odd, how far from the typical trace of its name
+	Asked     string         // what the person asked, cut short; "" when no span recorded it or it is the name
+	CostUpper *float64       // TotalCostUSD had every cache write been kept 1 hour; nil when none could have been
 }
 
 // MoreModels is how many models the row's model cell does not name.
@@ -82,7 +83,7 @@ type listScale struct {
 // listRows pairs each trace with its hits (grouped by trace) and its model
 // calls (steps, by trace), and gives its link the search parameters keep,
 // so the trace page opens on a match.
-func listRows(traces []store.TraceSummary, hits []store.SpanHit, steps map[string][]genStep, keep template.URL, why, asked map[string]string) ([]listRow, listScale) {
+func listRows(traces []store.TraceSummary, hits []store.SpanHit, steps map[string][]genStep, uppers map[string]*float64, keep template.URL, why, asked map[string]string) ([]listRow, listScale) {
 	var sc listScale
 	var seen string
 	for _, calls := range steps {
@@ -102,7 +103,7 @@ func listRows(traces []store.TraceSummary, hits []store.SpanHit, steps map[strin
 		mix := traceMix(t)
 		sc.Tokens = max(sc.Tokens, mix.Total())
 		sc.Total = sc.Total.Add(mix)
-		row := listRow{TraceSummary: t, Mix: mix, URL: "/traces/" + url.PathEscape(t.ID), Hit: first[t.ID], Hits: count[t.ID], Why: why[t.ID]}
+		row := listRow{TraceSummary: t, Mix: mix, URL: "/traces/" + url.PathEscape(t.ID), Hit: first[t.ID], Hits: count[t.ID], Why: why[t.ID], CostUpper: uppers[t.ID]}
 		if row.Asked = asked[t.ID]; row.Asked == t.Name {
 			row.Asked = ""
 		}

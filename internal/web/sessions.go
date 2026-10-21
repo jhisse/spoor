@@ -22,8 +22,9 @@ type sessionPageData struct {
 
 type sessionRow struct {
 	store.SessionSummary
-	Mix     TokenMix
-	Subject string // the first prompt of the first turn, cut short; "" when no turn recorded one
+	Mix       TokenMix
+	Subject   string   // the first prompt of the first turn, cut short; "" when no turn recorded one
+	CostUpper *float64 // TotalCostUSD had every cache write been kept 1 hour; nil when none could have been
 }
 
 // subjects reads what each trace is about with pick, from its first model
@@ -79,6 +80,7 @@ func (s sessionRow) Wall() string { return fmtCoarse(s.EndedAt.Sub(s.StartedAt))
 
 type sessionReplay struct {
 	Summary    store.SessionSummary
+	CostUpper  *float64 // Summary.TotalCostUSD had every cache write been kept 1 hour; nil when none could have been
 	Turns      []sessionTurn
 	Work, Wall string // sum of trace durations vs. first start to last end
 	MaxTokens  int64
@@ -118,12 +120,25 @@ func (h *Handlers) sessionList(r *http.Request, data *sessionPageData) error {
 	if err != nil {
 		return err
 	}
+	prices, err := h.Store.ListModelPrices(ctx)
+	if err != nil {
+		return err
+	}
 	var total TokenMix
 	firsts := make([]string, len(sessions))
 	for i, ss := range sessions {
 		firsts[i] = ss.FirstTraceID
 		mix := summaryMix(ss.TotalInputTokens, ss.TotalOutputTokens, ss.TotalCacheReadTokens, ss.TotalCacheWriteTokens)
-		data.Sessions = append(data.Sessions, sessionRow{SessionSummary: ss, Mix: mix})
+		row := sessionRow{SessionSummary: ss, Mix: mix}
+		if ss.TotalCostUSD != nil && ss.TotalCacheWriteTokens > 0 {
+			// One usage read per session on the page that has a cost and cache writes.
+			gens, err := h.Store.QuerySpans(ctx, store.SpanQuery{SessionID: ss.ID, Kind: store.SpanKindGeneration, Usage: true})
+			if err != nil {
+				return err
+			}
+			row.CostUpper = costUpper(ss.TotalCostUSD, gens, prices)
+		}
+		data.Sessions = append(data.Sessions, row)
 		data.MaxTokens = max(data.MaxTokens, mix.Total())
 		total = total.Add(mix)
 	}
@@ -169,6 +184,7 @@ func (h *Handlers) sessionReplay(ctx context.Context, sessionID string, data *se
 	}
 	data.Replay.Subject = subjects[summary.FirstTraceID]
 	data.Replay.Chart = buildSessionChart(traces, gens, prices)
+	data.Replay.CostUpper = costUpper(summary.TotalCostUSD, gens, prices)
 	turns := map[string]*sessionTurn{}
 	for i := range data.Replay.Turns {
 		turns[traces[i].ID] = &data.Replay.Turns[i]

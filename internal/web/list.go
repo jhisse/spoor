@@ -102,19 +102,20 @@ func (h *Handlers) List(w http.ResponseWriter, r *http.Request) {
 		hits, asked, err = h.rowText(ctx, p.Span, ids)
 	}
 	var steps map[string][]genStep
+	var uppers map[string]*float64
 	switch {
 	case err != nil:
 	case len(summaries) == 0:
 		err = h.countWithout(ctx, data.Chips)
 	default:
 		// The band is the first page's with no filter but the service: "lately" is not a search result.
-		steps, data.Latest, err = h.contexts(ctx, summaries, ids, p.Cursor == nil && !p.Odd && len(data.Chips) == min(1, len(p.Service)))
+		steps, uppers, data.Latest, err = h.contexts(ctx, summaries, ids, p.Cursor == nil && !p.Odd && len(data.Chips) == min(1, len(p.Service)))
 	}
 	if err != nil {
 		fail(w, r, err)
 		return
 	}
-	data.Traces, data.Scale = listRows(summaries, hits, steps, spanQuery(form), data.Why, asked)
+	data.Traces, data.Scale = listRows(summaries, hits, steps, uppers, spanQuery(form), data.Why, asked)
 	data.Legend = legend(data.Scale.Total, false)
 	data.NextURL = buildNextURL(r.URL, next)
 	if r.Header.Get("HX-Target") == "trace-list" { // a submitted form names every field, set or not
@@ -174,18 +175,19 @@ type latestSession struct {
 const latestSessions = 3
 
 // contexts reads what the list draws beside its totals: each listed trace's
-// model calls as marked steps (traces with fewer than two have none), read
+// model calls as marked steps (traces with fewer than two have none) and the
+// top of its cost range (costUpper), read
 // the way the trace page reads them, and, when latest is set, the sessions
 // the page's newest traces belong to. The spans come from an index, without
 // bodies, so the cost follows the page and those sessions, not the database.
-func (h *Handlers) contexts(ctx context.Context, traces []store.TraceSummary, ids []string, latest bool) (map[string][]genStep, []latestSession, error) {
+func (h *Handlers) contexts(ctx context.Context, traces []store.TraceSummary, ids []string, latest bool) (map[string][]genStep, map[string]*float64, []latestSession, error) {
 	prices, err := h.Store.ListModelPrices(ctx)
 	if err != nil {
-		return nil, nil, err
+		return nil, nil, nil, err
 	}
 	spans, err := h.Store.QuerySpans(ctx, store.SpanQuery{TraceIDs: ids, Usage: true})
 	if err != nil {
-		return nil, nil, err
+		return nil, nil, nil, err
 	}
 	byTrace := map[string][]store.Span{}
 	for _, sp := range spans {
@@ -197,6 +199,10 @@ func (h *Handlers) contexts(ctx context.Context, traces []store.TraceSummary, id
 			markSteps(st, prices)
 			steps[id] = st
 		}
+	}
+	uppers := map[string]*float64{}
+	for _, t := range traces {
+		uppers[t.ID] = costUpper(t.TotalCostUSD, byTrace[t.ID], prices)
 	}
 	var sessions []latestSession
 	seen := map[string]bool{}
@@ -210,13 +216,13 @@ func (h *Handlers) contexts(ctx context.Context, traces []store.TraceSummary, id
 		seen[*t.SessionID] = true
 		card, err := h.latestCard(ctx, *t.SessionID, prices)
 		if err != nil {
-			return nil, nil, err
+			return nil, nil, nil, err
 		}
 		if card != nil {
 			sessions = append(sessions, *card)
 		}
 	}
-	return steps, sessions, nil
+	return steps, uppers, sessions, nil
 }
 
 // latestCard is one session of the band; nil when retention removed the
@@ -238,7 +244,7 @@ func (h *Handlers) latestCard(ctx context.Context, sessionID string, prices []st
 		return nil, err
 	}
 	calls, _ := sessionSteps(nil, gens, prices)
-	return &latestSession{sessionRow{s, summaryMix(s.TotalInputTokens, s.TotalOutputTokens, s.TotalCacheReadTokens, s.TotalCacheWriteTokens), subject[s.FirstTraceID]},
+	return &latestSession{sessionRow{s, summaryMix(s.TotalInputTokens, s.TotalOutputTokens, s.TotalCacheReadTokens, s.TotalCacheWriteTokens), subject[s.FirstTraceID], costUpper(s.TotalCostUSD, gens, prices)},
 		buildContextSpark(calls, 7, sparkHeight)}, nil
 }
 

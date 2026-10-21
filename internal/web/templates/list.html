@@ -49,7 +49,7 @@
 {{if .Latest}}<div class="sec">
 <div class="chart-h"><h3>Latest sessions <span class="muted">· of the newest traces on this page, at most three · one bar per model call, each drawing on its own scale</span></h3><a class="link cap" href="{{.URL "sessions" (.Form.Get "service")}}">All sessions →</a></div>
 <div class="latest">{{range .Latest}}<a href="{{sessionURL .ID}}" title="Session {{.ID}}.{{.Ctx.Why}}">
-<span class="row">{{template "status_glyph" .Status}}<b>{{relTime .EndedAt}}</b><span class="mono muted">{{printf "%.8s" .ID}}</span><b class="end">{{template "cache_unknown" .CacheUnknown}}{{costVal .TotalCostUSD}}</b></span>
+<span class="row">{{template "status_glyph" .Status}}<b>{{relTime .EndedAt}}</b><span class="mono muted">{{printf "%.8s" .ID}}</span><b class="end">{{template "cache_unknown" .CacheUnknown}}{{costVal .TotalCostUSD}}{{template "cost_upper" .CostUpper}}</b></span>
 {{if .Subject}}<span class="ellip" title="{{.Subject}}">{{.Subject}}</span>{{end}}
 <span class="cap">{{.TraceCount}} {{if eq .TraceCount 1}}turn{{else}}turns{{end}} over {{.Wall}} · {{.Ctx.Calls}} model {{if eq .Ctx.Calls 1}}call{{else}}calls{{end}}{{if .Ctx.Peak}}, the largest {{fmtCount .Ctx.Peak}} tokens{{end}}</span>
 <span class="row">{{.Ctx.SVG}}{{template "ctx_marks" .Ctx}}</span>
@@ -68,7 +68,7 @@
 <td class="dim" data-l="" title="{{.StartedAt.Format "2006-01-02 15:04:05"}} UTC">{{relTime .StartedAt}}</td>
 <td class="num">{{fmtDuration (.EndedAt.Sub .StartedAt)}}</td>
 <td class="num wide"><span class="cellbar">{{tokenSum .TotalInputTokens .TotalOutputTokens}}<span class="tokcell">{{tokenBar .Mix $.Scale.Tokens 64 6}}</span></span></td>
-<td class="num end" data-l="cost">{{template "cache_unknown" .CacheUnknown}}{{costVal .TotalCostUSD}}</td>
+<td class="num end" data-l="cost">{{template "cache_unknown" .CacheUnknown}}{{costVal .TotalCostUSD}}{{template "cost_upper" .CostUpper}}</td>
 </tr>
 {{with .Hit}}<tr class="why"><td colspan="8"><a class="hit" href="{{$row.URL}}" tabindex="-1"><span class="kind k-{{.Kind}}" title="{{.Kind}}">{{kindLetter .Kind}}</span><span class="nm">{{.SpanName}}</span>{{if eq .Status "error"}}<svg class="st err" role="img" aria-label="error"><use href="#i-err"/></svg>{{end}}{{if $row.MoreHits}}<span class="cap">and {{$row.MoreHits}} more {{if eq $row.MoreHits 1}}span{{else}}spans{{end}}</span>{{end}}{{with .Snippet}}<span class="mono">{{snippet .}}</span>{{end}}</a></td></tr>{{end}}
 {{end}}
