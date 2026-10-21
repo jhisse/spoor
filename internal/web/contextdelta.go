@@ -14,13 +14,13 @@ import (
 
 // genStep is one generation of a trace, in start order, paired with the
 // generation it is compared against wherever context is shown: the preceding
-// generation of the same model under the same nearest agent ancestor. A sub-agent's first call
-// is never compared with its parent agent's last one: that is a different
-// context, not a rewritten one.
+// generation of the same model in the same conversation (contextOwner).
+// A sub-agent's first call is never compared with its parent agent's last
+// one: that is a different context, not a rewritten one.
 type genStep struct {
 	Span      store.Span
 	Prev      *store.Span // nil for the first generation of its scope
-	Scope     string      // nearest agent ancestor's span ID, "" when none
+	Scope     string      // contextOwner's key, "" when none
 	ScopeName string
 	// What the step did to its context: "C" a smaller prompt, "B" a cache
 	// break, "E" a cache expiry. Break is the break's sentence and Extra its
@@ -42,9 +42,7 @@ func genSteps(spans []store.Span) []genStep {
 			continue
 		}
 		st := genStep{Span: sp}
-		if a := nearestAgent(byID, sp); a != nil {
-			st.Scope, st.ScopeName = a.ID, a.Name
-		}
+		st.Scope, st.ScopeName = contextOwner(byID, sp)
 		steps = append(steps, st)
 	}
 	sort.SliceStable(steps, func(i, j int) bool { return steps[i].Span.StartedAt.Before(steps[j].Span.StartedAt) })
@@ -61,20 +59,33 @@ func genSteps(spans []store.Span) []genStep {
 	return steps
 }
 
-// nearestAgent walks sp's parent chain. The step cap is for a payload whose
+// contextOwner names the conversation sp belongs to: its nearest agent
+// ancestor, or, when a tool span sits between them, that agent and the
+// tool's name. A model call made inside a tool (a sub-agent run as a tool,
+// a tool that asks a model) is not the agent's own conversation; calls
+// inside different runs of the same tool share one (Claude Code's Bash
+// checks read each other's cache). The step cap is for a payload whose
 // parent ids form a cycle.
-func nearestAgent(byID map[string]store.Span, sp store.Span) *store.Span {
+func contextOwner(byID map[string]store.Span, sp store.Span) (scope, name string) {
+	var tool *store.Span
 	for i := 0; i < len(byID) && sp.ParentSpanID != nil; i++ {
 		p, ok := byID[*sp.ParentSpanID]
 		if !ok {
-			return nil
+			break
+		}
+		if p.Kind == store.SpanKindTool && tool == nil {
+			tool = &p
 		}
 		if p.Kind == store.SpanKindAgent {
-			return &p
+			scope, name = p.ID, p.Name
+			break
 		}
 		sp = p
 	}
-	return nil
+	if tool != nil {
+		return scope + "\x00" + tool.Name, tool.Name
+	}
+	return scope, name
 }
 
 // contextDelta is a generation's prompt split into the prefix it shares with

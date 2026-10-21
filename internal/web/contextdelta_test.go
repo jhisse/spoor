@@ -21,7 +21,7 @@ func TestGenStepsPairsWithinNearestAgent(t *testing.T) {
 	t0 := time.Now()
 	agent := store.Span{ID: "agent", Kind: store.SpanKindAgent, Name: "main", StartedAt: t0}
 	sub := store.Span{ID: "sub", Kind: store.SpanKindAgent, Name: "helper", ParentSpanID: ptr("agent"), StartedAt: t0}
-	tool := store.Span{ID: "tool", Kind: store.SpanKindTool, ParentSpanID: ptr("sub"), StartedAt: t0}
+	tool := store.Span{ID: "tool", Kind: store.SpanKindTool, Name: "search", ParentSpanID: ptr("sub"), StartedAt: t0}
 	steps := genSteps([]store.Span{
 		agent, sub, tool,
 		gen("t", "g3", ptr("agent"), t0.Add(3*time.Second), nil),
@@ -34,11 +34,57 @@ func TestGenStepsPairsWithinNearestAgent(t *testing.T) {
 	if steps[0].Prev != nil || steps[1].Prev != nil {
 		t.Errorf("first generation of each agent must have no predecessor")
 	}
-	if steps[1].ScopeName != "helper" {
-		t.Errorf("g2 scope = %q, want the nearest agent ancestor (through the tool span)", steps[1].ScopeName)
+	if steps[1].Scope != "sub\x00search" || steps[1].ScopeName != "search" {
+		t.Errorf("g2 scope = %q, want the sub-agent and the tool it was called in: a call inside a tool is not the agent's own conversation", steps[1].Scope)
 	}
 	if steps[2].Prev == nil || steps[2].Prev.ID != "g1" {
 		t.Errorf("g3 must be compared with g1 (same agent), not with the sub-agent's g2")
+	}
+}
+
+// A sub-agent run through a tool (nanoclaw's tool.Agent) puts its model
+// calls under the tool span, with no agent span between them and the root.
+// Those calls are another conversation: chaining them with the root's calls
+// would mark the first one "smaller context" and the next root call a jump.
+func TestGenStepsToolCallIsItsOwnContext(t *testing.T) {
+	t0 := time.Now()
+	root := store.Span{ID: "root", Kind: store.SpanKindAgent, Name: "agent.turn", StartedAt: t0}
+	tool := store.Span{ID: "tool", Kind: store.SpanKindTool, Name: "tool.Agent", ParentSpanID: ptr("root"), StartedAt: t0}
+	steps := genSteps([]store.Span{
+		root, tool,
+		gen("t", "main1", ptr("root"), t0.Add(1*time.Second), nil),
+		gen("t", "sub1", ptr("tool"), t0.Add(2*time.Second), nil),
+		gen("t", "sub2", ptr("tool"), t0.Add(3*time.Second), nil),
+		gen("t", "main2", ptr("root"), t0.Add(4*time.Second), nil),
+	})
+	prev := map[string]string{}
+	for _, st := range steps {
+		if st.Prev != nil {
+			prev[st.Span.ID] = st.Prev.ID
+		}
+	}
+	if prev["sub1"] != "" || prev["sub2"] != "sub1" || prev["main2"] != "main1" {
+		t.Errorf("predecessors = %v, want sub2←sub1 and main2←main1 only", prev)
+	}
+}
+
+// Claude Code checks each Bash command with a model call inside that
+// command's tool span; the checks of one turn share their cache.
+func TestGenStepsChainsCallsAcrossRunsOfOneTool(t *testing.T) {
+	s := newTestStore(t)
+	ingestCapture(t, s, "claude-code-interactive-tools.pb")
+	_, spans := onlyTrace(t, s)
+	prev := map[string]string{}
+	for _, st := range genSteps(spans) {
+		if st.Prev != nil {
+			prev[st.Span.ID] = st.Prev.ID
+		}
+	}
+	if prev["1864653fec855ce1"] != "4124c777e7eed7ca" || prev["cd7e1a253c0057bd"] != "1864653fec855ce1" {
+		t.Errorf("predecessors = %v, want the three Bash checks chained", prev)
+	}
+	if prev["6b8e6896304eef6e"] != "0777b793456d5aaa" {
+		t.Errorf("predecessors = %v, want the main calls chained around the checks", prev)
 	}
 }
 
