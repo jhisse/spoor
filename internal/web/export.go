@@ -72,7 +72,7 @@ func ExportHTML(w io.Writer, traces []store.Trace, spans [][]store.Span) error {
 	}{CSS: template.CSS(css)} // #nosec G203 -- our own embedded stylesheet, not request data
 	for i, t := range traces {
 		roots := BuildSpanTree(spans[i])
-		et := exportTrace{Trace: t, Totals: computeTraceTotals(spans[i], roots)}
+		et := exportTrace{Trace: t, Totals: computeTraceTotals(spans[i], roots, nil)}
 		appendExportSpans(&et.Spans, roots, 0)
 		data.Traces = append(data.Traces, et)
 	}

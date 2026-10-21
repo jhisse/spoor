@@ -1,6 +1,7 @@
 package web
 
 import (
+	"math"
 	"net/http/httptest"
 	"strings"
 	"testing"
@@ -487,7 +488,7 @@ func TestTraceTotalsMatchTreeRollup(t *testing.T) {
 		usage("orphan", &orphanParent, 7, 3, 0.25),
 	}
 	roots := BuildSpanTree(spans)
-	got := computeTraceTotals(spans, roots)
+	got := computeTraceTotals(spans, roots, nil)
 	if got.InputTokens != 107 || store.Deref(got.OutputTokens) != 13 || got.CostUSD == nil || *got.CostUSD != 0.75 || got.SpanCount != 3 {
 		t.Errorf("totals = %d in, %d out, cost %v, %d spans; want 107, 13, 0.75, 3", got.InputTokens, store.Deref(got.OutputTokens), got.CostUSD, got.SpanCount)
 	}
@@ -503,11 +504,36 @@ func TestTraceTotalsMatchTreeRollup(t *testing.T) {
 	}
 	// No span reported an output count: unknown, not zero.
 	noOutput := []store.Span{{ID: "g", Kind: store.SpanKindGeneration, InputTokens: i64Ptr(5)}}
-	if got := computeTraceTotals(noOutput, BuildSpanTree(noOutput)); got.OutputTokens != nil || got.InputTokens != 5 {
+	if got := computeTraceTotals(noOutput, BuildSpanTree(noOutput), nil); got.OutputTokens != nil || got.InputTokens != 5 {
 		t.Errorf("totals without an output count = %d in, %v out; want 5 and nil", got.InputTokens, got.OutputTokens)
 	}
-	if none := computeTraceTotals(nil, nil); none.CostUSD != nil {
+	if none := computeTraceTotals(nil, nil, nil); none.CostUSD != nil {
 		t.Errorf("empty trace cost = %v, want nil", *none.CostUSD)
+	}
+}
+
+// A trace does not say whether its cache writes were kept 5 minutes or 1
+// hour, and senders such as Claude Code keep them 1 hour: the header states
+// both prices, counting each write once and leaving a reported cost alone.
+func TestTraceTotalsRangeOverCacheWriteLifetime(t *testing.T) {
+	now := time.Now().UTC()
+	call := func(id string, parent *string, write int64, cost float64) store.Span {
+		return store.Span{TraceID: "t", ID: id, ParentSpanID: parent, Kind: store.SpanKindGeneration, Model: ptr("m"),
+			StartedAt: now, EndedAt: now.Add(time.Second), InputTokens: ptr(write), CacheWriteTokens: ptr(write), CostUSD: &cost}
+	}
+	prices := []store.ModelPrice{{ModelPattern: "^m$", InputPricePerToken: 1e-6, CacheWritePricePerToken: ptr(1.25e-6), CacheWrite1hPricePerToken: ptr(2e-6)}}
+	agent := "agent"
+	reported := call("reported", nil, 1000, 0.5)
+	reported.Metadata = []byte(`{"llm.cost.total":0.5}`)
+	spans := []store.Span{call("agent", nil, 1000, 0.00125), call("llm", &agent, 1000, 0.00125), reported}
+	got := computeTraceTotals(spans, BuildSpanTree(spans), prices)
+	// One write of 1,000 tokens: 0.75e-6 more per token at the 1-hour rate.
+	if got.CostUpper == nil || math.Abs(*got.CostUpper-(*got.CostUSD+1000*0.75e-6)) > 1e-12 {
+		t.Errorf("upper = %v, want the cost %v plus one write at the 1-hour rate", got.CostUpper, *got.CostUSD)
+	}
+	none := []store.Span{call("g", nil, 0, 0.001)}
+	if got := computeTraceTotals(none, BuildSpanTree(none), prices); got.CostUpper != nil {
+		t.Errorf("a trace that wrote no cache has no range, got %v", *got.CostUpper)
 	}
 }
 
