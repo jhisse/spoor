@@ -88,6 +88,24 @@ func TestGenStepsChainsCallsAcrossRunsOfOneTool(t *testing.T) {
 	}
 }
 
+// A call twice the size of the prompt it would continue, that read more than
+// that from cache, is a fork (Claude Code's side calls): the next call still
+// continues the conversation it forked from, so it is not a smaller context.
+func TestGenStepsForkIsItsOwnConversation(t *testing.T) {
+	t0 := time.Now()
+	steps := genSteps([]store.Span{
+		call("t", 1, t0, "m", 100_000, 90_000, 10_000),
+		call("t", 2, t0.Add(time.Second), "m", 210_000, 205_000, 5_000), // the fork
+		call("t", 3, t0.Add(2*time.Second), "m", 104_000, 102_000, 2_000),
+	})
+	markSteps(steps, nil)
+	for _, st := range steps[1:] {
+		if st.Prev == nil || st.Prev.ID != "c1" || st.Mark != "" {
+			t.Errorf("%s: want it compared with c1 and unmarked, got mark %q", st.Span.ID, st.Mark)
+		}
+	}
+}
+
 func TestGenStepsSurvivesParentCycle(t *testing.T) {
 	a := store.Span{ID: "a", Kind: store.SpanKindChain, ParentSpanID: ptr("b")}
 	b := store.Span{ID: "b", Kind: store.SpanKindChain, ParentSpanID: ptr("a")}

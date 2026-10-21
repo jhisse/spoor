@@ -68,6 +68,21 @@ func TestSessionChartSubAgentIsNotABreak(t *testing.T) {
 	}
 }
 
+// A fork reads the whole main context and as much again; the call after it
+// continues the main context and is not a smaller one.
+func TestSessionChartForkIsNotASmallerContext(t *testing.T) {
+	t0 := time.Date(2026, 10, 3, 4, 0, 0, 0, time.UTC)
+	at := func(s int) time.Time { return t0.Add(time.Duration(s) * time.Second) }
+	gens := []store.Span{
+		call("a", 1, at(0), "m", 100_000, 90_000, 10_000),
+		call("a", 2, at(10), "m", 210_000, 205_000, 5_000), // the fork
+		call("a", 3, at(20), "m", 104_000, 102_000, 2_000),
+	}
+	if got := marks(buildSessionChart(turns("a"), gens, sonnet)); got != "" {
+		t.Errorf("markers = %q, want none", got)
+	}
+}
+
 func TestSessionChartExpiryBreakAndSurvivedPause(t *testing.T) {
 	t0 := time.Date(2026, 10, 3, 4, 0, 0, 0, time.UTC)
 	gens := []store.Span{

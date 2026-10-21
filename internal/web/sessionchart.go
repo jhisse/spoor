@@ -56,6 +56,10 @@ func (c *sessionContexts) place(n int, st *genStep, prices []store.ModelPrice) {
 		return
 	}
 	k, read, sameModel := c.find(sp)
+	if k >= 0 && isFork(c.tails[k], sp) {
+		c.tails, c.steps = append(c.tails, sp), append(c.steps, n)
+		return
+	}
 	if k < 0 {
 		c.tails, c.steps = append(c.tails, sp), append(c.steps, n)
 		if sameModel {

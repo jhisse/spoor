@@ -51,12 +51,25 @@ func genSteps(spans []store.Span) []genStep {
 	last := map[string]int{}
 	for i := range steps {
 		context := steps[i].Scope + "\x00" + store.Deref(steps[i].Span.Model)
-		if j, ok := last[context]; ok {
+		j, ok := last[context]
+		if ok {
 			steps[i].Prev = &steps[j].Span
+			if isFork(steps[j].Span, steps[i].Span) {
+				continue
+			}
 		}
 		last[context] = i
 	}
 	return steps
+}
+
+// isFork says cur, which would continue prev, is a conversation of its own:
+// a prompt at least twice prev's that read more than prev's from cache
+// carries the conversation plus as much again from elsewhere (Claude Code's
+// side calls), so the call after it still continues prev.
+func isFork(prev, cur store.Span) bool {
+	p := inputOf(prev)
+	return p > 0 && inputOf(cur) >= 2*p && cur.Mix().CacheRead > p
 }
 
 // contextOwner names the conversation sp belongs to: its nearest agent
