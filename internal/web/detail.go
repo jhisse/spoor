@@ -11,6 +11,7 @@ import (
 	"slices"
 	"strings"
 
+	"github.com/jhisse/spoor/internal/otlp"
 	"github.com/jhisse/spoor/internal/store"
 )
 
@@ -52,6 +53,7 @@ type detailPageData struct {
 // returned.
 type traceTotals struct {
 	CostUSD      *float64 // nil when no span has a cost: unknown, not zero
+	CostUpper    *float64 // CostUSD had every cache write been kept 1 hour; nil when none could have been
 	InputTokens  int64
 	OutputTokens *int64 // nil when no span reported output tokens: unknown, not zero
 	Tokens       TokenMix
@@ -63,11 +65,12 @@ type traceTotals struct {
 // computeTraceTotals sums usage over the tree's roots, so the header and
 // the tree's Σ rows agree: a parent that repeats its child's usage is
 // counted once (the rule on SpanNode.Tokens).
-func computeTraceTotals(spans []store.Span, roots []*SpanNode) traceTotals {
+func computeTraceTotals(spans []store.Span, roots []*SpanNode, prices []store.ModelPrice) traceTotals {
 	t := traceTotals{SpanCount: len(spans)}
-	var sum float64
+	var sum, extra float64
 	var out int64
 	for _, root := range roots {
+		extra += writeAt1h(root, prices)
 		t.InputTokens += root.Tokens.Total() - root.Tokens.Output
 		t.Tokens = t.Tokens.Add(root.Tokens)
 		out += root.Tokens.Output
@@ -89,7 +92,34 @@ func computeTraceTotals(spans []store.Span, roots []*SpanNode) traceTotals {
 		}
 	}
 	t.Models = slices.Sorted(maps.Keys(models))
+	if t.CostUSD != nil && extra > 0 {
+		upper := sum + extra
+		t.CostUpper = &upper
+	}
 	return t
+}
+
+// writeAt1h is what n's cost would add had every cache write under it been
+// kept 1 hour instead of 5 minutes. No trace says which lifetime a sender
+// asked for (Claude Code keeps its main conversation 1 hour), so the header
+// states both. It counts the way rollUp counts cost: a node whose children
+// carry a cost stands for them, and a cost the sender reported is its own.
+func writeAt1h(n *SpanNode, prices []store.ModelPrice) (extra float64) {
+	if n.CostSum {
+		for _, c := range n.Children {
+			extra += writeAt1h(c, prices)
+		}
+		return extra
+	}
+	sp := n.Span
+	if sp.CostUSD == nil || sp.Model == nil || otlp.CostReported(sp) {
+		return 0
+	}
+	p, ok := store.MatchModelPrice(prices, *sp.Model)
+	if !ok || p.CacheWrite1hPricePerToken == nil {
+		return 0
+	}
+	return float64(sp.Mix().CacheWrite) * (*p.CacheWrite1hPricePerToken - p.CacheWritePrice())
 }
 
 // Detail renders GET /traces/{trace_id}: the trace header and its span tree.
@@ -111,6 +141,8 @@ func (h *Handlers) Detail(w http.ResponseWriter, r *http.Request) {
 	if err = errors.Join(err, hitsErr); want == "" && len(hits) > 0 {
 		want = hits[0].SpanID
 	}
+	prices, pricesErr := h.Store.ListModelPrices(ctx)
+	err = errors.Join(err, pricesErr)
 	roots := BuildSpanTree(spans)
 	selected, selectedID := selectSpan(spans, roots, want)
 	steps := stepNodes(roots)
@@ -119,7 +151,7 @@ func (h *Handlers) Detail(w http.ResponseWriter, r *http.Request) {
 		Roots:      roots,
 		Prev:       prev,
 		Next:       next,
-		Totals:     computeTraceTotals(spans, roots),
+		Totals:     computeTraceTotals(spans, roots, prices),
 		SelectedID: selectedID,
 		TokenScale: maxSpanTokens(spans),
 		Look:       worthALook(roots, steps),
