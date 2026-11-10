@@ -150,23 +150,24 @@ func serve(cfg *config.Config) error {
 	return shutdownErr
 }
 
-// runSweepLoop deletes the traces older than retentionDays, every interval.
-// A sweep error is logged and the loop keeps ticking: one bad sweep must not
-// take the server down.
+// runSweepLoop deletes the traces older than retentionDays, at the start and
+// then every interval: a process that lives less than one interval still
+// applies the retention. A sweep error is logged and the loop keeps ticking:
+// one bad sweep must not take the server down.
 func runSweepLoop(ctx context.Context, st store.Store, retentionDays int, interval time.Duration, logger *slog.Logger) {
 	ticker := time.NewTicker(interval)
 	defer ticker.Stop()
 	for {
+		traces, spans, err := st.SweepExpired(ctx, time.Now().AddDate(0, 0, -retentionDays))
+		if err != nil {
+			logger.Error("sweep failed", "error", err)
+		} else {
+			logger.Info("sweep completed", "traces_deleted", traces, "spans_deleted", spans)
+		}
 		select {
 		case <-ctx.Done():
 			return
 		case <-ticker.C:
-			traces, spans, err := st.SweepExpired(ctx, time.Now().AddDate(0, 0, -retentionDays))
-			if err != nil {
-				logger.Error("sweep failed", "error", err)
-				continue
-			}
-			logger.Info("sweep completed", "traces_deleted", traces, "spans_deleted", spans)
 		}
 	}
 }
