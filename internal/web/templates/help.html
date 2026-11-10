@@ -91,7 +91,7 @@ OTEL_SERVICE_NAME=my-app</pre>
 <div class="panel-b">
 <dl class="spots">
 <div><dt>Version</dt><dd class="n">{{.Version}}</dd></div>
-<div><dt>Price table</dt><dd class="n">{{.Prices}} models</dd><dd class="why">Ships in the binary, from Langfuse's public price list, and is reloaded at every start. A newer binary brings newer prices; <code>spoor reprice</code> applies them to stored spans.</dd></div>
+<div><dt>Price table</dt><dd class="n">{{.Prices}} models</dd><dd class="why">Ships in the binary, from Langfuse's public price list, and is reloaded at every start. Its newest price is from {{.PricesAsOf}}: a model released or repriced after that day is missing or out of date here. A newer binary brings newer prices; <code>spoor reprice</code> applies them to stored spans.</dd></div>
 <div><dt>Retention</dt><dd class="n">{{if .RetentionDays}}{{.RetentionDays}} days{{else}}forever{{end}}</dd><dd class="why">{{if .RetentionDays}}Traces older than that are deleted by the retention sweep (every <code>SPOOR_SWEEP_INTERVAL</code>, default 1h).{{else}}Nothing is deleted; set <code>SPOOR_RETENTION_DAYS</code> to change that.{{end}}</dd></div>
 </dl>
 </div></section>

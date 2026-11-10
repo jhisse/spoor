@@ -21,7 +21,7 @@
 {{else}}<tr><td colspan="3">the SDK reported no tokens; nothing to multiply</td></tr>{{end}}
 <tr class="sum"><td>sum</td><td></td><td class="num">= {{usd .Computed}}</td></tr>
 </table></div>
-<p class="cap mt measure">Price per million tokens, from the table row <code>{{.Pattern}}</code>.
+<p class="cap mt measure">Price per million tokens, from the table row <code>{{.Pattern}}</code>, last updated {{.PriceDate}}.
 {{if not .Stored}}<span class="warn-t">No cost was stored at ingestion; the sum uses today's table.</span>
 {{else if .Reported}}The stored cost, {{usd .Stored}}, was reported by the SDK, not calculated by spoor; by the table it would be {{usd .Computed}}.
 {{else if .Differs}}<span class="warn-t">Priced with an older table: stored {{usd .Stored}}, today's table gives {{usd .Computed}}. Run <code>spoor reprice</code> to bring stored costs up to date.</span>{{if and .PricedBy (ne .PricedBy .Pattern)}} The stored cost came from the row <code>{{.PricedBy}}</code>.{{end}}

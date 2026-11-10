@@ -138,6 +138,7 @@ func TestDetailCostBreakdownStates(t *testing.T) {
 	}
 	const model = "claude-haiku-4-5-20251001"
 	closing := buildCostBreakdown(genSpan(model, nil), prices).Computed
+	row, _ := store.MatchModelPrice(prices, model)
 
 	cases := []struct {
 		id, model string
@@ -146,7 +147,7 @@ func TestDetailCostBreakdownStates(t *testing.T) {
 		want      []string
 		notWant   string
 	}{
-		{"closes", model, &closing, "", []string{"fresh input", "cache read", "cache write", "output", "sum", "= " + usd(closing), "The sum matches the cost stored"}, "differs"},
+		{"closes", model, &closing, "", []string{"fresh input", "cache read", "cache write", "output", "sum", "= " + usd(closing), "The sum matches the cost stored", "</code>, last updated " + row.UpdatedAt.Format(time.DateOnly) + "."}, "differs"},
 		{"stale", model, ptr(closing * 2), "", []string{"differs from today's calculation", "Priced with an older table: stored " + usd(closing*2) + ", today's table gives " + usd(closing), "<code>spoor reprice</code>", "= " + usd(closing)}, "The stored cost came from the row"},
 		// Same dollars, but the recorded row and fingerprint are not today's: still said.
 		{"old-row", model, &closing, "", []string{"Priced with an older table", "The stored cost came from the row <code>claude-haiku-4-5</code>"}, "The sum matches"},
