@@ -442,6 +442,15 @@ func TestParseSince(t *testing.T) {
 	if got, err := parseSince("90m"); err != nil || time.Since(got) < 89*time.Minute || time.Since(got) > 91*time.Minute {
 		t.Errorf("90m = %v, %v", got, err)
 	}
+	// Go's durations stop at hours; an agent asking for a week writes 7d.
+	if got, err := parseSince("7d"); err != nil || time.Since(got) < 7*24*time.Hour-time.Minute || time.Since(got) > 7*24*time.Hour+time.Minute {
+		t.Errorf("7d = %v, %v", got, err)
+	}
+	for _, in := range []string{"d", "-1d", "1.5d", "7dd"} {
+		if _, err := parseSince(in); err == nil {
+			t.Errorf("%s should be refused", in)
+		}
+	}
 	for in, want := range map[string]string{
 		"2026-10-02":                "2026-10-02T00:00:00Z",
 		"2026-10-02T04:05":          "2026-10-02T04:05:00Z",
