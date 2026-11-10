@@ -3,6 +3,7 @@ package otlp
 import (
 	"bytes"
 	"compress/gzip"
+	"context"
 	"encoding/hex"
 	"encoding/json"
 	"maps"
@@ -15,9 +16,11 @@ import (
 	"google.golang.org/protobuf/proto"
 
 	collectortrace "go.opentelemetry.io/proto/otlp/collector/trace/v1"
+
+	"github.com/jhisse/spoor/internal/store"
 )
 
-func loadTestdata(t *testing.T, name, ext string) []byte {
+func loadTestdata(t testing.TB, name, ext string) []byte {
 	t.Helper()
 	data, err := os.ReadFile("../../testdata/" + name + "." + ext) // #nosec G304 -- test-only, name/ext come from call sites in this file, never external input
 	if err != nil {
@@ -199,4 +202,63 @@ func TestDecodeRequestJSONIgnoresUnknownFields(t *testing.T) {
 	if !proto.Equal(got, want) {
 		t.Error("the request decoded differently with unknown fields in it")
 	}
+}
+
+// OTLP/JSON allows a 64-bit integer as a number as well as a string. Neither
+// a nanosecond timestamp nor a large intValue fits a float64 exactly, so both
+// must come through as sent.
+func TestDecodeRequestJSONKeepsLargeIntegers(t *testing.T) {
+	body := `{"resourceSpans":[{"scopeSpans":[{"spans":[{"traceId":"5b8efff798038103d269b633813fc60c","spanId":"eee19b7ec3c1b174",
+		"startTimeUnixNano":1762740000123456789,"attributes":[{"key":"n","value":{"intValue":9007199254740993}}]}]}]}]}`
+	got, err := decodeRequest(newDecodeRequest(t, []byte(body), "application/json", false))
+	if err != nil {
+		t.Fatalf("decodeRequest: %v", err)
+	}
+	span := got.ResourceSpans[0].ScopeSpans[0].Spans[0]
+	if span.StartTimeUnixNano != 1762740000123456789 {
+		t.Errorf("startTimeUnixNano = %d, want 1762740000123456789", span.StartTimeUnixNano)
+	}
+	if n := span.Attributes[0].Value.GetIntValue(); n != 9007199254740993 {
+		t.Errorf("intValue = %d, want 9007199254740993", n)
+	}
+
+	if _, err := decodeRequest(newDecodeRequest(t, []byte(`{} {"resourceSpans":[]}`), "application/json", false)); err == nil {
+		t.Error("a body with data after the JSON value was accepted")
+	}
+}
+
+// Any body, in either encoding, is decoded or refused: never a panic. The
+// port is open to every local process.
+func FuzzDecodeRequest(f *testing.F) {
+	for _, name := range []string{"openllmetry-anthropic-simple", "claude-code-tool-read", "otel-openai-v2-events"} {
+		f.Add(loadTestdata(f, name, "json"), true)
+		f.Add(loadTestdata(f, name, "pb"), false)
+	}
+	f.Add([]byte(`{"resourceSpans":[{"scopeSpans":[{"spans":[{"traceId":7,"spanId":"zz","parentSpanId":null}]}]}]}`), true)
+	f.Fuzz(func(t *testing.T, body []byte, asJSON bool) {
+		contentType := "application/x-protobuf"
+		if asJSON {
+			contentType = "application/json"
+		}
+		r := httptest.NewRequest(http.MethodPost, "/v1/traces", bytes.NewReader(body))
+		r.Header.Set("Content-Type", contentType)
+		req, err := decodeRequest(r)
+		if err != nil {
+			return
+		}
+		h := &Handler{Store: discardStore{}}
+		if _, err := h.ingestRequest(t.Context(), req); err != nil {
+			t.Fatalf("ingesting a decoded request: %v", err)
+		}
+	})
+}
+
+// discardStore prices nothing and stores nothing: the fuzz target runs the
+// translation without a database.
+type discardStore struct{ store.Store }
+
+func (discardStore) ListModelPrices(context.Context) ([]store.ModelPrice, error) { return nil, nil }
+
+func (discardStore) IngestBatch(context.Context, []store.TraceMerge, []store.Span) error {
+	return nil
 }
