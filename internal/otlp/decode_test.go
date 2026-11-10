@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"compress/gzip"
 	"encoding/hex"
+	"encoding/json"
 	"maps"
 	"net/http"
 	"net/http/httptest"
@@ -165,5 +166,37 @@ func TestDecodeRequestGzipJSON(t *testing.T) {
 	}
 	if len(got.ResourceSpans) == 0 {
 		t.Fatal("no resource spans decoded")
+	}
+}
+
+// OTLP/JSON receivers must ignore a field they do not know: a sender built on
+// a newer protocol than this binary still has its spans stored.
+func TestDecodeRequestJSONIgnoresUnknownFields(t *testing.T) {
+	jsonBody := loadTestdata(t, "openllmetry-anthropic-simple", "json")
+	want, err := decodeRequest(newDecodeRequest(t, jsonBody, "application/json", false))
+	if err != nil {
+		t.Fatalf("decodeRequest: %v", err)
+	}
+
+	var tree map[string]any
+	if err := json.Unmarshal(jsonBody, &tree); err != nil {
+		t.Fatalf("reading the capture: %v", err)
+	}
+	tree["futureField"] = "x"
+	rs := tree["resourceSpans"].([]any)[0].(map[string]any)
+	rs["futureField"] = map[string]any{"nested": 1}
+	span := rs["scopeSpans"].([]any)[0].(map[string]any)["spans"].([]any)[0].(map[string]any)
+	span["futureField"] = []any{1, "two"}
+	withUnknown, err := json.Marshal(tree)
+	if err != nil {
+		t.Fatalf("writing the body: %v", err)
+	}
+
+	got, err := decodeRequest(newDecodeRequest(t, withUnknown, "application/json", false))
+	if err != nil {
+		t.Fatalf("decodeRequest with unknown fields: %v", err)
+	}
+	if !proto.Equal(got, want) {
+		t.Error("the request decoded differently with unknown fields in it")
 	}
 }

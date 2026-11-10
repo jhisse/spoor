@@ -65,7 +65,8 @@ func decodeRequest(r *http.Request) (*collectortrace.ExportTraceServiceRequest, 
 // unmarshalOTLPJSON decodes OTLP/JSON, which writes traceId, spanId and
 // parentSpanId as hex. protojson expects base64 for bytes fields and would
 // decode the hex into wrong-length garbage with no error, so those three
-// fields are converted to base64 first.
+// fields are converted to base64 first. A field this binary does not know is
+// ignored, as OTLP requires of a receiver: a newer sender must not get a 400.
 func unmarshalOTLPJSON(data []byte, req *collectortrace.ExportTraceServiceRequest) error {
 	var generic any
 	if err := json.Unmarshal(data, &generic); err != nil {
@@ -76,7 +77,7 @@ func unmarshalOTLPJSON(data []byte, req *collectortrace.ExportTraceServiceReques
 	if err != nil {
 		return err
 	}
-	return protojson.Unmarshal(fixed, req)
+	return protojson.UnmarshalOptions{DiscardUnknown: true}.Unmarshal(fixed, req)
 }
 
 func hexIDsToBase64(v any) {
