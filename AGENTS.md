@@ -185,6 +185,17 @@ Break one and something subtle goes wrong.
 - **Pin every version, exactly.** Python dependencies with `==` and each script's `exclude-newer` (so the transitive ones stand still), npm packages, `uvx` tools, the Go version and toolchain, the CI tools, the runner image, Docker images (distroless by digest) and GitHub Actions, each at the latest release when added or touched (`gh api repos/<owner>/<repo>/releases/latest`, actions by commit SHA with the tag in a comment). A bump is its own change: rerun the captures and the tests with it, and where the newest release breaks something, say why in a comment (`testdata/capture/otel-openai-v2.py`).
 - No new dependency for what a few lines can do. Comments only for an invariant or a workaround that is not obvious.
 
+## Commits, branches and pull requests
+
+Pull requests are squash-merged, so the title of the pull request is the commit on `main`.
+
+- **A commit subject is `type(scope): subject`.** The type is `fix`, `feat`, `docs`, `refactor`, `test` or `chore`; the scope is the package or area changed (`otlp`, `web`, `serve`, `pricing`, `recipes`) and is left out when the change has none. The subject is imperative, lower case, with no full stop: `fix(serve): run the retention sweep at the start`.
+- **The body says what was wrong and why the change fixes it**, wrapped at 72 columns. It does not list files.
+- **A branch is `type/short-slug`**, with the commit's type (`fix/otlp-json-unknown-fields`), cut from the current `main`. Not a name a tool generated.
+- **One change per branch and per pull request.** A second fix found on the way is a second pull request.
+- **A pull request's title is the commit subject.** Its body has "What", "Change" and "Test", and "Not in this PR" when something was left out on purpose. It says which checks were run and the figure `make loc` printed. A bug fix names the test that fails before it.
+- **Commits, pull requests, comments and branch names describe the change and nothing else**: the bug, the specification or the code that justifies it. No footer added by a tool, no link to a session or a chat.
+
 ## Pointers
 
 - [docs/schema.md](docs/schema.md): tables, columns, the `trace_summary` view, example queries for `sqlite3`.
