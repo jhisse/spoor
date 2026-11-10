@@ -1,0 +1,36 @@
+# Proposes the bumps that need no capture rerun: Go modules, the actions and
+# the Docker images, one pull request per ecosystem. The Python and npm
+# dependencies of testdata/capture and testdata/chatbots are bumped by hand,
+# with their captures (AGENTS.md).
+version: 2
+updates:
+  - package-ecosystem: gomod
+    directory: /
+    schedule:
+      interval: weekly
+    groups:
+      go-modules:
+        patterns: ["*"]
+    commit-message:
+      prefix: chore
+      include: scope
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    groups:
+      actions:
+        patterns: ["*"]
+    commit-message:
+      prefix: chore
+      include: scope
+  - package-ecosystem: docker
+    directory: /
+    schedule:
+      interval: weekly
+    groups:
+      docker-images:
+        patterns: ["*"]
+    commit-message:
+      prefix: chore
+      include: scope
