@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"math"
 	"regexp"
+	"time"
 
 	"github.com/jhisse/spoor/internal/otlp"
 	"github.com/jhisse/spoor/internal/store"
@@ -22,6 +23,7 @@ type costLine struct {
 // differ both are shown, never reconciled.
 type costBreakdown struct {
 	Model, Pattern string // Pattern is "" when no price row matches
+	PriceDate      string // the day that row was last updated: a price is only as good as its date
 	PricedBy       string // the row recorded when Stored was calculated; "" if none was
 	Stale          bool   // that row's fingerprint is not today's: the table changed since
 	Lines          []costLine
@@ -58,6 +60,7 @@ func buildCostBreakdown(sp store.Span, prices []store.ModelPrice) *costBreakdown
 		return c
 	}
 	c.Pattern, c.PricedBy = p.ModelPattern, store.Deref(sp.PricePattern)
+	c.PriceDate = p.UpdatedAt.Format(time.DateOnly)
 	c.Stale = sp.PriceFingerprint != nil && *sp.PriceFingerprint != p.Fingerprint()
 	m := sp.Mix()
 	write := "cache write"

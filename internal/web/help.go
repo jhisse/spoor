@@ -4,11 +4,13 @@ import (
 	"net"
 	"net/http"
 	"net/url"
+	"time"
 )
 
 type helpPageData struct {
 	shell
 	IngestBase, IngestURL, UIURL, Version string
+	PricesAsOf                            string // the day the newest price row was updated
 	Prices, RetentionDays                 int
 }
 
@@ -30,6 +32,12 @@ func (h *Handlers) Help(w http.ResponseWriter, r *http.Request) {
 		fail(w, r, err)
 		return
 	}
+	var newest time.Time
+	for _, p := range prices {
+		if p.UpdatedAt.After(newest) {
+			newest = p.UpdatedAt
+		}
+	}
 	h.renderPage(w, r, helpTmpl, "", &helpPageData{IngestBase: h.ingestBase(r), IngestURL: h.ingestURL(r),
-		UIURL: "http://" + r.Host, Version: h.Version, Prices: len(prices), RetentionDays: h.RetentionDays})
+		UIURL: "http://" + r.Host, Version: h.Version, Prices: len(prices), PricesAsOf: newest.Format(time.DateOnly), RetentionDays: h.RetentionDays})
 }

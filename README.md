@@ -215,7 +215,7 @@ sqlite3 spoor.db ".backup backup.db"       # or: sqlite3 spoor.db "VACUUM INTO '
 
 **Logs.** Text lines on standard error. A request that failed inside spoor is logged at level `error`: `internal error` for a UI request answered 500, `storage unavailable` for an ingest request answered 503 (OTLP senders retry 503). `GET /healthz` on either port answers 200 while the database is reachable.
 
-**Prices.** A span's cost is calculated when it is ingested, from a price table that ships in the binary ([NOTICE](NOTICE)). `serve`, `demo` and `migrate` load the table into `model_prices` at every start, in one transaction. `serve` logs how many stored spans were priced with older rows and `spoor reprice` recalculates them; run `spoor reprice --dry-run` first. A cost the sender reported itself is left alone.
+**Prices.** A span's cost is calculated when it is ingested, from a price table that ships in the binary ([NOTICE](NOTICE)). `serve`, `demo` and `migrate` load the table into `model_prices` at every start, in one transaction. `serve` logs how many stored spans were priced with older rows and `spoor reprice` recalculates them; run `spoor reprice --dry-run` first. A cost the sender reported itself is left alone. The Help page says the day of the newest price in the table, and a span's cost breakdown the day its row was last updated.
 
 </details>
 
