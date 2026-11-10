@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"encoding/base64"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -128,8 +129,12 @@ type exportRow struct {
 	TraceStatus store.Status `json:"trace_status"`
 }
 
+// maxToolLimit is the largest page a tool returns; the Store answers a
+// larger limit with its own default.
+const maxToolLimit = 200
+
 func callTool(ctx context.Context, st store.Store, name string, a toolArgs) (any, error) {
-	limit := a.Limit
+	limit := min(a.Limit, maxToolLimit)
 	if limit <= 0 {
 		limit = 20
 	}
@@ -142,6 +147,15 @@ func callTool(ctx context.Context, st store.Store, name string, a toolArgs) (any
 		return searchSpans(ctx, st, a, limit)
 	}
 	return nil, fmt.Errorf("unknown tool %q", name)
+}
+
+// pageCursor is where a page of list_traces ended and the lower bound its
+// first page resolved since to. Traces are ordered by (started_at, id), so a
+// trace that arrives between two calls is newer than the cursor and moves
+// nothing; carrying From keeps an age such as 24h from sliding while paging.
+type pageCursor struct {
+	store.Cursor
+	From *time.Time
 }
 
 func listTraces(ctx context.Context, st store.Store, a toolArgs, limit int) (any, error) {
@@ -157,12 +171,25 @@ func listTraces(ctx context.Context, st store.Store, a toolArgs, limit int) (any
 		}
 		q.From = &from
 	}
-	traces, _, err := st.QueryTraces(ctx, q)
+	if a.Cursor != "" {
+		var c pageCursor
+		raw, err := base64.RawURLEncoding.DecodeString(a.Cursor)
+		if err != nil || json.Unmarshal(raw, &c) != nil || c.ID == "" {
+			return nil, fmt.Errorf("cursor %q: pass the next_cursor of the previous answer unchanged", a.Cursor)
+		}
+		q.Cursor, q.From = &c.Cursor, c.From
+	}
+	traces, next, err := st.QueryTraces(ctx, q)
 	rows := make([]traceRow, len(traces))
 	for i, t := range traces {
 		rows[i] = newTraceRow(t)
 	}
-	return map[string]any{"traces": rows}, err
+	out := map[string]any{"traces": rows}
+	if next != nil {
+		raw, _ := json.Marshal(pageCursor{*next, q.From})
+		out["next_cursor"] = base64.RawURLEncoding.EncodeToString(raw)
+	}
+	return out, err
 }
 
 // parseSince reads an age (7d, 24h, 90m) or a UTC time: RFC 3339 or a date.

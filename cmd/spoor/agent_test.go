@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"os/exec"
@@ -205,7 +206,12 @@ func (s *mcpSession) post(msg map[string]any, header map[string]string) *httptes
 // handshake of an earlier revision's client.
 func startMCP(t *testing.T) *mcpSession {
 	t.Helper()
-	ro, err := sqlite.OpenReadOnly(seedAgentDB(t))
+	return startMCPOn(t, seedAgentDB(t))
+}
+
+func startMCPOn(t *testing.T, dbPath string) *mcpSession {
+	t.Helper()
+	ro, err := sqlite.OpenReadOnly(dbPath)
 	must(t, err)
 	t.Cleanup(func() { _ = ro.Close() })
 	mux := http.NewServeMux()
@@ -434,6 +440,66 @@ func TestMCPOverHTTP(t *testing.T) {
 		if s.h.ServeHTTP(w, r); w.Code != http.StatusMethodNotAllowed {
 			t.Errorf("GET /mcp: status %d, want 405", w.Code)
 		}
+	}
+}
+
+// list_traces hands out a cursor while older traces remain, and the cursor
+// continues where the page ended.
+func TestMCPListTracesPages(t *testing.T) {
+	path := seedAgentDB(t)
+	s := startMCPOn(t, path)
+	first, text, isErr := s.tool("list_traces", map[string]any{"limit": 1, "since": "3h"})
+	if isErr || len(dig(t, first, "traces").([]any)) != 1 || dig(t, first, "traces", 0, "id") != "trace-bad" {
+		t.Fatalf("first page: %s", text)
+	}
+	cursor, _ := first.(map[string]any)["next_cursor"].(string)
+	if cursor == "" {
+		t.Fatalf("first page has no next_cursor although a trace remains: %s", text)
+	}
+
+	// A trace arrives between the two calls: it is newer than the cursor.
+	st, err := sqlite.Open(path)
+	must(t, err)
+	now := time.Now().UTC()
+	must(t, st.MergeTrace(context.Background(), store.Trace{ID: "trace-new", Name: "agent.run", StartedAt: now, EndedAt: now, CreatedAt: now}, true))
+	must(t, st.Close())
+
+	// since=1m alone matches only the new trace; the cursor carries the first page's since.
+	second, text, isErr := s.tool("list_traces", map[string]any{"limit": 1, "since": "1m", "cursor": cursor})
+	if isErr || len(dig(t, second, "traces").([]any)) != 1 || dig(t, second, "traces", 0, "id") != "trace-ok" {
+		t.Fatalf("second page: %s", text)
+	}
+	if _, more := second.(map[string]any)["next_cursor"]; more {
+		t.Errorf("last page still has a next_cursor: %s", text)
+	}
+	if again, text, _ := s.tool("list_traces", map[string]any{"limit": 1}); dig(t, again, "traces", 0, "id") != "trace-new" {
+		t.Errorf("a new first page: %s, want trace-new first", text)
+	}
+	if _, text, isErr := s.tool("list_traces", map[string]any{"cursor": "not-a-cursor"}); !isErr || !strings.Contains(text, "next_cursor") {
+		t.Errorf("a cursor that is not one: %s; want an error naming next_cursor", text)
+	}
+}
+
+// A limit above the largest page is that page, not the Store's default of 50.
+func TestMCPListTracesLimitAboveTheMaximum(t *testing.T) {
+	path := filepath.Join(t.TempDir(), "spoor.db")
+	must(t, sqlite.Migrate(path))
+	st, err := sqlite.Open(path)
+	must(t, err)
+	base := time.Now().UTC().Add(-time.Hour)
+	for i := range maxToolLimit + 1 {
+		start := base.Add(time.Duration(i) * time.Second)
+		must(t, st.MergeTrace(context.Background(), store.Trace{ID: fmt.Sprintf("trace-%03d", i), Name: "agent.run", StartedAt: start, EndedAt: start, CreatedAt: start}, true))
+	}
+	must(t, st.Close())
+
+	s := startMCPOn(t, path)
+	payload, _, isErr := s.tool("list_traces", map[string]any{"limit": 500})
+	if n := len(dig(t, payload, "traces").([]any)); isErr || n != maxToolLimit {
+		t.Fatalf("limit=500 gave %d traces, want %d", n, maxToolLimit)
+	}
+	if cursor, _ := payload.(map[string]any)["next_cursor"].(string); cursor == "" {
+		t.Error("no next_cursor although one more trace remains")
 	}
 }
 

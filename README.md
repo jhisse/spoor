@@ -153,7 +153,7 @@ Any other client: Streamable HTTP at `http://localhost:8080/mcp`. The endpoint i
 
 | Tool | What it returns |
 |---|---|
-| `list_traces` | Traces, newest first, one summary row each. Filters: service, status, since |
+| `list_traces` | Traces, newest first, one summary row each. Filters: service, status, since. Pages with `cursor`, from the `next_cursor` of the previous answer |
 | `get_trace` | One trace and its spans in start order, with input and output. Long values are cut and the cut is reported |
 | `search_spans` | Spans whose name, input, output, metadata, status message or events hold every word of a query (`"phrase"`, `-excluded`) |
 
