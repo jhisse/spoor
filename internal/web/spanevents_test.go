@@ -55,6 +55,13 @@ func TestErrorReason(t *testing.T) {
 		t.Errorf("exception with a type only = %q", got)
 	}
 	sp.Events = nil
+	// What an HTTP server instrumentation sends for a failed request: the
+	// error's class and nothing else.
+	sp.Metadata = json.RawMessage(`{"error.type":"jinja2.exceptions.TemplateNotFound","http.response.status_code":500}`)
+	if got := errorReason(sp); got != "jinja2.exceptions.TemplateNotFound" {
+		t.Errorf("with no status text and no exception the error type is the reason, got %q", got)
+	}
+	sp.Metadata = nil
 	if got := errorReason(sp); got != "" {
 		t.Errorf("a failure with no reason sent must stay without one, got %q", got)
 	}
@@ -76,7 +83,10 @@ func TestDetailShowsWhyASpanFailed(t *testing.T) {
 		Status: store.StatusUnset, StartedAt: start, EndedAt: start.Add(3 * time.Second), CreatedAt: start}
 	tool := failedToolSpan(start.Add(time.Second))
 	tool.TraceID, tool.ParentSpanID = tr.ID, strPtr("root")
-	for _, sp := range []store.Span{root, tool} {
+	mute := store.Span{TraceID: tr.ID, ID: "mute", ParentSpanID: strPtr("root"), Kind: store.SpanKindGeneric, Name: "GET /live",
+		Status: store.StatusError, StartedAt: start.Add(2 * time.Second), EndedAt: start.Add(3 * time.Second), CreatedAt: start,
+		Metadata: json.RawMessage(`{"error.type":"ConnectionError","http.response.status_code":200}`)}
+	for _, sp := range []store.Span{root, tool, mute} {
 		if err := s.InsertSpan(t.Context(), sp); err != nil {
 			t.Fatalf("InsertSpan: %v", err)
 		}
@@ -92,6 +102,20 @@ func TestDetailShowsWhyASpanFailed(t *testing.T) {
 	} {
 		if !strings.Contains(body, want) {
 			t.Errorf("page is missing %q", want)
+		}
+	}
+
+	if strings.Contains(body, "Error type") {
+		t.Errorf("a span with no error type must show no error type line")
+	}
+
+	body = doDetailQuery(t, h, tr.ID, "span=mute").Body.String()
+	for _, want := range []string{
+		`title="ConnectionError"`, // tree row
+		"</svg> Error</h3>", `<span class="cap">Error type</span> <b class="mono">ConnectionError</b>`,
+	} {
+		if !strings.Contains(body, want) {
+			t.Errorf("page of the span with an error type only is missing %q", want)
 		}
 	}
 

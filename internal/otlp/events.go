@@ -68,3 +68,7 @@ func ExceptionOf(e store.SpanEvent) (ex Exception, ok bool) {
 	ex.Stacktrace, _ = attrs["exception.stacktrace"].(string)
 	return ex, true
 }
+
+// ErrorType is the class of error the sender says the span ended with
+// (error.type: an exception name, a status code), "" when it names none.
+func ErrorType(s store.Span) string { return storedAttrs(s)["error.type"] }

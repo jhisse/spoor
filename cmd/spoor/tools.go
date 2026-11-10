@@ -12,6 +12,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/jhisse/spoor/internal/otlp"
 	"github.com/jhisse/spoor/internal/store"
 )
 
@@ -64,6 +65,7 @@ type spanRow struct {
 	EndedAt          time.Time      `json:"ended_at"`
 	Status           store.Status   `json:"status"`
 	StatusMessage    *string        `json:"status_message"`
+	ErrorType        *string        `json:"error_type"`
 	Model            *string        `json:"model"`
 	InputTokens      *int64         `json:"input_tokens"`
 	OutputTokens     *int64         `json:"output_tokens"`
@@ -93,6 +95,9 @@ func newSpanRow(sp store.Span, maxChars int) spanRow {
 		InputTokens: sp.InputTokens, OutputTokens: sp.OutputTokens, CacheReadTokens: sp.CacheReadTokens,
 		CacheWriteTokens: sp.CacheWriteTokens, ReasoningTokens: sp.ReasoningTokens, CostUSD: sp.CostUSD,
 		PricePattern: sp.PricePattern, PriceFingerprint: sp.PriceFingerprint, CreatedAt: sp.CreatedAt}
+	if t := otlp.ErrorType(sp); t != "" {
+		r.ErrorType = &t
+	}
 	r.Input, r.InputCut = shown(store.Deref(sp.Input), maxChars)
 	r.Output, r.OutputCut = shown(store.Deref(sp.Output), maxChars)
 	r.Metadata, r.MetadataCut = shown(string(sp.Metadata), maxChars)

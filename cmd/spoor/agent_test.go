@@ -44,7 +44,7 @@ func seedAgentDB(t *testing.T) string {
 	}
 	parent, statusMessage := "gen", "deploy killed (exit 137)"
 	start := base.Add(time.Minute + time.Second)
-	must(t, st.InsertSpan(ctx, store.Span{TraceID: "trace-bad", ID: "tool", ParentSpanID: &parent, Kind: store.SpanKindTool, Name: "run_deploy", StartedAt: start, EndedAt: start.Add(time.Second), Status: store.StatusError, Input: &toolInput, Metadata: json.RawMessage(`{"tool.exit_code":"137"}`), CreatedAt: start,
+	must(t, st.InsertSpan(ctx, store.Span{TraceID: "trace-bad", ID: "tool", ParentSpanID: &parent, Kind: store.SpanKindTool, Name: "run_deploy", StartedAt: start, EndedAt: start.Add(time.Second), Status: store.StatusError, Input: &toolInput, Metadata: json.RawMessage(`{"tool.exit_code":"137","error.type":"OOMKilled"}`), CreatedAt: start,
 		StatusMessage: &statusMessage, Attributes: json.RawMessage(`{"tool.exit_code":"137","gen_ai.operation.name":"execute_tool"}`), Events: json.RawMessage(`[{"name":"exception","time":"2026-10-03T12:00:00Z","attributes":{"exception.type":"OOMKilled","exception.message":"container ran out of memory"}}]`)}))
 	return path
 }
@@ -301,7 +301,7 @@ func TestMCPFindsTheFailedTraceAndTheFailingStep(t *testing.T) {
 	if got := dig(t, payload, "spans", 0, "events", 0, "attributes", "exception.type"); got != "OOMKilled" {
 		t.Errorf("failing step must carry its events as JSON, exception.type = %v", got)
 	}
-	for key, want := range map[string]any{"name": "run_deploy", "kind": "tool", "status": "error", "parent_span_id": "gen", "status_message": "deploy killed (exit 137)"} {
+	for key, want := range map[string]any{"name": "run_deploy", "kind": "tool", "status": "error", "parent_span_id": "gen", "status_message": "deploy killed (exit 137)", "error_type": "OOMKilled"} {
 		if got := dig(t, payload, "spans", 0, key); got != want {
 			t.Errorf("failing step: %s = %v, want %v", key, got, want)
 		}
@@ -323,6 +323,9 @@ func TestMCPGetTraceCutsLongValuesAndSaysSo(t *testing.T) {
 	}
 	if in, _ := dig(t, payload, "spans", 0, "input").(string); len(in) != 1000 || dig(t, payload, "spans", 0, "input_truncated_from_chars").(float64) < 3000 {
 		t.Errorf("long input: %d chars; want 1000 and the full length reported", len(in))
+	}
+	if dig(t, payload, "spans", 0, "error_type") != nil {
+		t.Errorf("a span whose sender named no error type must show error_type null")
 	}
 	if dig(t, payload, "spans", 0, "output_truncated_from_chars") != nil || dig(t, payload, "spans", 0, "output", 0, "finish_reason") != "tool_use" {
 		t.Errorf("a short output must be complete, embedded JSON")

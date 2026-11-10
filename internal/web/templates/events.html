@@ -1,9 +1,10 @@
 {{/* span_error: why the span failed, as the sender said it. Given a spanEventsView. */}}
 {{define "span_error"}}
-{{if or .StatusMessage .Exceptions}}
+{{if or .StatusMessage .Exceptions .ErrorType}}
 <div class="callout err mt">
 <h3><svg class="st err" aria-hidden="true"><use href="#i-err"/></svg> Error</h3>
 {{if .StatusMessage}}<p class="prose">{{.StatusMessage}}</p>{{end}}
+{{if .ErrorType}}<p class="mt"><span class="cap">Error type</span> <b class="mono">{{.ErrorType}}</b></p>{{end}}
 {{range .Exceptions}}
 <p class="mt"><b class="mono">{{or .Exception.Type "exception"}}</b>{{if .Offset}} <span class="cap">{{.Offset}}</span>{{end}}</p>
 {{if .Exception.Message}}<p class="prose">{{.Exception.Message}}</p>{{end}}

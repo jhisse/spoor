@@ -1,6 +1,7 @@
 package web
 
 import (
+	"cmp"
 	"encoding/json"
 	"strings"
 
@@ -17,17 +18,19 @@ type eventView struct {
 	StackLines   int
 }
 
-// spanEventsView is the span panel's error block (status text, exceptions)
-// and timeline (every other event, in the order sent), plus the link count.
+// spanEventsView is the span panel's error block (status text, exceptions,
+// and the error type when no exception already names it) and timeline (every
+// other event, in the order sent), plus the link count.
 type spanEventsView struct {
 	StatusMessage string
+	ErrorType     string
 	Exceptions    []eventView
 	Events        []eventView
 	Links         int
 }
 
 func spanEvents(sp *store.Span) (v spanEventsView) {
-	v.StatusMessage = store.Deref(sp.StatusMessage)
+	v.StatusMessage, v.ErrorType = store.Deref(sp.StatusMessage), otlp.ErrorType(*sp)
 	var events []store.SpanEvent
 	_ = json.Unmarshal(sp.Events, &events) // NULL column: no events
 	for _, e := range events {
@@ -38,6 +41,9 @@ func spanEvents(sp *store.Span) (v spanEventsView) {
 		var isException bool
 		if ev.Exception, isException = otlp.ExceptionOf(e); isException {
 			ev.StackLines = strings.Count(strings.TrimSpace(ev.Exception.Stacktrace), "\n") + 1
+			if ev.Exception.Type == v.ErrorType {
+				v.ErrorType = ""
+			}
 			v.Exceptions = append(v.Exceptions, ev)
 		} else {
 			v.Events = append(v.Events, ev)
@@ -50,8 +56,9 @@ func spanEvents(sp *store.Span) (v spanEventsView) {
 }
 
 // errorReason is why a failed span failed, on one line: the status text,
-// else the first recorded exception. Empty for a span that did not fail or
-// whose sender gave no reason — spoor does not guess one from the output.
+// else the first recorded exception, else the error type. Empty for a span
+// that did not fail or whose sender gave no reason — spoor does not guess
+// one from the output.
 func errorReason(sp store.Span) string {
 	if sp.Status != store.StatusError {
 		return ""
@@ -61,5 +68,5 @@ func errorReason(sp store.Span) string {
 		ex := v.Exceptions[0].Exception
 		v.StatusMessage = strings.TrimPrefix(ex.Type+": "+ex.Message, ": ")
 	}
-	return shortText(strings.TrimSuffix(v.StatusMessage, ": "))
+	return shortText(cmp.Or(strings.TrimSuffix(v.StatusMessage, ": "), v.ErrorType))
 }

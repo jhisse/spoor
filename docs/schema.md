@@ -150,7 +150,7 @@ output: [{"role": "assistant", "content": "...", "finish_reason": "tool_use",
 
 - An exception recorded by an OpenTelemetry SDK is the event named `exception`, with the attributes above (`exception.stacktrace` is optional).
 - `attributes` is absent when the event has none; its keys contain dots, so quote them in a JSON path.
-- Why a span failed: `status_message` first, then its `exception` events. Many SDKs send only one of the two, and some send neither — then look at `output` and `metadata`.
+- Why a span failed: `status_message` first, then its `exception` events, then `error.type` in `metadata` (the class of the error; an HTTP server instrumentation often sends nothing else). Many SDKs send only one of the three, and some send none — then look at `output` and the rest of `metadata`.
 
 ## Example queries
 
