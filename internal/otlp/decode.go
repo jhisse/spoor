@@ -4,10 +4,12 @@
 package otlp
 
 import (
+	"bytes"
 	"compress/gzip"
 	"encoding/base64"
 	"encoding/hex"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"net/http"
@@ -68,9 +70,16 @@ func decodeRequest(r *http.Request) (*collectortrace.ExportTraceServiceRequest, 
 // fields are converted to base64 first. A field this binary does not know is
 // ignored, as OTLP requires of a receiver: a newer sender must not get a 400.
 func unmarshalOTLPJSON(data []byte, req *collectortrace.ExportTraceServiceRequest) error {
+	// UseNumber: as float64, a nanosecond timestamp or a large intValue sent
+	// as a JSON number would be rounded.
+	dec := json.NewDecoder(bytes.NewReader(data))
+	dec.UseNumber()
 	var generic any
-	if err := json.Unmarshal(data, &generic); err != nil {
+	if err := dec.Decode(&generic); err != nil {
 		return err
+	}
+	if _, err := dec.Token(); err != io.EOF {
+		return errors.New("data after the JSON value")
 	}
 	hexIDsToBase64(generic)
 	fixed, err := json.Marshal(generic)
