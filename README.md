@@ -232,7 +232,7 @@ spoor stores, shows and counts. It does not judge, and it will not grow into a p
 | High-volume concurrent ingestion | Everything is written to one SQLite file |
 | A gRPC OTLP endpoint | Put an [OpenTelemetry Collector](docs/recipes/otel-collector.md) in front |
 
-**Known gaps.** The "what is new in this prompt" view needs the sender to export prompt content. The price table has one rate per model, so a Gemini Pro prompt above 200k tokens is priced at the base rate; the span's cost breakdown says so.
+**Known gaps.** The "what is new in this prompt" view needs the sender to export prompt content. The split of a prompt into cache read, fresh input and cache write, and the cache-loss marks, need the sender to report cache counts: [which senders do](docs/recipes/README.md#cache-counts). The price table has one rate per model, so a Gemini Pro prompt above 200k tokens is priced at the base rate; the span's cost breakdown says so.
 
 ## Contributing
 
