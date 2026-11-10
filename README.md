@@ -209,7 +209,7 @@ sqlite3 spoor.db ".backup backup.db"       # or: sqlite3 spoor.db "VACUUM INTO '
 
 **Upgrade.** Replace the binary and start it. `spoor serve` applies pending schema migrations before it opens either port and logs the versions; `spoor migrate` applies them, loads the price table and exits. Each migration is one transaction that also records its version, so a process killed while migrating leaves the schema as it was and the next start applies that migration again.
 
-**Retention.** Unset, spoor keeps everything. With `SPOOR_RETENTION_DAYS=30`, every `SPOOR_SWEEP_INTERVAL` spoor deletes each trace first stored more than 30 days ago, with all its spans. It applies to every trace and changing it needs a restart. The file does not shrink by itself: SQLite reuses the freed pages, and `VACUUM` with spoor stopped returns them.
+**Retention.** Unset, spoor keeps everything. With `SPOOR_RETENTION_DAYS=30`, at the start and then every `SPOOR_SWEEP_INTERVAL` spoor deletes each trace first stored more than 30 days ago, with all its spans. It applies to every trace and changing it needs a restart. The file does not shrink by itself: SQLite reuses the freed pages, and `VACUUM` with spoor stopped returns them.
 
 **Exposing the ports.** Neither port has authentication, and both bind loopback by default (`serve` logs a warning for each one that does not). To reach spoor from another machine, set `SPOOR_HTTP_ADDR` or `SPOOR_INGEST_ADDR` only behind a VPN, a firewall or a proxy that authenticates, and list the name you open the UI under in `SPOOR_ALLOWED_HOSTS`, or every request is refused with 403. What spoor does and does not protect is in [SECURITY.md](SECURITY.md).
 
