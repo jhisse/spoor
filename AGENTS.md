@@ -67,7 +67,7 @@ The linters are not vendored. Install the versions CI pins (`.github/workflows/c
 
 ```sh
 go install github.com/golangci/golangci-lint/v2/cmd/golangci-lint@v2.14.0
-go install github.com/securego/gosec/v2/cmd/gosec@v2.29.0
+go install github.com/securego/gosec/v2/cmd/gosec@v2.30.0
 go install golang.org/x/vuln/cmd/govulncheck@v1.8.0
 ```
 
