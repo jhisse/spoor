@@ -19,8 +19,28 @@ archives:
 checksum:
   name_template: checksums.txt
 
+# The release notes: one line per commit on main since the previous tag,
+# grouped by the type in its subject. Chores and test-only commits are left out.
 changelog:
-  disable: true
+  use: git
+  sort: asc
+  abbrev: 7
+  groups:
+    - title: Features
+      regexp: '^.*?feat(\(.+\))?!?:.+$'
+      order: 0
+    - title: Fixes
+      regexp: '^.*?fix(\(.+\))?!?:.+$'
+      order: 1
+    - title: Documentation
+      regexp: '^.*?docs(\(.+\))?!?:.+$'
+      order: 2
+    - title: Other
+      order: 999
+  filters:
+    exclude:
+      - '^chore(\(.+\))?!?:'
+      - '^test(\(.+\))?!?:'
 
 release:
   prerelease: auto
