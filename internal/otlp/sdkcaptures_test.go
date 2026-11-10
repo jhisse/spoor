@@ -206,8 +206,10 @@ func TestGeminiCLICapture(t *testing.T) {
 	}
 }
 
-// A failed call keeps its prompt, and the model when the SDK names it.
+// A failed call keeps its prompt, and the model when the SDK names it. The
+// class of the error is read back from the stored span when the SDK sent one.
 func TestErrorCapturesKeepThePrompt(t *testing.T) {
+	errorTypes := map[string]string{"traceloop-openai-error": "NotFoundError", "otel-openai-v2-error": "<class 'openai.NotFoundError'>"}
 	for file, model := range map[string]string{
 		"openinference-openai-error":    "", // only inside llm.invocation_parameters
 		"openinference-anthropic-error": "no-such-model",
@@ -224,6 +226,9 @@ func TestErrorCapturesKeepThePrompt(t *testing.T) {
 		}
 		if !strings.Contains(store.Deref(s.StatusMessage), "no-such-model") {
 			t.Errorf("%s: status message = %q, want the provider's error", file, store.Deref(s.StatusMessage))
+		}
+		if got := ErrorType(s); got != errorTypes[file] {
+			t.Errorf("%s: error type = %q, want %q", file, got, errorTypes[file])
 		}
 	}
 }
