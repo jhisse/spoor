@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"slices"
 	"sort"
+	"strconv"
 	"strings"
 	"time"
 
@@ -164,8 +165,14 @@ func listTraces(ctx context.Context, st store.Store, a toolArgs, limit int) (any
 	return map[string]any{"traces": rows}, err
 }
 
-// parseSince reads an age (24h, 90m) or a UTC time: RFC 3339 or a date.
+// parseSince reads an age (7d, 24h, 90m) or a UTC time: RFC 3339 or a date.
+// Go's durations stop at hours, so a whole number of days is read here.
 func parseSince(s string) (time.Time, error) {
+	if days, ok := strings.CutSuffix(s, "d"); ok {
+		if n, err := strconv.ParseUint(days, 10, 16); err == nil {
+			return time.Now().UTC().AddDate(0, 0, -int(n)), nil
+		}
+	}
 	if d, err := time.ParseDuration(s); err == nil {
 		return time.Now().UTC().Add(-d), nil
 	}
@@ -174,7 +181,7 @@ func parseSince(s string) (time.Time, error) {
 			return t, nil
 		}
 	}
-	return time.Time{}, fmt.Errorf("since %q: want an age such as 24h or 90m, an RFC 3339 time or a date such as 2026-10-02", s)
+	return time.Time{}, fmt.Errorf("since %q: want an age such as 7d, 24h or 90m, an RFC 3339 time or a date such as 2026-10-02", s)
 }
 
 func getTrace(ctx context.Context, st store.Store, a toolArgs) (any, error) {
