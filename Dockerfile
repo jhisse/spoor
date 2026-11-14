@@ -2,7 +2,7 @@
 # statically linked, with no libc dependency. The build stage always runs on
 # the builder's own architecture and cross-compiles, so a multi-arch image
 # needs no emulation.
-FROM --platform=$BUILDPLATFORM golang:1.27.2 AS builder
+FROM --platform=$BUILDPLATFORM golang:1.27.3 AS builder
 ARG TARGETOS TARGETARCH
 ARG VERSION=dev
 WORKDIR /build
@@ -14,7 +14,7 @@ RUN CGO_ENABLED=0 GOOS=$TARGETOS GOARCH=$TARGETARCH go build -trimpath -ldflags 
 
 # distroless/static:nonroot: no shell, no package manager, uid 65532. A
 # mounted database directory must be writable by that uid.
-FROM gcr.io/distroless/static-debian12@sha256:afa5c872c891853ca7fcf1f12c3edb23f7eeef36189728842dd51042ff57f7ab
+FROM gcr.io/distroless/static-debian12@sha256:d75cdd72874d4790092fcb1b058493ecf6bb5bf2b2b897045b00ff01d91843f2
 COPY --from=builder /spoor /spoor
 # An empty /data owned by nonroot: a named volume mounted there inherits it.
 COPY --from=builder --chown=65532:65532 /data /data
