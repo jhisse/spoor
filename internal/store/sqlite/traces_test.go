@@ -3,6 +3,7 @@ package sqlite
 import (
 	"context"
 	"fmt"
+	"strings"
 	"testing"
 	"time"
 
@@ -74,5 +75,30 @@ func TestQueryTracesPaginationImmuneToInsertion(t *testing.T) {
 	}
 	if cursor2 != nil {
 		t.Errorf("page2 next cursor = %+v, want nil (no rows remain)", cursor2)
+	}
+}
+
+// The models of a trace are read from that trace's spans: on the index by
+// kind and model, every trace listed scanned every generation span stored
+// (3.7 s for a 216-turn session on a database of 11,000 model calls).
+func TestTraceSummaryReadsModelsByTrace(t *testing.T) {
+	s := newTestStore(t).(*Store)
+	rows, err := s.db.Query(`EXPLAIN QUERY PLAN `+traceSummaryQuery+`WHERE t.id = ? GROUP BY t.id`, "t1")
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer func() { _ = rows.Close() }()
+	for rows.Next() {
+		var id, parent, unused int
+		var detail string
+		if err := rows.Scan(&id, &parent, &unused, &detail); err != nil {
+			t.Fatal(err)
+		}
+		if strings.Contains(detail, "idx_spans_kind_model") {
+			t.Errorf("plan step %q reads every span of the kind, not the trace's", detail)
+		}
+	}
+	if err := rows.Err(); err != nil {
+		t.Fatal(err)
 	}
 }
