@@ -90,7 +90,8 @@ const traceColumns = `id, service, session_id, name, started_at, ended_at, statu
 // The cost sum is left un-COALESCEd: SUM over no non-NULL value is NULL,
 // read as "no span in this trace has a cost", distinct from a real total
 // of zero. Models lists the generation spans' models, the one that cost
-// most first (a model with no cost last, ties by calls, then by name).
+// most first (a model with no cost last, ties by calls, then by name); the
+// unary plus keeps the planner on the trace's spans, not every span of the kind.
 const traceSummaryQuery = `SELECT t.id, t.service, t.session_id, t.name, t.started_at, t.ended_at,
 	t.status, t.metadata, t.created_at,
 	SUM(sp.cost_usd),
@@ -99,7 +100,7 @@ const traceSummaryQuery = `SELECT t.id, t.service, t.session_id, t.name, t.start
 	COALESCE(SUM(sp.cache_read_tokens), 0),
 	COALESCE(SUM(sp.cache_write_tokens), 0),
 	(SELECT GROUP_CONCAT(m ORDER BY c DESC, n DESC, m) FROM (SELECT model m, SUM(cost_usd) c, COUNT(*) n
-		FROM spans WHERE trace_id = t.id AND kind = 'generation' AND model IS NOT NULL GROUP BY model)),
+		FROM spans WHERE trace_id = t.id AND +kind = 'generation' AND model IS NOT NULL GROUP BY model)),
 	COALESCE(MIN(sp.parent_span_id IS NOT NULL), 0),
 	` + cacheUnknownSQL + `,
 	COUNT(sp.id), COALESCE(SUM(sp.status = 'error'), 0)
