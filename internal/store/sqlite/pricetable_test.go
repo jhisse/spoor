@@ -59,8 +59,10 @@ func TestCatalogModelsResolveToTheirOwnRow(t *testing.T) {
 		{"claude-sonnet-5-5", "claude-sonnet-5-5|", 2},
 		{"claude-fable-5", "claude-fable-5|", 10},
 		{"claude-fable-5-1", "claude-fable-5-1|", 10},
+		{"claude-fable-5-2", "claude-fable-5-2|", 8},
 		{"claude-mythos-5", "claude-mythos-5$", 10},
 		{"claude-mythos-5-1", "claude-mythos-5-1$", 10},
+		{"claude-mythos-5-2", "claude-mythos-5-2$", 8},
 		{"claude-opus-4", "claude-opus-4(-20250514)?|", 15},
 		{"claude-opus-4-1", "claude-opus-4-1(", 15},
 		{"claude-opus-4-5", "claude-opus-4-5(", 5},
@@ -87,6 +89,7 @@ func TestCatalogModelsResolveToTheirOwnRow(t *testing.T) {
 		{"claude-opus-5-5-20260915", "claude-opus-5-5|", 4},
 		{"claude-sonnet-5-5-20260915", "claude-sonnet-5-5|", 2},
 		{"claude-fable-5-1-20260920", "claude-fable-5-1|", 10},
+		{"claude-fable-5-2[1m]", "claude-fable-5-2|", 8},
 		{"claude-opus-5-5-20260915[1m]", "claude-opus-5-5|", 4},
 		{"gpt-4o-2024-05-13", "(gpt-4o-2024-05-13)", 5},
 		{"gpt-4o-mini-2024-07-18", "(gpt-4o-mini-2024-07-18)", 0.15},
@@ -150,6 +153,8 @@ func TestCatalogPricesMatchPublishedPrices(t *testing.T) {
 		model                               string
 		input, write, write1h, read, output float64
 	}{
+		{"claude-fable-5-2", 8, 10, 16, 0.20, 40},
+		{"claude-mythos-5-2", 8, 10, 16, 0.20, 40},
 		{"claude-fable-5-1", 10, 12.50, 20, 0.25, 50},
 		{"claude-mythos-5-1", 10, 12.50, 20, 0.25, 50},
 		{"claude-fable-5", 10, 12.50, 20, 1, 50},
