@@ -22,6 +22,8 @@ type contextChart struct {
 	ReadShare   string      // share of the input read from cache; "" when no call reported a cache count
 	ReadCalls   int         // how many of the Steps reported a cache count
 	Notes       []string    // what was left out, and why
+	Pauses      []string    // a session's pauses without a model call, one sentence each
+	PauseCount  string      // the heading of Pauses: how many, from what length, over which steps
 	Spark       contextSpark
 }
 

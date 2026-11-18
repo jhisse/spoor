@@ -82,7 +82,7 @@ func (c *sessionContexts) place(n int, st *genStep, prices []store.ModelPrice) {
 // sessionSteps reads a session's generations (oldest first) as steps: each
 // one's context mark, its turn (turn numbers a trace id) and the pause
 // before it, with a note per pause.
-func sessionSteps(turn map[string]int, gens []store.Span, prices []store.ModelPrice) (steps []genStep, notes []string) {
+func sessionSteps(turn map[string]int, gens []store.Span, prices []store.ModelPrice) (steps []genStep, pauses []string) {
 	steps = make([]genStep, len(gens))
 	var ctxs sessionContexts
 	var lastEnd time.Time
@@ -98,7 +98,7 @@ func sessionSteps(turn map[string]int, gens []store.Span, prices []store.ModelPr
 			if in := inputOf(sp); in > 0 && sp.CacheReadTokens != nil {
 				note += fmt.Sprintf("; it read %.0f%% of its input from cache", float64(*sp.CacheReadTokens)/float64(in)*100)
 			}
-			notes = append(notes, note+".")
+			pauses = append(pauses, note+".")
 		}
 		if sp.EndedAt.After(lastEnd) {
 			lastEnd = sp.EndedAt
@@ -106,7 +106,7 @@ func sessionSteps(turn map[string]int, gens []store.Span, prices []store.ModelPr
 		ctxs.place(i+1, &st, prices)
 		steps[i] = st
 	}
-	return steps, notes
+	return steps, pauses
 }
 
 // buildSessionChart is the context chart over every generation of a session
@@ -117,14 +117,22 @@ func buildSessionChart(traces []store.TraceSummary, gens []store.Span, prices []
 		turn[t.ID] = i + 1
 	}
 	total := len(gens)
-	steps, notes := sessionSteps(turn, gens[:min(total, sessionChartMax)], prices)
+	steps, pauses := sessionSteps(turn, gens[:min(total, sessionChartMax)], prices)
 	c := buildContextChart(steps, prices, "")
 	if total < 2 || c.Tokens == "" { // one call, or no call reports tokens: nothing to draw
 		return nil
 	}
-	if total > len(steps) {
-		notes = append(notes, fmt.Sprintf("Showing the first %d of %d generations.", len(steps), total))
+	c.Pauses = pauses
+	noun := "pauses"
+	if len(pauses) == 1 {
+		noun = "pause"
 	}
-	c.Notes = append(notes, c.Notes...)
+	c.PauseCount = fmt.Sprintf("%d %s of %s or more without a model call", len(pauses), noun, fmtCoarse(pauseThreshold))
+	if total > len(steps) {
+		c.PauseCount += fmt.Sprintf(", in the first %d generations", len(steps))
+	}
+	if total > len(steps) {
+		c.Notes = append([]string{fmt.Sprintf("Showing the first %d of %d generations.", len(steps), total)}, c.Notes...)
+	}
 	return c
 }

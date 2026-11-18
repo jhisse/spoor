@@ -105,10 +105,10 @@ func TestSessionChartExpiryBreakAndSurvivedPause(t *testing.T) {
 	if !strings.Contains(breaks(c)[0], "$0.3525") {
 		t.Errorf("expiry sentence should carry the input cost: %s", breaks(c)[0])
 	}
-	notes := strings.Join(c.Notes, "\n")
-	if !strings.Contains(notes, "Step 2: no model call for 48 min before it; it read 98% of its input from cache.") ||
-		!strings.Contains(notes, "Step 3: no model call for 1 h 12 min before it; it read 0% of its input from cache.") {
-		t.Errorf("Notes = %q", c.Notes)
+	pauses := strings.Join(c.Pauses, "\n")
+	if !strings.Contains(pauses, "Step 2: no model call for 48 min before it; it read 98% of its input from cache.") ||
+		!strings.Contains(pauses, "Step 3: no model call for 1 h 12 min before it; it read 0% of its input from cache.") {
+		t.Errorf("Pauses = %q", c.Pauses)
 	}
 	if strings.Count(string(c.Tokens), "⋯") != 4 {
 		t.Errorf("want two labelled pauses in the chart: %s", c.Tokens)
@@ -125,7 +125,10 @@ func TestSessionChartDegrades(t *testing.T) {
 		t.Errorf("markers %q breaks %v: want C only, no dollar band, no cost line", got, breaks(c))
 	}
 	notes := strings.Join(c.Notes, "\n")
-	for _, want := range []string{"Step 2: no model call for 1 h 00 min before it.", "no stored cost", "no known price", "no cache tokens"} {
+	if len(c.Pauses) != 2 || c.Pauses[0] != "Step 2: no model call for 1 h 00 min before it." {
+		t.Errorf("Pauses = %q", c.Pauses)
+	}
+	for _, want := range []string{"no stored cost", "no known price", "no cache tokens"} {
 		if !strings.Contains(notes, want) {
 			t.Errorf("Notes missing %q: %q", want, c.Notes)
 		}
@@ -138,8 +141,9 @@ func TestSessionChartDegrades(t *testing.T) {
 		many[i] = call("a", i, t0.Add(time.Duration(i)*time.Second), "m", int64(1000+i), -1, 0)
 	}
 	c = buildSessionChart(turns("a"), many, nil)
-	if c.Steps != sessionChartMax || !strings.Contains(strings.Join(c.Notes, "\n"), "Showing the first 400 of 405 generations.") {
-		t.Errorf("Steps = %d, Notes = %q", c.Steps, c.Notes)
+	if c.Steps != sessionChartMax || !strings.Contains(strings.Join(c.Notes, "\n"), "Showing the first 400 of 405 generations.") ||
+		c.PauseCount != "0 pauses of 5 min or more without a model call, in the first 400 generations" {
+		t.Errorf("Steps = %d, Notes = %q, PauseCount = %q", c.Steps, c.Notes, c.PauseCount)
 	}
 }
 
@@ -164,5 +168,10 @@ func TestSessionsRendersSessionChart(t *testing.T) {
 		if !strings.Contains(body, want) {
 			t.Errorf("body missing %q", want)
 		}
+	}
+	// The pause sentence is folded under its count, not printed under the chart.
+	if !strings.Contains(body, `<summary class="cap">1 pause of 5 min or more without a model call</summary><p class="cap mt measure">Step 3: no model call for 1 h 00 min before it`) ||
+		strings.Count(body, "Step 3: no model call") != 1 {
+		t.Error("the pause sentence should sit once, in a folded list headed by its count")
 	}
 }
