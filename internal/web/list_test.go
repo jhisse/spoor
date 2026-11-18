@@ -38,7 +38,7 @@ func TestListRendersColumnsAndSeededTrace(t *testing.T) {
 	}
 	body := w.Body.String()
 	// trace-2 named no service: its cell is a dash, never a made-up name.
-	for _, want := range []string{"<th>Trace</th>", "<th>Service</th>", "Started", "Duration", "Cost", `aria-label="ok"`, "trace-1", `<span class="ellip" title="acme">acme</span>`, `<span class="ellip" title="">—</span>`} {
+	for _, want := range []string{`<main id="main" class="page list">`, "<th>Trace</th>", "<th>Service</th>", "Started", "Duration", "Cost", `aria-label="ok"`, "trace-1", `<span class="ellip" title="acme">acme</span>`, `<span class="ellip" title="">—</span>`} {
 		if !strings.Contains(body, want) {
 			t.Errorf("body missing %q, got: %s", want, body)
 		}

@@ -147,6 +147,7 @@ a, button, summary, input, select { transition: background-color .1s, border-col
 
 .page { max-width: 1280px; margin: 0 auto; padding: 16px var(--gutter) 48px; }
 .page.wide { max-width: 1680px; padding-bottom: 12px; }
+.page.list { max-width: 1440px; }   /* room for whole model and service names beside the context and token bars */
 .page.narrow { max-width: 920px; }
 .page.read { max-width: 680px; }   /* prose and short code: the Help page */
 .crumbs { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-bottom: 4px; font-size: 12px; line-height: 16px; color: var(--ink-3); }
@@ -623,6 +624,8 @@ svg text.mark { fill: var(--warn); font-weight: 700; }
 .data.traces td.dim { white-space: nowrap; }
 /* Model and service give way first: a cell with max-width 0 shrinks to its share and cuts its text. */
 @media (min-width: 1024px) { .data.traces td:has(> .ellip) { max-width: 0; } .data.traces .ellip { max-width: none; } .data.traces td:not(:has(> .ellip)):not([colspan]) { width: 1%; white-space: nowrap; } }
+/* The trace column gives way too, down to 34ch: a trace name of up to 40ch would otherwise hold the table wider than the page. A badge that no longer fits beside the name goes under it rather than cut the name. */
+@media (min-width: 1024px) { .data.traces td.main { max-width: 0; min-width: 34ch; } .data.traces .cellmain { flex-wrap: wrap; row-gap: 2px; } }
 .data.traces .name { max-width: 40ch; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .hit > .kind { display: inline-flex; margin-right: 6px; vertical-align: 1px; }
 .hit > .nm { margin-right: 6px; font-weight: 600; }
