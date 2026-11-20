@@ -159,6 +159,19 @@ func TestBuildContextDeltaRewrittenAndIdentical(t *testing.T) {
 	}
 }
 
+// A retry or a rolled-back conversation sends a prompt that stops where the
+// previous one went on: there is no message left to compare.
+func TestBuildContextDeltaShrunkPrompt(t *testing.T) {
+	prev := gen("t", "g1", nil, time.Now(), prompt(msgSystem, msgUser1, msgAsst1))
+	d := buildContextDelta(&prev, gen("t", "g2", nil, time.Now(), prompt(msgSystem, msgUser1)))
+	if d.NoBasis != "" || len(d.Kept) != 2 || len(d.New) != 0 || d.RewrittenAt != 0 || d.Rewrite != nil {
+		t.Fatalf("shrunk prompt: delta = %+v", d)
+	}
+	if want := "Context cut after message 2. Messages of the previous generation left out: 1."; d.Cut != want {
+		t.Errorf("Cut = %q, want %q", d.Cut, want)
+	}
+}
+
 func TestBuildContextDeltaPointsInsideTheRewrittenMessage(t *testing.T) {
 	prev := prevGen()
 	grown := `{"role":"user","content":"first question, briefly"}`
