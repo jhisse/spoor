@@ -118,10 +118,7 @@ func (h *Handlers) sessionList(r *http.Request, data *sessionPageData) error {
 	if err != nil {
 		return err
 	}
-	prices, err := h.Store.ListModelPrices(ctx)
-	if err != nil {
-		return err
-	}
+	prices := store.Prices()
 	var total TokenMix
 	firsts := make([]string, len(sessions))
 	for i, ss := range sessions {
@@ -171,10 +168,7 @@ func (h *Handlers) sessionReplay(ctx context.Context, sessionID string, data *se
 	if err != nil {
 		return err
 	}
-	prices, err := h.Store.ListModelPrices(ctx)
-	if err != nil {
-		return err
-	}
+	prices := store.Prices()
 	data.Replay = buildReplay(summary, traces)
 	subjects, err := h.subjects(ctx, []string{summary.FirstTraceID}, subjectText)
 	if err != nil {

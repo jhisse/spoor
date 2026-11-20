@@ -181,10 +181,7 @@ const latestSessions = 3
 // the page's newest traces belong to. The spans come from an index, without
 // bodies, so the cost follows the page and those sessions, not the database.
 func (h *Handlers) contexts(ctx context.Context, traces []store.TraceSummary, ids []string, latest bool) (map[string][]genStep, map[string]*float64, []latestSession, error) {
-	prices, err := h.Store.ListModelPrices(ctx)
-	if err != nil {
-		return nil, nil, nil, err
-	}
+	prices := store.Prices()
 	spans, err := h.Store.QuerySpans(ctx, store.SpanQuery{TraceIDs: ids, Usage: true})
 	if err != nil {
 		return nil, nil, nil, err

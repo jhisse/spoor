@@ -207,7 +207,7 @@ Environment variables, or a `.env` file in the working directory (only `SPOOR_*`
 sqlite3 spoor.db ".backup backup.db"       # or: sqlite3 spoor.db "VACUUM INTO 'backup.db'"
 ```
 
-**Upgrade.** Replace the binary and start it. `spoor serve` applies pending schema migrations before it opens either port and logs the versions; `spoor migrate` applies them, loads the price table and exits. Each migration is one transaction that also records its version, so a process killed while migrating leaves the schema as it was and the next start applies that migration again.
+**Upgrade.** Replace the binary and start it. `spoor serve` applies pending schema migrations before it opens either port and logs the versions; `spoor migrate` applies them and exits. Each migration is one transaction that also records its version, so a process killed while migrating leaves the schema as it was and the next start applies that migration again.
 
 **Retention.** Unset, spoor keeps everything. With `SPOOR_RETENTION_DAYS=30`, at the start and then every `SPOOR_SWEEP_INTERVAL` spoor deletes each trace first stored more than 30 days ago, with all its spans. It applies to every trace and changing it needs a restart. The file does not shrink by itself: SQLite reuses the freed pages, and `VACUUM` with spoor stopped returns them.
 
@@ -215,7 +215,7 @@ sqlite3 spoor.db ".backup backup.db"       # or: sqlite3 spoor.db "VACUUM INTO '
 
 **Logs.** Text lines on standard error. A request that failed inside spoor is logged at level `error`: `internal error` for a UI request answered 500, `storage unavailable` for an ingest request answered 503 (OTLP senders retry 503). `GET /healthz` on either port answers 200 while the database is reachable.
 
-**Prices.** A span's cost is calculated when it is ingested, from a price table that ships in the binary ([NOTICE](NOTICE)). `serve`, `demo` and `migrate` load the table into `model_prices` at every start, in one transaction. `serve` logs how many stored spans were priced with older rows and `spoor reprice` recalculates them; run `spoor reprice --dry-run` first. A cost the sender reported itself is left alone. The Help page says the day of the newest price in the table, and a span's cost breakdown the day its row was last updated.
+**Prices.** A span's cost is calculated when it is ingested, from a price table that ships in the binary ([NOTICE](NOTICE)); spoor does not read the `model_prices` table in the file. `serve` logs how many stored spans were priced with older rows and `spoor reprice` recalculates them; run `spoor reprice --dry-run` first. A cost the sender reported itself is left alone. The Help page says the day of the newest price in the table, and a span's cost breakdown the day its row was last updated.
 
 </details>
 

@@ -259,7 +259,7 @@ type Span struct {
 	CacheWriteTokens *int64
 	ReasoningTokens  *int64
 	CostUSD          *float64
-	// PricePattern is the model_prices row that priced CostUSD and
+	// PricePattern is the price catalog row that priced CostUSD and
 	// PriceFingerprint that row's ModelPrice.Fingerprint at the time. Nil
 	// when spoor did not calculate the cost.
 	PricePattern     *string
@@ -345,10 +345,6 @@ type Store interface {
 	// ListServices returns the distinct services traces were stored under,
 	// sorted. Traces without one are not represented.
 	ListServices(ctx context.Context) ([]string, error)
-
-	// ListModelPrices returns every price row: the caller matches in Go
-	// (MatchModelPrice), so the rule is the same on every backend.
-	ListModelPrices(ctx context.Context) ([]ModelPrice, error)
 
 	// ListGenerationModels returns the distinct models seen on generation
 	// spans, sorted.

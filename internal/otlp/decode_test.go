@@ -257,8 +257,6 @@ func FuzzDecodeRequest(f *testing.F) {
 // translation without a database.
 type discardStore struct{ store.Store }
 
-func (discardStore) ListModelPrices(context.Context) ([]store.ModelPrice, error) { return nil, nil }
-
 func (discardStore) IngestBatch(context.Context, []store.TraceMerge, []store.Span) error {
 	return nil
 }

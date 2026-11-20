@@ -20,10 +20,7 @@ func TestListShowsContextPerCallAndLatestSessions(t *testing.T) {
 	turn, spans := onlyTrace(t, s)
 	ingestCapture(t, s, "openllmetry-anthropic-simple.pb")
 
-	prices, err := s.ListModelPrices(t.Context())
-	if err != nil {
-		t.Fatal(err)
-	}
+	prices := store.Prices()
 	page := buildContextChart(genSteps(spans), prices, "").Spark // what the trace page says
 	if page.Calls < 2 || page.Peak == 0 {
 		t.Fatalf("the capture should have several model calls with tokens: %+v", page)
@@ -77,7 +74,7 @@ func TestListMarksACacheBreakWithItsEstimatedCost(t *testing.T) {
 		}
 		insertSpans(t, s, spans...)
 	}
-	prices, _ := s.ListModelPrices(t.Context())
+	prices := store.Prices()
 	_, spans, _ := s.GetTraceByID(t.Context(), "priced")
 	page := buildContextChart(genSteps(spans), prices, "").Spark
 	if page.Breaks != 1 || page.Extra <= 0 {

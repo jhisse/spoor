@@ -8,7 +8,7 @@ import (
 	"sync"
 )
 
-// compiledPatterns caches each model_pattern's compiled regex (nil for a
+// compiledPatterns caches each catalog pattern's compiled regex (nil for a
 // malformed one): the price table has a few hundred rows and every span
 // with a model is matched against all of them.
 var compiledPatterns sync.Map
@@ -46,8 +46,7 @@ func modelNameForms(model string) [4]string {
 // pattern matches any of modelNameForms; the longest matching pattern wins
 // (a row written for a dated or tagged name beats the base model's), ties
 // broken alphabetically so the result doesn't depend on row order. A
-// malformed regex is skipped: it can only come from an operator's own
-// INSERT, not from a payload.
+// malformed regex is skipped; the catalog's patterns are tested to compile.
 func MatchModelPrice(prices []ModelPrice, model string) (ModelPrice, bool) {
 	var (
 		best  ModelPrice

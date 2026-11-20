@@ -32,9 +32,10 @@ func runReprice(args []string) error {
 	fs.Usage = func() {
 		_, _ = fmt.Fprint(fs.Output(), `usage: spoor reprice [--service=<name>] [--from=<time>] [--to=<time>] [--dry-run]
 
-Recomputes spans.cost_usd from the current model_prices: what to run after
-the price table changes. A cost reported by the sender (spoor.cost_usd,
-llm.cost.total) is left alone, and a known cost never becomes unknown.
+Recomputes spans.cost_usd with the price catalog this binary ships: what to
+run after an upgrade changes the prices. A cost reported by the sender
+(spoor.cost_usd, llm.cost.total) is left alone, and a known cost never
+becomes unknown.
 `)
 	}
 	if err := fs.Parse(args); err != nil {
@@ -56,10 +57,7 @@ llm.cost.total) is left alone, and a known cost never becomes unknown.
 }
 
 func reprice(ctx context.Context, st store.Store, q store.SpanQuery, dryRun bool) error {
-	prices, err := st.ListModelPrices(ctx)
-	if err != nil {
-		return err
-	}
+	prices := store.Prices()
 	// Every matching span (without bodies) is held in memory and
 	// written in one transaction; page by started_at if a store outgrows that.
 	spans, err := st.QuerySpans(ctx, q)

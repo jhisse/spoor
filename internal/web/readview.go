@@ -48,10 +48,7 @@ func buildSpanIO(sp *store.Span) (io spanIO) {
 }
 
 func (h *Handlers) readView(ctx context.Context, trace store.Trace, spans []store.Span, keep template.URL) ([]readCall, error) {
-	prices, err := h.Store.ListModelPrices(ctx)
-	if err != nil {
-		return nil, err
-	}
+	prices := store.Prices()
 	calls := buildRead(trace, spans, prices, keep)
 	// The first call of a turn is compared with the session's previous turn, as the span panel does.
 	if len(calls) > 0 && calls[0].Prev == nil && trace.SessionID != nil {

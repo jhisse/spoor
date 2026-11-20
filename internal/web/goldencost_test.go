@@ -125,10 +125,7 @@ func TestGoldenCostOfEveryCapture(t *testing.T) {
 			s := newTestStore(t)
 			h := newTestHandlers(t, s)
 			ingestCapture(t, s, c.file)
-			prices, err := s.ListModelPrices(t.Context())
-			if err != nil {
-				t.Fatal(err)
-			}
+			prices := store.Prices()
 			traces, _, err := s.QueryTraces(t.Context(), store.TraceQuery{Limit: 50})
 			if err != nil || len(traces) == 0 {
 				t.Fatalf("QueryTraces: %v, %d traces", err, len(traces))

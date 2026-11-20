@@ -2,7 +2,7 @@ spoor includes data derived from third-party work.
 
 Model prices
 ------------
-internal/store/sqlite/model_prices.json is generated from
+internal/store/model_prices.json is generated from
 worker/src/constants/default-model-prices.json in Langfuse
 (https://github.com/langfuse/langfuse), which is distributed under the MIT
 license:

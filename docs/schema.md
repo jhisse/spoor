@@ -4,7 +4,7 @@ The SQLite file is spoor's read API. This page documents it for a person or a co
 
 Every value below is what the instrumented application sent, or a sum of it. spoor does not summarise or judge.
 
-**Schema version 1.** A database reports its own with `PRAGMA user_version`. The tables are written only by spoor itself (`serve`, `demo`, `migrate`, `reprice`): read them, do not write them.
+**Schema version 1.** A database reports its own with `PRAGMA user_version`. The tables other than `model_prices` are written only by spoor itself (`serve`, `demo`, `migrate`, `reprice`): read them, do not write them.
 
 ## Ways to read
 
@@ -73,7 +73,7 @@ One row per step. Primary key `(trace_id, id)`.
 | `output_tokens` | The whole completion, reasoning included |
 | `reasoning_tokens` | The part of `output_tokens` spent on reasoning |
 | `cost_usd` | Cost of this span in US dollars. NULL when the model has no known price: unknown, not free |
-| `price_pattern`, `price_fingerprint` | The `model_prices` row that priced `cost_usd`, and a fingerprint of that row's prices and of the matching rule at the time. NULL when spoor did not calculate the cost (the SDK reported it, or the model has no price) |
+| `price_pattern`, `price_fingerprint` | The row of the price catalog that priced `cost_usd` (its pattern, an anchored regular expression matched against `model`; the longest matching pattern wins), and a fingerprint of that row's prices and of the matching rule at the time. NULL when spoor did not calculate the cost (the SDK reported it, or the model has no price) |
 | `metadata` | JSON object with every attribute the SDK sent that has no column of its own, keyed by its flat dotted name. SDK-specific fields (exit codes, failure kinds) live here |
 | `created_at` | When spoor received the span |
 | `status_message` | The text the SDK sent with the status: on a failed span, the reason. NULL when none was sent |
@@ -85,7 +85,7 @@ The token contract, in one line: `fresh input = input_tokens - cache_read_tokens
 
 ### `model_prices`
 
-The price table used to compute `cost_usd` at ingestion: `model_pattern` (an anchored regular expression matched against `spans.model`, as sent and with a bracketed tag such as `[1m]`, a date stamp and a `5.5`-for-`5-5` spelling removed; the longest matching pattern wins), `input_price_per_token`, `output_price_per_token`, `cache_read_price_per_token`, `cache_write_price_per_token` (US dollars per token; a NULL cache price is estimated from the input price), `cache_write_1h_price_per_token` (the rate of a cache write kept for one hour, where the provider has two rates; `cache_write_price_per_token` is then the 5-minute rate, and the one `cost_usd` is stored at, because a trace rarely says which lifetime was used), `updated_at`. The binary replaces the rows with its own catalog at every start. Changing it does not reprice spans already stored: `spoor serve` logs how many spans were priced with rows that have since changed, and `spoor reprice` recomputes them.
+Not read or written by spoor: the prices ship in the binary ([NOTICE](../NOTICE)), and every command prices with the catalog of the binary that runs it. The table stays so that an older spoor can still open the file. It is empty in a file this version created, and in an older file it holds the prices an older spoor last loaded, which need not match `cost_usd`: do not join it to `spans`. A row written to it prices nothing. A new binary does not reprice spans already stored: `spoor serve` logs how many spans were priced with rows that have since changed, and `spoor reprice` recomputes them.
 
 ## View
 
@@ -290,5 +290,5 @@ ORDER BY started_at DESC LIMIT 20
 
 - **Search matches words, not substrings.** `Timeout` does not find `ConnectionTimeout`; use the `instr` scan above for that. Text is indexed as stored: a non-ASCII character an SDK sent as a `\u00e7` escape inside a JSON string (common in `metadata`) is not found by typing the character.
 - **A session exists only if the SDK sent an id.** Two traces of the same conversation without one cannot be linked.
-- **Cost is priced at ingestion** from `model_prices` as it was then; `spoor reprice` applies the current table.
+- **Cost is priced at ingestion** with the prices of the binary that ingested it; `spoor reprice` applies the running binary's.
 - **One statement per query.** Do not rely on what a string with several statements returns.

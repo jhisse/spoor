@@ -106,10 +106,7 @@ func TestCostBreakdownClosesOnEveryRealCapture(t *testing.T) {
 	for _, f := range files {
 		s := newTestStore(t)
 		ingestCapture(t, s, filepath.Base(f))
-		prices, err := s.ListModelPrices(t.Context())
-		if err != nil {
-			t.Fatal(err)
-		}
+		prices := store.Prices()
 		_, spans := onlyTrace(t, s)
 		for _, sp := range spans {
 			c := buildCostBreakdown(sp, prices)
@@ -132,10 +129,7 @@ func TestDetailCostBreakdownStates(t *testing.T) {
 	s := newTestStore(t)
 	h := newTestHandlers(t, s)
 	tr := seedTrace(t, s, "trace-1", time.Now())
-	prices, err := s.ListModelPrices(t.Context())
-	if err != nil {
-		t.Fatal(err)
-	}
+	prices := store.Prices()
 	const model = "claude-haiku-4-5-20251001"
 	closing := buildCostBreakdown(genSpan(model, nil), prices).Computed
 	row, _ := store.MatchModelPrice(prices, model)

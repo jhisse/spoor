@@ -2,7 +2,9 @@ package main
 
 import (
 	"context"
+	"database/sql"
 	"fmt"
+	"math"
 	"os/exec"
 	"path/filepath"
 	"sort"
@@ -45,13 +47,11 @@ func TestRepriceDryRunThenReal(t *testing.T) {
 	}
 	run := func(args ...string) string {
 		t.Helper()
-		cmd := exec.Command(binPath, append([]string{"reprice"}, args...)...) // #nosec G204 -- the test's own binary and arguments
-		cmd.Env = buildEnv([]string{"SPOOR_SQLITE_PATH=" + dbPath})
-		outBytes, err := cmd.CombinedOutput()
+		out, err := spoorReprice(t, dbPath, args...)
 		if err != nil {
-			t.Fatalf("reprice %v: %v\n%s", args, err, outBytes)
+			t.Fatalf("reprice %v: %v\n%s", args, err, out)
 		}
-		return string(outBytes)
+		return out
 	}
 	// priced lists the spans that have a cost, with the cache read tokens on file.
 	priced := func() string {
@@ -97,4 +97,68 @@ func cacheRead(sp store.Span) int64 {
 		return 0
 	}
 	return *sp.CacheReadTokens
+}
+
+// unpricedDB is a migrated file holding one claude-sonnet-5 span with no
+// cost, closed so a test can change the file before running spoor on it.
+func unpricedDB(t *testing.T) string {
+	t.Helper()
+	dbPath := filepath.Join(t.TempDir(), "spoor.db")
+	if err := sqlite.Migrate(dbPath); err != nil {
+		t.Fatalf("Migrate: %v", err)
+	}
+	st, err := sqlite.Open(dbPath)
+	if err != nil {
+		t.Fatalf("Open: %v", err)
+	}
+	defer func() { _ = st.Close() }()
+	now, model, in := time.Now().UTC(), "claude-sonnet-5", int64(1000)
+	if err := st.MergeTrace(t.Context(), store.Trace{ID: "t", Name: "t", StartedAt: now, EndedAt: now, Status: store.StatusOK, CreatedAt: now}, true); err != nil {
+		t.Fatalf("MergeTrace: %v", err)
+	}
+	if err := st.InsertSpan(t.Context(), store.Span{TraceID: "t", ID: "s", Kind: store.SpanKindGeneration, StartedAt: now, EndedAt: now,
+		Status: store.StatusOK, CreatedAt: now, Model: &model, InputTokens: &in}); err != nil {
+		t.Fatalf("InsertSpan: %v", err)
+	}
+	return dbPath
+}
+
+func rawDB(t *testing.T, dbPath string) *sql.DB {
+	t.Helper()
+	db, err := sql.Open("sqlite", dbPath)
+	if err != nil {
+		t.Fatal(err)
+	}
+	t.Cleanup(func() { _ = db.Close() })
+	return db
+}
+
+func spoorReprice(t *testing.T, dbPath string, args ...string) (string, error) {
+	t.Helper()
+	cmd := exec.Command(binPath, append([]string{"reprice"}, args...)...) // #nosec G204 -- the test's own binary and arguments
+	cmd.Env = buildEnv([]string{"SPOOR_SQLITE_PATH=" + dbPath})
+	out, err := cmd.CombinedOutput()
+	return string(out), err
+}
+
+// After an upgrade the file still holds the model_prices rows an older
+// spoor loaded, here one pricing the model at $1 a token: reprice prices with
+// the catalog of the binary that runs, not with that copy.
+func TestRepriceUsesTheBinaryCatalog(t *testing.T) {
+	dbPath := unpricedDB(t)
+	db := rawDB(t, dbPath)
+	if _, err := db.Exec(`DELETE FROM model_prices`); err != nil {
+		t.Fatal(err)
+	}
+	if _, err := db.Exec(`INSERT INTO model_prices VALUES ('^claude-sonnet-5$', 1, 1, NULL, NULL, NULL, '2020-01-01T00:00:00.000000000Z')`); err != nil {
+		t.Fatal(err)
+	}
+	if out, err := spoorReprice(t, dbPath); err != nil {
+		t.Fatalf("reprice: %v\n%s", err, out)
+	}
+	row, _ := store.MatchModelPrice(store.Prices(), "claude-sonnet-5")
+	var cost float64
+	if err := db.QueryRow(`SELECT cost_usd FROM spans WHERE id = 's'`).Scan(&cost); err != nil || math.Abs(cost-1000*row.InputPricePerToken) > 1e-12 {
+		t.Errorf("cost of 1000 input tokens after reprice = %v (%v), want %v from the catalog, not the copy's $1,000", cost, err, 1000*row.InputPricePerToken)
+	}
 }
