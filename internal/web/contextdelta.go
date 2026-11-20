@@ -113,6 +113,7 @@ type contextDelta struct {
 	KeptLabel   string
 	RewrittenAt int // 1-based index of the first message that differs from the previous prompt; 0 when all of it was kept
 	Rewrite     *rewrite
+	Cut         string // said when the prompt ends where the previous one went on
 	New         []chatMessage
 }
 
@@ -205,13 +206,7 @@ func buildContextDelta(prev *store.Span, cur store.Span) contextDelta {
 	for i := range d.New {
 		d.New[i].New = true
 	}
-	if k < len(prevRaw) {
-		d.RewrittenAt = k + 1
-		// A prompt whose entries are not all objects decodes as raw messages but not as chat messages.
-		if prevMsgs := parseMessages(prev.Input); k < len(prevMsgs) {
-			d.Rewrite = buildRewrite(k+1, prevMsgs[k], msgs[k])
-		}
-	}
+	d.markChange(*prev, len(prevRaw), msgs, k)
 	var keptChars, allChars int64
 	for i, m := range curRaw {
 		allChars += int64(len(m))
@@ -226,6 +221,23 @@ func buildContextDelta(prev *store.Span, cur store.Span) contextDelta {
 		d.KeptLabel += " · " + fmtCount(keptChars) + " characters"
 	}
 	return d
+}
+
+// markChange says where the prompt stops following the previous one's
+// prevLen messages after the k they share: at a message that differs, or at
+// its own end (a retry or a rolled-back conversation).
+func (d *contextDelta) markChange(prev store.Span, prevLen int, msgs []chatMessage, k int) {
+	switch {
+	case k == prevLen:
+	case k == len(msgs):
+		d.Cut = fmt.Sprintf("Context cut after message %d. Messages of the previous generation left out: %d.", k, prevLen-k)
+	default:
+		d.RewrittenAt = k + 1
+		// A prompt whose entries are not all objects decodes as raw messages but not as chat messages.
+		if prevMsgs := parseMessages(prev.Input); k < len(prevMsgs) {
+			d.Rewrite = buildRewrite(k+1, prevMsgs[k], msgs[k])
+		}
+	}
 }
 
 func spanURL(sp store.Span) string {

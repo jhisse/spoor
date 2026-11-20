@@ -72,6 +72,7 @@
 <div class="mt kept">{{range .Delta.Kept}}{{template "chat_message" .}}{{end}}</div>
 </details>
 {{if .Delta.RewrittenAt}}<p class="cap warn-t mt">Context rewritten from message {{.Delta.RewrittenAt}} on.{{with .Delta.Rewrite}} {{.Sentence}}{{end}}</p>{{end}}
+{{with .Delta.Cut}}<p class="cap warn-t mt">{{.}}</p>{{end}}
 {{with .Delta.Rewrite}}{{if .Text}}<p class="cap mt">Was</p><div class="code">{{.Pre}}<mark>{{.Was}}</mark>{{.Post}}</div>
 <p class="cap mt">Now</p><div class="code">{{.Pre}}<mark>{{.Now}}</mark>{{.Post}}</div>{{end}}{{end}}
 <div class="mt">{{range .Delta.New}}{{template "chat_message" .}}{{else}}<p class="cap">No new message in this call.</p>{{end}}</div>
