@@ -5,6 +5,7 @@ import (
 	"database/sql"
 	"fmt"
 	"math"
+	"os"
 	"os/exec"
 	"path/filepath"
 	"sort"
@@ -160,5 +161,46 @@ func TestRepriceUsesTheBinaryCatalog(t *testing.T) {
 	var cost float64
 	if err := db.QueryRow(`SELECT cost_usd FROM spans WHERE id = 's'`).Scan(&cost); err != nil || math.Abs(cost-1000*row.InputPricePerToken) > 1e-12 {
 		t.Errorf("cost of 1000 input tokens after reprice = %v (%v), want %v from the catalog, not the copy's $1,000", cost, err, 1000*row.InputPricePerToken)
+	}
+}
+
+// A dry run opens the file read-only: a read-write open would switch this
+// file to WAL (Open's DSN does), and a missing file stays missing.
+func TestRepriceDryRunWritesNothing(t *testing.T) {
+	dbPath := unpricedDB(t)
+	// journalMode sets the mode when given one, and reads it, on a connection
+	// closed again before spoor runs: an open one would keep WAL out.
+	journalMode := func(set string) string {
+		t.Helper()
+		db, err := sql.Open("sqlite", dbPath)
+		if err != nil {
+			t.Fatal(err)
+		}
+		defer func() { _ = db.Close() }()
+		q := `PRAGMA journal_mode`
+		if set != "" {
+			q += " = " + set
+		}
+		var m string
+		if err := db.QueryRow(q).Scan(&m); err != nil {
+			t.Fatal(err)
+		}
+		return m
+	}
+	if got := journalMode("DELETE"); got != "delete" {
+		t.Fatalf("journal_mode = %q after setting DELETE", got)
+	}
+	if out, err := spoorReprice(t, dbPath, "--dry-run"); err != nil || !strings.Contains(out, "1 of 1 spans would change") {
+		t.Errorf("reprice --dry-run: %v\n%s", err, out)
+	}
+	if got := journalMode(""); got != "delete" {
+		t.Errorf("journal_mode after reprice --dry-run = %q, want the file left as it was (delete)", got)
+	}
+	missing := filepath.Join(t.TempDir(), "spoor.db")
+	if out, err := spoorReprice(t, missing, "--dry-run"); err == nil {
+		t.Errorf("reprice --dry-run on a missing file succeeded:\n%s", out)
+	}
+	if _, err := os.Stat(missing); !os.IsNotExist(err) {
+		t.Errorf("reprice --dry-run created %s (stat: %v)", missing, err)
 	}
 }

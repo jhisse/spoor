@@ -12,7 +12,7 @@
 
 - **Both ports bind loopback by default** (`127.0.0.1:8080`, `127.0.0.1:4318`). `spoor serve` logs a warning for each listener bound anywhere else. The Docker image listens on every interface inside the container; publish both ports on loopback (`-p 127.0.0.1:8080:8080 -p 127.0.0.1:4318:4318`).
 - **Other sites in the operator's browser cannot read or change anything.** Every UI request except `/healthz` must carry a loopback `Host` or one listed in `SPOOR_ALLOWED_HOSTS` (this stops DNS rebinding). A request that is not GET or HEAD must also name that same host in `Origin` or `Referer` (this stops cross-site requests); `/mcp` alone accepts a request with no `Origin`, since an MCP client is not a browser. Pages cannot be framed (`Content-Security-Policy: frame-ancestors 'none'`).
-- **`spoor export` and the MCP tools cannot write.** They use a connection SQLite itself keeps read-only.
+- **`spoor export`, `spoor reprice --dry-run` and the MCP tools cannot write.** They use a connection SQLite itself keeps read-only.
 - **A stored span is never overwritten** by a later request.
 
 ## What spoor does not protect

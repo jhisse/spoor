@@ -28,14 +28,14 @@ func runReprice(args []string) error {
 	}
 	fs.Func("from", "only spans started at or after this RFC 3339 time", bound(&q.From))
 	fs.Func("to", "only spans started at or before this RFC 3339 time", bound(&q.To))
-	dryRun := fs.Bool("dry-run", false, "report what would change, write nothing")
+	dryRun := fs.Bool("dry-run", false, "report what would change, change nothing")
 	fs.Usage = func() {
 		_, _ = fmt.Fprint(fs.Output(), `usage: spoor reprice [--service=<name>] [--from=<time>] [--to=<time>] [--dry-run]
 
 Recomputes spans.cost_usd with the price catalog this binary ships: what to
 run after an upgrade changes the prices. A cost reported by the sender
 (spoor.cost_usd, llm.cost.total) is left alone, and a known cost never
-becomes unknown.
+becomes unknown. --dry-run opens the file read-only and changes nothing in it.
 `)
 	}
 	if err := fs.Parse(args); err != nil {
@@ -45,7 +45,11 @@ becomes unknown.
 	if err != nil {
 		return err
 	}
-	st, err := sqlite.Open(path)
+	open := sqlite.Open
+	if *dryRun {
+		open = sqlite.OpenReadOnly
+	}
+	st, err := open(path)
 	if err != nil {
 		return fmt.Errorf("reprice: %w", err)
 	}
