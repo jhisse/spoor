@@ -377,10 +377,7 @@ func TestListShowsWhatWasAsked(t *testing.T) {
 func TestCostRangeOverCacheWriteLifetimeOnListAndSessions(t *testing.T) {
 	s := newTestStore(t)
 	h := newTestHandlers(t, s)
-	prices, err := s.ListModelPrices(t.Context())
-	if err != nil {
-		t.Fatal(err)
-	}
+	prices := store.Prices()
 	p, ok := store.MatchModelPrice(prices, "claude-haiku-4-5")
 	if !ok || p.CacheWrite1hPricePerToken == nil {
 		t.Fatal("the price table has no 1-hour cache-write price for claude-haiku-4-5")

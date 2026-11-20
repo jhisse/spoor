@@ -39,9 +39,6 @@ func MigrateVersions(path string) (from, to uint, err error) {
 			}
 		}
 	}
-	if err := syncModelPriceCatalog(db); err != nil {
-		return from, to, fmt.Errorf("syncing model price catalog: %w", err)
-	}
 	return from, max(to, from), nil
 }
 

@@ -82,10 +82,7 @@ func (h *Handler) ingestRequest(ctx context.Context, req *collectortrace.ExportT
 	if len(groups) == 0 {
 		return rejected, nil
 	}
-	prices, err := h.Store.ListModelPrices(ctx)
-	if err != nil {
-		return rejected, fmt.Errorf("listing model prices: %w", err)
-	}
+	prices := store.Prices()
 
 	now := time.Now().UTC()
 	var traces []store.TraceMerge

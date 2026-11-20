@@ -1,29 +1,45 @@
-package sqlite
+package store
 
 import (
-	"context"
+	"encoding/json"
 	"regexp"
 	"slices"
 	"strings"
 	"testing"
-
-	"github.com/jhisse/spoor/internal/store"
 )
 
-// These tests read the REAL price table, a fresh database with every
-// migration applied: a hand-made two-row table cannot show a model name
-// falling to another model's row.
+// These tests read the REAL price table, the catalog the binary ships: a
+// hand-made two-row table cannot show a model name falling to another
+// model's row.
 
-func catalogPrices(t *testing.T) []store.ModelPrice {
+func catalogPrices(t *testing.T) []ModelPrice {
 	t.Helper()
-	prices, err := newTestStore(t).ListModelPrices(context.Background())
-	if err != nil {
-		t.Fatalf("ListModelPrices: %v", err)
-	}
+	prices := Prices()
 	if len(prices) < 150 {
 		t.Fatalf("got %d price rows, want the full catalog", len(prices))
 	}
 	return prices
+}
+
+// A price the catalog leaves out would decode as 0, a free model instead of
+// an unknown cost; a pattern listed twice would leave the row to JSON order.
+func TestCatalogRowsAreCompleteAndUnique(t *testing.T) {
+	var rows []map[string]any
+	if err := json.Unmarshal(modelPriceCatalog, &rows); err != nil {
+		t.Fatal(err)
+	}
+	seen := map[any]bool{}
+	for _, r := range rows {
+		for _, key := range []string{"model_pattern", "input_price_per_token", "output_price_per_token", "updated_at"} {
+			if r[key] == nil {
+				t.Errorf("catalog row %v has no %s", r["model_pattern"], key)
+			}
+		}
+		if seen[r["model_pattern"]] {
+			t.Errorf("catalog pattern %v is listed twice", r["model_pattern"])
+		}
+		seen[r["model_pattern"]] = true
+	}
 }
 
 // An unanchored row is a substring match: it also prices every longer name
@@ -113,7 +129,7 @@ func TestCatalogModelsResolveToTheirOwnRow(t *testing.T) {
 		{"google/gemini-4-argon", "(gemini-4-argon)", 2},
 	}
 	for _, c := range cases {
-		p, ok := store.MatchModelPrice(prices, c.model)
+		p, ok := MatchModelPrice(prices, c.model)
 		if !ok {
 			t.Errorf("%s: no price row, want the one containing %q", c.model, c.row)
 			continue
@@ -125,7 +141,7 @@ func TestCatalogModelsResolveToTheirOwnRow(t *testing.T) {
 
 	// A name the table does not know has no price; it never borrows one.
 	for _, model := range []string{"acme/in-house-model", "claude-opus-6", "claude-opus-5-5-preview", "my-claude-opus-5-finetune", "gpt-4o-mini-transcribe-x", "gpt-9"} {
-		if p, ok := store.MatchModelPrice(prices, model); ok {
+		if p, ok := MatchModelPrice(prices, model); ok {
 			t.Errorf("%s: matched %q, want no price", model, p.ModelPattern)
 		}
 	}
@@ -193,7 +209,7 @@ func TestCatalogPricesMatchPublishedPrices(t *testing.T) {
 	}
 	same := func(got, want float64) bool { return got > want*0.999999 && got < want*1.000001 }
 	for _, c := range cases {
-		p, ok := store.MatchModelPrice(prices, c.model)
+		p, ok := MatchModelPrice(prices, c.model)
 		if !ok {
 			t.Errorf("%s: no price row", c.model)
 			continue

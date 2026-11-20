@@ -81,7 +81,7 @@ OTEL_SERVICE_NAME=my-app</pre>
 <div><dt><code>spoor serve</code></dt><dd class="why">This server: the UI and the OTLP receiver. No configuration needed.</dd></div>
 <div><dt><code>spoor demo</code></dt><dd class="why">Starts with real sample traces loaded, in a temporary database.</dd></div>
 <div><dt><code>spoor export --trace &lt;id&gt;</code></dt><dd class="why">A trace as JSONL, one span per line. <code>--session &lt;id&gt;</code> exports a session; <code>--html</code> writes one page you can share as a file; the Export button on a trace or a session downloads that page.</dd></div>
-<div><dt><code>spoor reprice --dry-run</code></dt><dd class="why">Recalculates stored costs from the current price table. Without <code>--dry-run</code> it writes them.</dd></div>
+<div><dt><code>spoor reprice --dry-run</code></dt><dd class="why">Recalculates stored costs from the price table this spoor ships. Without <code>--dry-run</code> it writes them.</dd></div>
 <div><dt><code>spoor migrate</code></dt><dd class="why">Applies pending schema migrations. <code>serve</code> does it on start.</dd></div>
 </dl>
 </div></section>
@@ -91,7 +91,7 @@ OTEL_SERVICE_NAME=my-app</pre>
 <div class="panel-b">
 <dl class="spots">
 <div><dt>Version</dt><dd class="n">{{.Version}}</dd></div>
-<div><dt>Price table</dt><dd class="n">{{.Prices}} models</dd><dd class="why">Ships in the binary, from Langfuse's public price list, and is reloaded at every start. Its newest price is from {{.PricesAsOf}}: a model released or repriced after that day is missing or out of date here. A newer binary brings newer prices; <code>spoor reprice</code> applies them to stored spans.</dd></div>
+<div><dt>Price table</dt><dd class="n">{{.Prices}} models</dd><dd class="why">Ships in the binary, from Langfuse's public price list. Its newest price is from {{.PricesAsOf}}: a model released or repriced after that day is missing or out of date here. A newer binary brings newer prices; <code>spoor reprice</code> applies them to stored spans.</dd></div>
 <div><dt>Retention</dt><dd class="n">{{if .RetentionDays}}{{.RetentionDays}} days{{else}}forever{{end}}</dd><dd class="why">{{if .RetentionDays}}Traces older than that are deleted by the retention sweep (every <code>SPOOR_SWEEP_INTERVAL</code>, default 1h).{{else}}Nothing is deleted; set <code>SPOOR_RETENTION_DAYS</code> to change that.{{end}}</dd></div>
 </dl>
 </div></section>

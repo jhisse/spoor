@@ -13,13 +13,13 @@
 <div><dt>Spans without their parent</dt><dd class="n">{{commas .Orphans}}</dd><dd class="why">shown as roots, marked “no parent”.</dd></div>
 <div><dt>Model calls without a token count</dt><dd class="n">{{commas .NoInputTokens}}</dd><dd class="why">the SDK sent none; tokens show as “?” and the cost is unknown. Failed calls are not counted: they have none to send.</dd></div>
 <div><dt>Model calls without a model</dt><dd class="n">{{commas .NoModel}}</dd><dd class="why">no price can match; the cost is unknown.</dd></div>
-<div><dt>Model calls without a price</dt><dd class="n">{{commas .UnpricedSpans}}</dd><dd class="why">the model matches no row of the <code>model_prices</code> table; the cost is unknown (–), never a default.</dd></div>
+<div><dt>Model calls without a price</dt><dd class="n">{{commas .UnpricedSpans}}</dd><dd class="why">the model matches no row of the price table; the cost is unknown (–), never a default.</dd></div>
 <div><dt>Costs priced without cache counts</dt><dd class="n">{{commas .CacheUnknown}}</dd><dd class="why">the SDK sent no cache read or write count, so the whole prompt was priced as fresh input; marked “~”.</dd></div>
 <div><dt>Prompts not readable as messages</dt><dd class="n">{{commas .NoMessages}}</dd><dd class="why">stored and shown as sent; no comparison with the previous call.</dd></div>
 </dl>
 {{if .Unpriced}}
 <div class="row mt">{{range .Unpriced}}<span class="chip look mono" title="{{commas .Spans}} model calls">{{.Model}} · {{commas .Spans}}</span>{{end}}</div>
-<p class="cap mt measure">A new <code>model_prices</code> row applies to spans ingested after it; <code>spoor reprice</code> applies it to stored ones.</p>
+<p class="cap mt measure">A price added in a new spoor applies to spans ingested after it; <code>spoor reprice</code> applies it to stored ones.</p>
 {{else}}
 <p class="mt muted">Every model seen has a price.</p>
 {{end}}

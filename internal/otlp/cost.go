@@ -2,7 +2,7 @@ package otlp
 
 import "github.com/jhisse/spoor/internal/store"
 
-// priceSpan prices a span against model_prices, each bucket of its
+// priceSpan prices a span against the price catalog, each bucket of its
 // store.TokenMix at that bucket's price, and records the row that priced it
 // and that row's fingerprint. A count the SDK didn't report adds nothing.
 // No model, no token count at all, or no matching row leaves s untouched:

@@ -5,6 +5,8 @@ import (
 	"net/http"
 	"net/url"
 	"time"
+
+	"github.com/jhisse/spoor/internal/store"
 )
 
 type helpPageData struct {
@@ -27,11 +29,7 @@ func (h *Handlers) ingestURL(r *http.Request) string { return h.ingestBase(r) + 
 // search, the keyboard shortcuts, the MCP endpoint, the commands and this
 // build. The addresses are the ones this request reached.
 func (h *Handlers) Help(w http.ResponseWriter, r *http.Request) {
-	prices, err := h.Store.ListModelPrices(r.Context())
-	if err != nil {
-		fail(w, r, err)
-		return
-	}
+	prices := store.Prices()
 	var newest time.Time
 	for _, p := range prices {
 		if p.UpdatedAt.After(newest) {

@@ -41,7 +41,7 @@ func TestBlindSpotsShowsEffectiveRetention(t *testing.T) {
 	}
 }
 
-// Only a generation model that matches no model_prices row is listed, with
+// Only a generation model that matches no price catalog row is listed, with
 // its span count; every other count is on the page; and the ingest
 // server's counters are shown when the process has one.
 func TestBlindSpotsCountsWhatCannotBeRead(t *testing.T) {

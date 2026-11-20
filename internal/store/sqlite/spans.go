@@ -161,3 +161,13 @@ func (s *Store) ComparableSpans(ctx context.Context, like store.Span, since time
 	}
 	return durations, inputTokens, rows.Err()
 }
+
+func (s *Store) ListGenerationModels(ctx context.Context) ([]string, error) {
+	models, err := queryAll(ctx, s.db, func(sc scanner) (m string, err error) { return m, sc.Scan(&m) },
+		`SELECT DISTINCT model FROM spans WHERE kind = ? AND model IS NOT NULL ORDER BY model`,
+		string(store.SpanKindGeneration))
+	if err != nil {
+		return nil, fmt.Errorf("querying generation models: %w", err)
+	}
+	return models, nil
+}

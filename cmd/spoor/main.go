@@ -65,7 +65,7 @@ Commands:
 	serve      run the OTLP ingestion and web UI servers
 	migrate    apply pending database schema migrations
 	export     write a trace or a session as JSONL or one shareable HTML file
-	reprice    recompute stored span costs from the current model prices
+	reprice    recompute stored span costs with the prices this binary ships
 	version    print the version (also --version)
 
 Use "spoor <command> -h" for flags of a specific command.

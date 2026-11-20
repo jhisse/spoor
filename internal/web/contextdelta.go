@@ -309,10 +309,7 @@ func (h *Handlers) contextViews(ctx context.Context, trace store.Trace, spans []
 	steps := genSteps(spans)
 	var chart *contextChart
 	if len(steps) >= 2 {
-		prices, err := h.Store.ListModelPrices(ctx)
-		if err != nil {
-			return nil, nil, err
-		}
+		prices := store.Prices()
 		chart = buildContextChart(steps, prices, selectedID)
 	}
 	for i, st := range steps {

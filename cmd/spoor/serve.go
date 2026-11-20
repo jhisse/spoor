@@ -72,15 +72,11 @@ func serve(cfg *config.Config) error {
 
 	// Said once, never fixed here: a stored cost was right for its day.
 	// Repricing is the operator's call.
-	prices, err := st.ListModelPrices(context.Background())
-	if err != nil {
-		return fmt.Errorf("reading model prices: %w", err)
-	}
 	pricings, err := st.SpanPricings(context.Background())
 	if err != nil {
 		return fmt.Errorf("reading span pricings: %w", err)
 	}
-	if stale := store.StalePricings(prices, pricings); stale > 0 {
+	if stale := store.StalePricings(store.Prices(), pricings); stale > 0 {
 		logger.Warn("spans were priced with a price table that has since changed; `spoor reprice --dry-run` shows the difference", "spans", stale)
 	}
 

@@ -77,10 +77,7 @@ type spanExplain struct {
 
 func (h *Handlers) explainSpan(ctx context.Context, sp store.Span, out []chatMessage) (spanExplain, error) {
 	e := spanExplain{Health: genHealth(sp, out)}
-	prices, err := h.Store.ListModelPrices(ctx)
-	if err != nil {
-		return e, err
-	}
+	prices := store.Prices()
 	e.Cost = buildCostBreakdown(sp, prices)
 	durations, inputTokens, err := h.Store.ComparableSpans(ctx, sp, time.Now().Add(-baselineWindow), baselineLimit)
 	if err != nil {

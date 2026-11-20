@@ -161,8 +161,7 @@ func (h *Handlers) Detail(w http.ResponseWriter, r *http.Request) {
 	if err = errors.Join(err, hitsErr); want == "" && len(hits) > 0 {
 		want = hits[0].SpanID
 	}
-	prices, pricesErr := h.Store.ListModelPrices(ctx)
-	err = errors.Join(err, pricesErr)
+	prices := store.Prices()
 	roots := BuildSpanTree(spans)
 	selected, selectedID := selectSpan(spans, roots, want)
 	steps := stepNodes(roots)
