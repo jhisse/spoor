@@ -2,6 +2,7 @@ package sqlite
 
 import (
 	"database/sql"
+	"errors"
 	"fmt"
 	"io/fs"
 	"strconv"
@@ -17,7 +18,9 @@ func Migrate(path string) error {
 // MigrateVersions is Migrate, also reporting the schema version before
 // and after (0 = empty database) so `serve` can log what it applied. The
 // version is the file's own PRAGMA user_version, set in the same transaction
-// as the migration it names: a killed migration leaves nothing half done.
+// as the migration it names: a killed migration leaves nothing half done. A
+// file at a version above the last migration is refused, from and to both
+// that version.
 func MigrateVersions(path string) (from, to uint, err error) {
 	db, err := sql.Open("sqlite", path)
 	if err != nil {
@@ -28,9 +31,12 @@ func MigrateVersions(path string) (from, to uint, err error) {
 	if err := db.QueryRow(`PRAGMA user_version`).Scan(&from); err != nil {
 		return 0, 0, fmt.Errorf("reading schema version: %w", err)
 	}
-	files, err := fs.Glob(migrations.FS, "*.up.sql") // sorted; the Nth file is version N
+	files, err := migrationFiles()
 	if err != nil {
 		return 0, 0, err
+	}
+	if latest := uint(len(files)); from > latest {
+		return from, from, newerSchema(from, latest)
 	}
 	for i, name := range files {
 		if to = uint(i + 1); to > from {
@@ -40,6 +46,11 @@ func MigrateVersions(path string) (from, to uint, err error) {
 		}
 	}
 	return from, max(to, from), nil
+}
+
+// migrationFiles lists the migrations in order: the Nth file is version N.
+func migrationFiles() ([]string, error) {
+	return fs.Glob(migrations.FS, "*.up.sql")
 }
 
 func applyMigration(db *sql.DB, name string, version uint) error {
@@ -57,4 +68,35 @@ func applyMigration(db *sql.DB, name string, version uint) error {
 		return err
 	}
 	return tx.Commit()
+}
+
+// checkVersion refuses a file whose schema is not the one this binary
+// migrates to: its queries would fail on a missing or renamed column.
+func checkVersion(dsn string) error {
+	db, err := sql.Open("sqlite", dsn+"?mode=ro&_pragma=busy_timeout(5000)")
+	if err != nil {
+		return err
+	}
+	defer func() { _ = db.Close() }()
+	var version uint
+	if err := db.QueryRow(`PRAGMA user_version`).Scan(&version); err != nil {
+		return fmt.Errorf("reading schema version: %w", err)
+	}
+	files, err := migrationFiles()
+	if err != nil {
+		return err
+	}
+	switch want := uint(len(files)); {
+	case version == 0:
+		return errors.New("no spoor schema in this file: check the path, or run `spoor migrate`")
+	case version < want:
+		return fmt.Errorf("schema version %d, this spoor needs %d: run `spoor migrate`", version, want)
+	case version > want:
+		return newerSchema(version, want)
+	}
+	return nil
+}
+
+func newerSchema(version, latest uint) error {
+	return fmt.Errorf("schema version %d is newer than this spoor reads (up to %d): use a newer spoor", version, latest)
 }

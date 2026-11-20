@@ -207,7 +207,7 @@ Environment variables, or a `.env` file in the working directory (only `SPOOR_*`
 sqlite3 spoor.db ".backup backup.db"       # or: sqlite3 spoor.db "VACUUM INTO 'backup.db'"
 ```
 
-**Upgrade.** Replace the binary and start it. `spoor serve` applies pending schema migrations before it opens either port and logs the versions; `spoor migrate` applies them and exits. Each migration is one transaction that also records its version, so a process killed while migrating leaves the schema as it was and the next start applies that migration again.
+**Upgrade.** Replace the binary and start it. `spoor serve` applies pending schema migrations before it opens either port and logs the versions; `spoor migrate` applies them and exits. Every command refuses a file written by a newer spoor, and the ones that do not migrate (`export`, `reprice`) refuse a missing file, and refuse a file at an older schema version, saying to run `spoor migrate`. Stop a running spoor before migrating, with `spoor migrate` or a newer `spoor serve`: it checks the version only when it opens the file. Going back to an older spoor after a migration needs the backup taken before the upgrade. Each migration is one transaction that also records its version, so a process killed while migrating leaves the schema as it was and the next start applies that migration again.
 
 **Retention.** Unset, spoor keeps everything. With `SPOOR_RETENTION_DAYS=30`, at the start and then every `SPOOR_SWEEP_INTERVAL` spoor deletes each trace first stored more than 30 days ago, with all its spans. It applies to every trace and changing it needs a restart. The file does not shrink by itself: SQLite reuses the freed pages, and `VACUUM` with spoor stopped returns them.
 
