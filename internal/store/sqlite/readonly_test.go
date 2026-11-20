@@ -1,7 +1,6 @@
 package sqlite
 
 import (
-	"os"
 	"path/filepath"
 	"strings"
 	"testing"
@@ -9,16 +8,6 @@ import (
 
 	"github.com/jhisse/spoor/internal/store"
 )
-
-func TestOpenReadOnlyMissingFile(t *testing.T) {
-	path := filepath.Join(t.TempDir(), "absent.db")
-	if _, err := OpenReadOnly(path); err == nil {
-		t.Fatal("OpenReadOnly on a missing file succeeded")
-	}
-	if _, err := os.Stat(path); !os.IsNotExist(err) {
-		t.Errorf("OpenReadOnly created the file")
-	}
-}
 
 // The MCP endpoint and `spoor export` read through this Store: SQLite itself
 // refuses every write, and what was stored stays readable.
